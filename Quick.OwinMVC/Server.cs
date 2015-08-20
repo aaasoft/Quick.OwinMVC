@@ -25,7 +25,16 @@ namespace Quick.OwinMVC
 #if DEBUG
                 app.UseErrorPage();
 #endif
-                app.UseWelcomePage();
+                Controller.MvcHttpController mvcHttpController = new Controller.MvcHttpController();
+                String pluginKey = Controller.Middleware.QOMVC_PLUGIN_KEY;
+                String pathKey = Controller.Middleware.QOMVC_PATH_KEY;
+                app.Use<Controller.Middleware>(new Dictionary<String, Controller.IHttpController>
+                {
+                    ["/"] = mvcHttpController,
+                    [$"/:{pluginKey}/view/:{pathKey}"] = mvcHttpController,
+                    [$"/:{pluginKey}/resource/:{pathKey}"] = new Controller.ResourceHttpController(),
+                    [$"/:{pluginKey}/api/:{pathKey}"] = new Controller.ApiHttpController()
+                });
             }
             );
         }

@@ -19,8 +19,8 @@ namespace Quick.OwinMVC.View.NVelocity
             //初始化NVelocity引擎
             var properties = new Commons.Collections.ExtendedProperties();
             properties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, "Views");
-            RuntimeConstants.resourc
-            engine = new NVelocity.App.VelocityEngine(properties);
+            //RuntimeConstants.resourc
+            engine = new VelocityEngine(properties);
             engine.Init();
         }
 

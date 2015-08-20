@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Controller
 {
-    class ApiHttpController
+    public class ApiHttpController : HttpController
     {
     }
 }
