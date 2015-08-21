@@ -55,7 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\UserController.cs" />
+    <Compile Include="Controller\PerformanceController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -72,6 +72,20 @@
       <Project>{17f47358-c8e5-49b2-bcac-0b315f93e114}</Project>
       <Name>Quick.OwinMVC</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\images\Background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resource\scripts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resource\css\invalid.css" />
+    <EmbeddedResource Include="Resource\css\reset.css" />
+    <EmbeddedResource Include="Resource\css\style.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resource\view\index.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

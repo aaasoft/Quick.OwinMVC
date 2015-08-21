@@ -10,6 +10,8 @@ using Quick.OwinMVC.Controller.Impl;
 using System.Reflection;
 using Quick.OwinMVC.Routing;
 using Quick.OwinMVC.View;
+using Quick.OwinMVC.Resource;
+using System.Net;
 
 namespace Quick.OwinMVC
 {
@@ -21,6 +23,14 @@ namespace Quick.OwinMVC
         private ApiHttpController apiController;
         private MvcHttpController mvcHttpController;
 
+        static Server()
+        {
+            //注册embed:前缀URI处理程序
+            WebRequest.RegisterPrefix("embed:", new EmbedWebRequestFactory());
+            //注册resource:前缀URI处理程序
+            WebRequest.RegisterPrefix("resource:", new ResourceWebRequestFactory());
+        }
+
         public Server(String url, IViewRender viewRender)
         {
             this.url = url;
@@ -30,7 +40,7 @@ namespace Quick.OwinMVC
 
         public void RegisterMvcController(String plugin, String path, IMvcController controller)
         {
-
+            mvcHttpController.RegisterController(plugin, path, controller);
         }
 
         public void RegisterApiController(String plugin, String path, IApiController controller)
@@ -43,7 +53,6 @@ namespace Quick.OwinMVC
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 String pluginName = assembly.GetName().Name;
-
                 foreach (Type type in assembly.GetTypes())
                 {
                     foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())

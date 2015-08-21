@@ -12,7 +12,7 @@ namespace Quick.OwinMVC.View.NVelocity
 {
     public class MyResourceLoader : ResourceLoader
     {
-        public override long GetLastModified(Resource resource)
+        public override long GetLastModified(global::NVelocity.Runtime.Resource.Resource resource)
         {
             throw new NotImplementedException();
         }
@@ -27,7 +27,7 @@ namespace Quick.OwinMVC.View.NVelocity
             throw new NotImplementedException();
         }
 
-        public override bool IsSourceModified(Resource resource)
+        public override bool IsSourceModified(global::NVelocity.Runtime.Resource.Resource resource)
         {
             throw new NotImplementedException();
         }
