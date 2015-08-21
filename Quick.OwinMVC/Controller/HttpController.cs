@@ -9,35 +9,35 @@ namespace Quick.OwinMVC.Controller
 {
     public abstract class HttpController : IHttpController
     {
-        public virtual void DoGet(IOwinContext context)
+        public virtual void DoGet(IOwinContext context, String plugin, String path)
         { }
-        public virtual void DoPost(IOwinContext context)
+        public virtual void DoPost(IOwinContext context, String plugin, String path)
         { }
-        public virtual void DoHead(IOwinContext context)
+        public virtual void DoHead(IOwinContext context, String plugin, String path)
         { }
-        public virtual void DoDelete(IOwinContext context)
+        public virtual void DoDelete(IOwinContext context, String plugin, String path)
         { }
-        public virtual void DoTrace(IOwinContext context)
+        public virtual void DoTrace(IOwinContext context, String plugin, String path)
         { }
 
-        public virtual void Service(IOwinContext context)
+        public virtual void Service(IOwinContext context, String plugin, String path)
         {
             switch (context.Request.Method)
             {
                 case "GET":
-                    DoGet(context);
+                    DoGet(context, plugin, path);
                     break;
                 case "POST":
-                    DoPost(context);
+                    DoPost(context, plugin, path);
                     break;
                 case "DELETE":
-                    DoDelete(context);
+                    DoDelete(context, plugin, path);
                     break;
                 case "HEAD":
-                    DoHead(context);
+                    DoHead(context, plugin, path);
                     break;
                 case "TRACE":
-                    DoTrace(context);
+                    DoTrace(context, plugin, path);
                     break;
             }
         }

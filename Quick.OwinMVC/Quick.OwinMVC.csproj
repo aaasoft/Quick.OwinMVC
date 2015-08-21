@@ -64,14 +64,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\ApiHttpController.cs" />
+    <Compile Include="Controller\IApiController.cs" />
+    <Compile Include="Controller\Impl\ApiHttpController.cs" />
     <Compile Include="Controller\HttpController.cs" />
     <Compile Include="Controller\IHttpController.cs" />
+    <Compile Include="Controller\Impl\ExtendHttpController.cs" />
+    <Compile Include="Controller\IMvcController.cs" />
     <Compile Include="Controller\IOwinContextSessionExtension.cs" />
-    <Compile Include="Controller\MvcHttpController.cs" />
-    <Compile Include="Controller\ResourceHttpController.cs" />
+    <Compile Include="Controller\Impl\MvcHttpController.cs" />
+    <Compile Include="Controller\Impl\ResourceHttpController.cs" />
     <Compile Include="Controller\Middleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Routing\RouteAttribute.cs" />
     <Compile Include="Routing\RouteBuilder.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="View\IViewRender.cs" />

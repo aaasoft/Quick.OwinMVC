@@ -9,6 +9,6 @@ namespace Quick.OwinMVC.Controller
 {
     public interface IHttpController
     {
-        void Service(IOwinContext context);
+        void Service(IOwinContext context, String plugin, String path);
     }
 }

@@ -25,7 +25,7 @@ namespace Quick.OwinMVC.Controller
         {
             return Task.Factory.StartNew(() =>
             {
-                String path = context.Request.Path.ToString();
+                String path = context.Environment["owin.RequestPath"].ToString();
                 IHttpController controller = null;
                 foreach (String reoute in routes.Keys)
                 {
@@ -34,7 +34,7 @@ namespace Quick.OwinMVC.Controller
                     {
                         var groups = regex.Match(path).Groups;
                         var dic = regex.GetGroupNames().ToDictionary(name => name, name => groups[name].Value);
-                        foreach (var key in dic.Keys)
+                        foreach (var key in dic.Keys.Where(t => t != "0"))
                             context.Environment.Add(key, dic[key]);
                         controller = routes[reoute];
                         break;
@@ -42,7 +42,7 @@ namespace Quick.OwinMVC.Controller
                 }
                 if (controller == null)
                     return Next.Invoke(context);
-                controller.Service(context);
+                controller.Service(context, context.Get<String>(QOMVC_PLUGIN_KEY), context.Get<String>(QOMVC_PATH_KEY));
                 return Task.FromResult(0);
                 /*
                 String content =
