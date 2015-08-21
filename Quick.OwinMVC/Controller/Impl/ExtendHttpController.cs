@@ -27,9 +27,9 @@ namespace Quick.OwinMVC.Controller.Impl
                 return;
             }
             T controller = controllerDict[$"{plugin}:{path}"];
-            ExecuteController(controller, context);
+            ExecuteController(controller, context, plugin, path);
         }
 
-        public abstract void ExecuteController(T controller, IOwinContext context);
+        public abstract void ExecuteController(T controller, IOwinContext context, string plugin, string path);
     }
 }

@@ -10,7 +10,7 @@ namespace Quick.OwinMVC.Controller.Impl
 {
     internal class ApiHttpController : ExtendHttpController<IApiController>
     {
-        public override void ExecuteController(IApiController controller, IOwinContext context)
+        public override void ExecuteController(IApiController controller, IOwinContext context, string plugin, string path)
         {
             var rep = context.Response;
             Object obj = controller.Service(context);

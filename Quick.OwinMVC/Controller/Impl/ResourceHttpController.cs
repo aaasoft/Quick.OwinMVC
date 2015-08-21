@@ -14,9 +14,9 @@ namespace Quick.OwinMVC.Controller.Impl
     {
         public override void DoGet(IOwinContext context, string plugin, string path)
         {
-            Uri uri = new Uri($"resource://{plugin}/Resource/{path}");
             var rep = context.Response;
 
+            Uri uri = new Uri($"resource://{plugin}/Resource/{path}");
             var resourceResponse = WebRequest.Create(uri).GetResponse();
             if (resourceResponse == null)
             {

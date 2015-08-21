@@ -2,6 +2,7 @@
 using NVelocity.App;
 using NVelocity.Context;
 using NVelocity.Runtime;
+using Quick.OwinMVC.View.NVelocity.ResourceLoaders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,7 +20,8 @@ namespace Quick.OwinMVC.View.NVelocity
             //初始化NVelocity引擎
             var properties = new Commons.Collections.ExtendedProperties();
             properties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, "Views");
-            //RuntimeConstants.resourc
+            properties.SetProperty(RuntimeConstants.RESOURCE_LOADER, "class");
+            properties.SetProperty($"class.{RuntimeConstants.RESOURCE_LOADER}.class", $"{typeof(EmbedResourceLoader).FullName};{typeof(EmbedResourceLoader).Assembly.GetName().Name}");
             engine = new VelocityEngine(properties);
             engine.Init();
         }
@@ -28,7 +30,7 @@ namespace Quick.OwinMVC.View.NVelocity
         public string Render(string viewName, IDictionary<string, object> viewData)
         {
             //得到模板                
-            Template template = engine.GetTemplate("Home.vm");
+            Template template = engine.GetTemplate(viewName);
             String content = null;
             using (StringWriter writer = new StringWriter())
             {

@@ -18,16 +18,17 @@ namespace Quick.OwinMVC.Controller.Impl
             this.viewRender = viewRender;
         }
 
-        public override void ExecuteController(IMvcController controller, IOwinContext context)
+        public override void ExecuteController(IMvcController controller, IOwinContext context, string plugin, string path)
         {
             IDictionary<String, Object> data = new ExpandoObject();
             String viewName = controller.Service(context, data);
+            viewName = $"{plugin}:{viewName}";
             var content = viewRender.Render(viewName, data);
             var bytes = encoding.GetBytes(content);
 
             var rep = context.Response;
             rep.ContentType = "text/html";
-            rep.ContentLength = content.Length;
+            rep.ContentLength = bytes.Length;
             rep.Write(content);
         }
     }

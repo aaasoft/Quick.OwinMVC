@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Quick.OwinMVC.Test Demo</title>
+    <link rel="stylesheet" href="../Resource/css/reset.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../Resource/css/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="../Resource/css/invalid.css" type="text/css" media="screen" />
+    <!-- jQuery -->
+    <script type="text/javascript" src="../Resource/scripts/jquery-1.3.2.min.js"></script>
+    <!-- jQuery Configuration -->
+    <script type="text/javascript" src="../Resource/scripts/simpla.jquery.configuration.js"></script>
+    <!-- jQuery WYSIWYG Plugin -->
+    <script type="text/javascript" src="../Resource/scripts/jquery.wysiwyg.js"></script>
+    <script type="text/javascript" src="../Resource/scripts/amcharts.js"></script>
+    <script type="text/javascript" src="../Resource/scripts/raphael.js"></script>
+    <script type="text/javascript" language="javascript">
+<!-- 提交表单函数 -->
+function __submitForm(formId)
+{
+    document.getElementById(formId).submit();
+}
+    </script>
+</head>
+<body>
+    <div id="body-wrapper">
+        <div class="systembar">
+            <a href="addMonitorProject.html"><img src="../Resource/images/icons/paper_content_pencil_48.png" width="16" />添加监控项目</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="#">系统</a>
+            | <a href="#">帮助</a>
+            | <a href="#">设置</a>
+            | <a href="Setting/EmailNoticeMedium.html">通知方式</a>
+            | <a href="#">反馈</a>
+            | <a href="logout.html">退出系统</a>
+        </div>
+        <!-- Start #sidebar -->
+        <div id="sidebar">
+            <div id="sidebar-wrapper">
+                <h1 id="sidebar-title"><a href="#">Simpla Admin</a></h1>
+                <!-- Logo (221px wide) -->
+                <img src="../Resource/images/logo.png" alt="Simpla Admin logo" width="221" height="124" id="logo" />
+                <!-- Sidebar Profile links -->
+                <div id="profile-links">
+                    &#27426;&#36814;&#29992;&#25143; <a href="#" title="编辑个人资料">null</a> <br />
+                </div>
+                <ul id="main-nav">
+                    <li><a href="index" class="nav-top-item no-submenu">概述</a></li>
+                    <li>
+                        <a href="#" class="nav-top-item">性能监控 </a>
+                        <ul>
+                            <li><a href="PerformanceMonitor/index">常规状态</a></li>
+                            <li><a href="PerformanceMonitor/CpuList">CPU</a></li>
+                            <li><a href="PerformanceMonitor/RamList">内存</a></li>
+                            <li><a href="PerformanceMonitor/FixDiskList">磁盘空间使用率</a></li>
+                            <li><a href="PerformanceMonitor/ProcessCountList">系统进程数</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-top-item"> 站点监控 </a>
+                        <ul>
+                            <li><a href="SiteMonitor/index.html">综合情况</a></li>
+                            <li><a href="SiteMonitor/LastStateList.html">最后状态</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-top-item"> 告警 </a>
+                        <ul>
+                            <li><a href="Warning/NoticeList.html">告警通知</a></li>
+                            <li><a href="Warning/WaringList.html">性能监控告警消息</a></li>
+                            <li><a href="Warning/FaultHistoryList.html">站点监控故障历史</a></li>
+                            <li><a href="Warning/Setting.html">告警设置</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-top-item no-submenu"> 报告 </a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-top-item"> 服务 </a>
+                        <ul>
+                            <li><a href="Security Assessment.html">监控节点</a></li>
+                            <li><a href="Security Assessment set.html">Windows特色功能</a></li>
+                            <li><a href="Security Assessment set.html">Linux特色功能</a></li>
+                            <li><a href="Security Assessment set.html">网络设备</a></li>
+                            <li><a href="Security Assessment set.html">网络拓扑图生成</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- End #main-nav -->
+            </div>
+        </div>
+        <!-- End #sidebar -->
+        <div id="main-content">
+            <div class="content-box">
+                <!-- Start Content Box -->
+                <div class="content-box-header">
+                    <h3>监控项目状态统计</h3>
+                    <ul class="content-box-tabs"></ul>
+                    <div class="clear"></div>
+                </div>
+                <!-- End .content-box-header -->
+                <div class="content-box-content">
+                    <div class="tab-content default-tab" id="tab1">
+                        <p id="page-intro">
+                            <div style="width: 600px;height: 300px;">
+                                <div id="chartPdiv" style="float:left; width: 100%;height: 100%; text-align:center;"></div>
+                            </div>
+                            <div style="width:100%;text-align:center">
+                                <table>
+                                    <thead>
+                                    </thead>
+                                    <th style="width:30%;"></th>
+                                    <th></th>
+                                    </thead>
+                                    <tbody></tbody>
+
+                                </table>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <!-- End .clear -->
+            <div class="content-box">
+                <!-- Start Content Box -->
+                <div class="content-box-header">
+                    <h3>故障历史</h3>
+                    <ul class="content-box-tabs">
+                        <a href="Warning/FaultHistoryList.html">所有故障</a>
+                    </ul>
+                    <div class="clear"></div>
+                </div>
+                <!-- End .content-box-header -->
+                <div class="content-box-content">
+                    <div class="tab-content default-tab" id="tab1">
+                        <!-- This is the target div. id must match the href of this div's tab -->
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>监控项目</th>
+                                    <th>开始时间</th>
+                                    <th>恢复时间</th>
+                                    <th>故障持续时间</th>
+                                    <th>故障原因</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+
+                        </table>
+                    </div>
+                    <!-- End #tab1 -->
+                    <!-- End #tab2 -->
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div id="footer">
+                <small>
+                    &#169; Copyright 2011 XX科技 | Powered by XXX
+                </small>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
