@@ -61,7 +61,9 @@ namespace Quick.OwinMVC.View.NVelocity
 
             object IContext.Get(string key)
             {
-                return data[key];
+                if (data.ContainsKey(key))
+                    return data[key];
+                return null;
             }
 
             object IContext.Put(string key, object value)

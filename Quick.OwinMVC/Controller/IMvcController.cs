@@ -18,6 +18,6 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        String Service(IOwinContext context, dynamic data);
+        String Service(IOwinContext context, IDictionary<String,Object> data);
     }
 }

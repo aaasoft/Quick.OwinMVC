@@ -13,8 +13,9 @@ namespace Quick.OwinMVC.Test.Controller
     [Route("index")]
     public class IndexController : IMvcController
     {
-        public string Service(IOwinContext context, dynamic data)
+        public string Service(IOwinContext context, IDictionary<String, Object> data)
         {
+            data["currentTime"] = DateTime.Now;
             return "index";
         }
     }

@@ -17,10 +17,9 @@ namespace Quick.OwinMVC.Controller.Impl
 
         public override void ExecuteController(IMvcController controller, IOwinContext context, string plugin, string path)
         {
-            IDictionary<String, Object> data = new ExpandoObject();
-            String viewName = controller.Service(context, data);
+            String viewName = controller.Service(context, context.Environment);
             viewName = $"{plugin}:{viewName}";
-            var content = ViewRender.Render(viewName, data);
+            var content = ViewRender.Render(viewName, context.Environment);
             var bytes = encoding.GetBytes(content);
 
             var rep = context.Response;
