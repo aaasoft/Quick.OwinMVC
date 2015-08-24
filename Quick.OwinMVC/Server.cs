@@ -17,8 +17,6 @@ namespace Quick.OwinMVC
 {
     public class Server
     {
-        public const String PLUGIN_ALIAS_DICT_KEY = "Quick.OwinMVC.Server.PluginAliasDict";
-
         private String url;
         private IViewRender viewRender;
         private IDisposable webApp;

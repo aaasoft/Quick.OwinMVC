@@ -11,7 +11,7 @@ using System.IO;
 
 namespace Quick.OwinMVC.Test.Controller
 {
-    [Route("Performance")]
+    [Route("performance")]
     public class PerformanceController : IApiController
     {
         PerformanceCounter cpuCounter;

@@ -15,10 +15,9 @@ namespace Quick.OwinMVC.Controller
 {
     public class Middleware : OwinMiddleware
     {
-        public const String QOMVC_PLUGIN_KEY = "QOMVC_Plugin";
-        public const String QOMVC_PATH_KEY = "QOMVC_Path";
-
-
+        public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
+        public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
+        
         private ApiHttpController apiController;
         private MvcHttpController mvcHttpController;
         private IDictionary<String, String> pluginAliasDict;
@@ -60,6 +59,14 @@ namespace Quick.OwinMVC.Controller
                 }
                 if (controller == null)
                     return Next.Invoke(context);
+                //替换别名为完整的程序集名
+                String pluginName = context.Get<String>(QOMVC_PLUGIN_KEY);
+                if (pluginName != null && pluginAliasDict.ContainsKey(pluginName))
+                {
+                    pluginName = pluginAliasDict[pluginName];
+                    context.Set<String>(QOMVC_PLUGIN_KEY, pluginName);
+                }
+                //交给HttpController
                 controller.Service(context, context.Get<String>(QOMVC_PLUGIN_KEY), context.Get<String>(QOMVC_PATH_KEY));
                 return Task.FromResult(0);
             });
