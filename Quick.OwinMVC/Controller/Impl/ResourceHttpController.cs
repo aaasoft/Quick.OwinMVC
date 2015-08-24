@@ -7,9 +7,11 @@ using Microsoft.Owin;
 using Newtonsoft.Json;
 using System.Net;
 using Quick.OwinMVC.Utils;
+using Quick.OwinMVC.Routing;
 
 namespace Quick.OwinMVC.Controller.Impl
 {
+    [Route("/:" + Middleware.QOMVC_PLUGIN_KEY + "/resource/:" + Middleware.QOMVC_PATH_KEY)]
     internal class ResourceHttpController : HttpController
     {
         public override void DoGet(IOwinContext context, string plugin, string path)

@@ -17,24 +17,16 @@ namespace Quick.OwinMVC.Controller
     {
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
-        
-        private ApiHttpController apiController;
-        private MvcHttpController mvcHttpController;
+
+        private IViewRender viewRender;
         private IDictionary<String, String> pluginAliasDict;
-        public IDictionary<String, IHttpController> routes;
+        public IDictionary<Regex, IHttpController> routes;
 
         public Middleware(OwinMiddleware next, IViewRender viewRender) : base(next)
         {
-            this.apiController = new ApiHttpController();
-            this.mvcHttpController = new MvcHttpController(viewRender);
+            this.viewRender = viewRender;
             this.pluginAliasDict = new Dictionary<String, String>();
-            this.routes = new Dictionary<String, IHttpController>
-            {
-                ["/"] = mvcHttpController,
-                [$"/:{QOMVC_PLUGIN_KEY}/view/:{QOMVC_PATH_KEY}"] = mvcHttpController,
-                [$"/:{QOMVC_PLUGIN_KEY}/resource/:{QOMVC_PATH_KEY}"] = new ResourceHttpController(),
-                [$"/:{QOMVC_PLUGIN_KEY}/api/:{QOMVC_PATH_KEY}"] = apiController
-            };
+            this.routes = new Dictionary<Regex, IHttpController>();
             scanController();
         }
 
@@ -44,16 +36,15 @@ namespace Quick.OwinMVC.Controller
             {
                 String path = context.Environment["owin.RequestPath"].ToString();
                 IHttpController controller = null;
-                foreach (String reoute in routes.Keys)
+                foreach (Regex regex in routes.Keys)
                 {
-                    var regex = RouteBuilder.RouteToRegex(reoute);
                     if (regex.IsMatch(path))
                     {
                         var groups = regex.Match(path).Groups;
                         var dic = regex.GetGroupNames().ToDictionary(name => name, name => groups[name].Value);
                         foreach (var key in dic.Keys.Where(t => t != "0"))
                             context.Environment.Add(key, dic[key]);
-                        controller = routes[reoute];
+                        controller = routes[regex];
                         break;
                     }
                 }
@@ -74,6 +65,7 @@ namespace Quick.OwinMVC.Controller
 
         private void scanController()
         {
+            List<Action> registerControllerActionList = new List<Action>();
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 String pluginName = assembly.GetName().Name;
@@ -82,27 +74,40 @@ namespace Quick.OwinMVC.Controller
                 {
                     pluginAliasDict[attr.Path] = pluginName;
                 }
+
                 foreach (Type type in assembly.GetTypes())
                 {
                     foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
                     {
+                        if (typeof(IHttpController).IsAssignableFrom(type))
+                            RegisterController(attr.Path, (IHttpController)Activator.CreateInstance(type));
                         if (typeof(IApiController).IsAssignableFrom(type))
-                            RegisterApiController(pluginName, attr.Path, (IApiController)Activator.CreateInstance(type));
-                        else
-                            RegisterMvcController(pluginName, attr.Path, (IMvcController)Activator.CreateInstance(type));
+                            registerControllerActionList.Add(() => RegisterController(pluginName, attr.Path, (IApiController)Activator.CreateInstance(type)));
+                        else if (typeof(IMvcController).IsAssignableFrom(type))
+                            registerControllerActionList.Add(() => RegisterController(pluginName, attr.Path, (IMvcController)Activator.CreateInstance(type)));
                     }
                 }
             }
+            registerControllerActionList.ForEach(t => t.Invoke());
+            foreach (MvcHttpController mvcHttpController in routes.Values.Where(t => t is MvcHttpController).Cast<MvcHttpController>())
+                mvcHttpController.ViewRender = this.viewRender;
         }
 
-        public void RegisterMvcController(String plugin, String path, IMvcController controller)
+        private void RegisterController(string path, IHttpController httpController)
         {
-            mvcHttpController.RegisterController(plugin, path, controller);
+            routes.Add(RouteBuilder.RouteToRegex(path), httpController);
         }
 
-        public void RegisterApiController(String plugin, String path, IApiController controller)
+        public void RegisterController(String plugin, String path, IMvcController controller)
         {
-            apiController.RegisterController(plugin, path, controller);
+            foreach (MvcHttpController mvcHttpController in routes.Values.Where(t => t is MvcHttpController).Cast<MvcHttpController>())
+                mvcHttpController.RegisterController(plugin, path, controller);
+        }
+
+        public void RegisterController(String plugin, String path, IApiController controller)
+        {
+            foreach (ApiHttpController apiController in routes.Values.Where(t => t is ApiHttpController).Cast<ApiHttpController>())
+                apiController.RegisterController(plugin, path, controller);
         }
     }
 }
