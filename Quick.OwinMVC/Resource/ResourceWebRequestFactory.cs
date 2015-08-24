@@ -18,7 +18,6 @@ namespace Quick.OwinMVC.Resource
 
         public override WebResponse GetResponse()
         {
-            //resource://{0}/{1}
             Assembly assembly = Assembly.Load(uri.Host);
             String assemblyName = assembly.GetName().Name;
             String resourceName = uri.LocalPath;

@@ -17,11 +17,11 @@ namespace Quick.OwinMVC
 {
     public class Server
     {
-        private String url;
-        private IDisposable webApp;
+        public const String PLUGIN_ALIAS_DICT_KEY = "Quick.OwinMVC.Server.PluginAliasDict";
 
-        private ApiHttpController apiController;
-        private MvcHttpController mvcHttpController;
+        private String url;
+        private IViewRender viewRender;
+        private IDisposable webApp;
 
         static Server()
         {
@@ -34,55 +34,17 @@ namespace Quick.OwinMVC
         public Server(String url, IViewRender viewRender)
         {
             this.url = url;
-            apiController = new ApiHttpController();
-            mvcHttpController = new MvcHttpController(viewRender);
-        }
-
-        public void RegisterMvcController(String plugin, String path, IMvcController controller)
-        {
-            mvcHttpController.RegisterController(plugin, path, controller);
-        }
-
-        public void RegisterApiController(String plugin, String path, IApiController controller)
-        {
-            apiController.RegisterController(plugin, path, controller);
-        }
-
-        private void scanController()
-        {
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                String pluginName = assembly.GetName().Name;
-                foreach (Type type in assembly.GetTypes())
-                {
-                    foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
-                    {
-                        if (typeof(IApiController).IsAssignableFrom(type))
-                            RegisterApiController(pluginName, attr.Path, (IApiController)Activator.CreateInstance(type));
-                        else
-                            RegisterMvcController(pluginName, attr.Path, (IMvcController)Activator.CreateInstance(type));
-                    }
-                }
-            }
+            this.viewRender = viewRender;
         }
 
         public void Start()
         {
-            scanController();
             webApp = WebApp.Start(url, app =>
             {
 #if DEBUG
                 app.UseErrorPage();
 #endif
-                String pluginKey = Controller.Middleware.QOMVC_PLUGIN_KEY;
-                String pathKey = Controller.Middleware.QOMVC_PATH_KEY;
-                app.Use<Controller.Middleware>(new Dictionary<String, Controller.IHttpController>
-                {
-                    ["/"] = mvcHttpController,
-                    [$"/:{pluginKey}/view/:{pathKey}"] = mvcHttpController,
-                    [$"/:{pluginKey}/resource/:{pathKey}"] = new ResourceHttpController(),
-                    [$"/:{pluginKey}/api/:{pathKey}"] = apiController
-                });
+                app.Use<Controller.Middleware>(viewRender);
             }
             );
         }

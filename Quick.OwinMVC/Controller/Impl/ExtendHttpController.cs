@@ -20,6 +20,8 @@ namespace Quick.OwinMVC.Controller.Impl
 
         public override void Service(IOwinContext context, string plugin, string path)
         {
+
+
             if (!controllerDict.ContainsKey($"{plugin}:{path}"))
             {
                 context.Response.StatusCode = 404;
