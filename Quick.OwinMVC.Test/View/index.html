@@ -2,7 +2,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Quick.OwinMVC.Test Demo</title>
+    #*
+    <script type="text/javascript" src="../Resource/scripts/jquery-1.3.2.min.js"></script>
+    *#
     #parse("Quick.OwinMVC.Test:part_head_content")
+    #parse("Quick.OwinMVC.Test:part_chart_pie")
+    <script type="text/javascript" language="javascript">
+        window.onload = function () {
+
+            var ramPieCharts_Data = [{ title: "未用", value: 1 }];
+            var ramPieCharts_LastUsedRamM = 0;
+            //#MACRO_Pie_Charts("ramPieCharts" "chartPdiv" "ramPieCharts_Data" '"[[title]]:[[value]]M ([[percents]]%)"' "100" null)
+
+            var refreshMemoryFunc = function () {
+                jQuery.ajax({
+                    dataType: "json",
+                    url: "../api/performance?type=memory",
+                    success: function (json) {
+                        var usedRamM = Math.round(json.used / 1024 / 1024);
+                        //仅当已使用内存的数据变化时，才更新饼图
+                        if (usedRamM != ramPieCharts_LastUsedRamM) {
+                            ramPieCharts_LastUsedRamM = usedRamM;
+                            var freeRamM = Math.round(json.free / 1024 / 1024);
+                            ramPieCharts_Data.splice(0, ramPieCharts_Data.length
+                            , { title: "剩余内存", value: freeRamM }
+                            , { title: "已使用内存", value: usedRamM });
+                            ramPieCharts.validateData();
+                        }
+                        setTimeout(refreshMemoryFunc, 5000);
+                    }
+                });
+            }
+            refreshMemoryFunc();
+        }
+    </script>
 </head>
 <body>
     <div id="body-wrapper">
@@ -20,19 +53,8 @@
                 <div class="content-box-content">
                     <div class="tab-content default-tab" id="tab1">
                         <p id="page-intro">
-                            <div style="width: 600px;height: 300px;">
+                            <div style="width: 100%;height: 300px;">
                                 <div id="chartPdiv" style="float:left; width: 100%;height: 100%; text-align:center;"></div>
-                            </div>
-                            <div style="width:100%;text-align:center">
-                                <table>
-                                    <thead>
-                                    </thead>
-                                    <th style="width:30%;"></th>
-                                    <th></th>
-                                    </thead>
-                                    <tbody></tbody>
-
-                                </table>
                             </div>
                         </p>
                     </div>
@@ -40,40 +62,8 @@
             </div>
             <div class="clear"></div>
             <!-- End .clear -->
-            <div class="content-box">
-                <!-- Start Content Box -->
-                <div class="content-box-header">
-                    <h3>故障历史</h3>
-                    <ul class="content-box-tabs">
-                        <a href="Warning/FaultHistoryList.html">所有故障</a>
-                    </ul>
-                    <div class="clear"></div>
-                </div>
-                <!-- End .content-box-header -->
-                <div class="content-box-content">
-                    <div class="tab-content default-tab" id="tab1">
-                        <!-- This is the target div. id must match the href of this div's tab -->
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>监控项目</th>
-                                    <th>开始时间</th>
-                                    <th>恢复时间</th>
-                                    <th>故障持续时间</th>
-                                    <th>故障原因</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-
-                        </table>
-                    </div>
-                    <!-- End #tab1 -->
-                    <!-- End #tab2 -->
-                </div>
-            </div>
-            <div class="clear"></div>
             #parse("Quick.OwinMVC.Test:part_footer")
         </div>
     </div>
 </body>
-</html>
+</html></script>

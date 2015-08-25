@@ -14,8 +14,8 @@ namespace Quick.OwinMVC.Test.Controller
     [Route("performance")]
     public class PerformanceController : IApiController
     {
+        private Microsoft.VisualBasic.Devices.Computer computer = new Microsoft.VisualBasic.Devices.Computer();
         PerformanceCounter cpuCounter;
-        PerformanceCounter ramCounter;
 
         public PerformanceController()
         {
@@ -24,9 +24,6 @@ namespace Quick.OwinMVC.Test.Controller
             cpuCounter.CounterName = "% Processor Time";
             cpuCounter.InstanceName = "_Total";
             cpuCounter.NextValue();
-
-            ramCounter = new PerformanceCounter("Memory", "Available MBytes");
-            ramCounter.NextValue();
         }
 
         public object Service(IOwinContext context)
@@ -36,7 +33,12 @@ namespace Quick.OwinMVC.Test.Controller
                 case "cpu":
                     return new { cpu = cpuCounter.NextValue() };
                 case "memory":
-                    return new { memory = ramCounter.NextValue() };
+                    return new
+                    {
+                        total = computer.Info.TotalPhysicalMemory,
+                        free = computer.Info.AvailablePhysicalMemory,
+                        used = computer.Info.TotalPhysicalMemory - computer.Info.AvailablePhysicalMemory
+                    };
                 case "disk":
                     return DriveInfo.GetDrives().Where(t => t.IsReady).Select(t => new
                     {
