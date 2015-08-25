@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
 
+[assembly: Route("test")]
+
 namespace Quick.OwinMVC.Test.Controller
 {
     [Route("/")]
