@@ -31,7 +31,11 @@ namespace Quick.OwinMVC.Test.Controller
             switch (context.Request.Query["type"])
             {
                 case "cpu":
-                    return new { cpu = cpuCounter.NextValue() };
+                    return new
+                    {
+                        time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        value = cpuCounter.NextValue()
+                    };
                 case "memory":
                     return new
                     {
@@ -48,6 +52,13 @@ namespace Quick.OwinMVC.Test.Controller
                         DriveFormat = t.DriveFormat,
                         DriveType = t.DriveType
                     });
+                case "info":
+                    return new
+                    {
+                        computer_name = computer.Name,
+                        os_name = computer.Info.OSFullName,
+                        process_run_time = (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString(@"dd\.hh\:mm\:ss")
+                    };
             }
             return null;
         }
