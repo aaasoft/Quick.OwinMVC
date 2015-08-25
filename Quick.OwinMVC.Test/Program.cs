@@ -10,7 +10,19 @@ namespace Quick.OwinMVC.Test
     {
         static void Main(string[] args)
         {
-            Server server = new Server("http://*:2001", new Quick.OwinMVC.View.NVelocity.ViewRender());
+            IDictionary<String, String> properties = new Dictionary<String, String>
+            {
+                //Quick.OwinMVC Server配置部分
+                [Server.VIEWRENDER_CLASS] = "Quick.OwinMVC.View.NVelocity.ViewRender; Quick.OwinMVC.View.NVelocity",
+
+                //NVelocity配置部分
+                ["file.resource.loader.path"] = "Views",
+                ["resource.loader"] = "class",
+                ["class.resource.loader.class"] = "Quick.OwinMVC.View.NVelocity.ResourceLoaders.EmbedResourceLoader; Quick.OwinMVC.View.NVelocity",
+                ["velocimacro.library"] = "Quick.OwinMVC.Test:vm_global_library",
+            };
+
+            Server server = new Server("http://*:2001", properties);
             server.Start();
             Console.WriteLine("WebServer is started.");
             Console.ReadKey();

@@ -8,6 +8,7 @@ namespace Quick.OwinMVC.View
 {
     public interface IViewRender
     {
+        void Init(IDictionary<String, String> properties);
         String Render(String viewName, IDictionary<String, Object> viewData);
     }
 }

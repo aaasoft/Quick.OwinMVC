@@ -12,11 +12,15 @@ using Quick.OwinMVC.Routing;
 using Quick.OwinMVC.View;
 using Quick.OwinMVC.Resource;
 using System.Net;
+using Quick.OwinMVC.Utils;
 
 namespace Quick.OwinMVC
 {
     public class Server
     {
+        public const String VIEWRENDER_CLASS = "Quick.OwinMVC.VIEWRENDER_CLASS";
+
+        private IDictionary<String, String> properties;
         private String url;
         private IViewRender viewRender;
         private IDisposable webApp;
@@ -29,10 +33,16 @@ namespace Quick.OwinMVC
             WebRequest.RegisterPrefix("resource:", new ResourceWebRequestFactory());
         }
 
-        public Server(String url, IViewRender viewRender)
+        public Server(String url, IDictionary<String, String> properties)
         {
+            this.properties = properties;
             this.url = url;
-            this.viewRender = viewRender;
+
+            if (!properties.ContainsKey(VIEWRENDER_CLASS))
+                throw new ApplicationException($"Cann't find '{VIEWRENDER_CLASS}' in properties.");
+            String viewRenderClassName = properties[VIEWRENDER_CLASS];
+            this.viewRender = (IViewRender)AssemblyUtils.CreateObject(viewRenderClassName);
+            this.viewRender.Init(properties);
         }
 
         public void Start()

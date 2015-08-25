@@ -1,8 +1,6 @@
 ﻿using NVelocity;
 using NVelocity.App;
 using NVelocity.Context;
-using NVelocity.Runtime;
-using Quick.OwinMVC.View.NVelocity.ResourceLoaders;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,17 +13,16 @@ namespace Quick.OwinMVC.View.NVelocity
     public class ViewRender : IViewRender
     {
         private VelocityEngine engine;
-        public ViewRender()
+
+        public void Init(IDictionary<string, string> properties)
         {
             //初始化NVelocity引擎
-            var properties = new Commons.Collections.ExtendedProperties();
-            properties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, "Views");
-            properties.SetProperty(RuntimeConstants.RESOURCE_LOADER, "class");
-            properties.SetProperty($"class.{RuntimeConstants.RESOURCE_LOADER}.class", $"{typeof(EmbedResourceLoader).FullName};{typeof(EmbedResourceLoader).Assembly.GetName().Name}");
-            engine = new VelocityEngine(properties);
+            var nv_properties = new Commons.Collections.ExtendedProperties();
+            foreach (String key in properties.Keys)
+                nv_properties.SetProperty(key, properties[key]);
+            engine = new VelocityEngine(nv_properties);
             engine.Init();
         }
-
 
         public string Render(string viewName, IDictionary<string, object> viewData)
         {
