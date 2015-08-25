@@ -6,17 +6,22 @@
     <script type="text/javascript" src="../Resource/scripts/jquery-1.3.2.min.js"></script>
     *#
     #parse("Quick.OwinMVC.Test:part_head_content")
+    <script type="text/javascript" src="../Resource/scripts/charts.function.js"></script>
     <script type="text/javascript" language="javascript">
         window.onload = function () {
 
             var ramPieCharts_Data = [{}];
             var ramPieCharts_LastUsedRamM = 0;
-            //#MACRO_Pie_Charts("ramPieCharts" "divMemoryChart" "ramPieCharts_Data" '"[[title]]:[[value]]M ([[percents]]%)"' "100" null)
+            var ramPieCharts = createPieCharts({
+                divName: "divMemoryChart",
+                dataProvider: ramPieCharts_Data,
+                balloonText: "[[title]]:[[value]]M ([[percents]]%)",
+                radius: 100
+            })
 
             var cpuSerialCharts_Data = [{}];
             var cpuSerialCharts_TitleList = ["使用率"];
             //#MACRO_Serial_Charts("cpuSerialCharts" "divCpuChart" "cpuSerialCharts_Data" "cpuSerialCharts_TitleList")
-
             var refrashDataFunc = function () {
                 //刷新基本信息数据
                 jQuery.ajax({
@@ -26,7 +31,6 @@
                         jQuery("#tdOSName").html(json.os_name);
                         jQuery("#tdComputerName").html(json.computer_name);
                         jQuery("#tdProcessRunTime").html(json.process_run_time);
-                        
                     }
                 });
 
