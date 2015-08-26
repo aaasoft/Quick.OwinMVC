@@ -60,7 +60,7 @@ var createSerialCharts = function (data) {
 
     //加载折线图
     var serialChart = new AmCharts.AmSerialChart();
-    serialChart.pathToImages = "../resource/images/amcharts/";
+    serialChart.pathToImages = "../resource/amcharts/images/";
     if (titleList.length != 0) {
         serialChart.marginTop = 15;
         serialChart.marginLeft = 80;

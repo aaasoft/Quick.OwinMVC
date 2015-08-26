@@ -22,7 +22,7 @@ namespace Quick.OwinMVC.Test
                 ["velocimacro.library"] = "Quick.OwinMVC.Test:vm_global_library",
             };
 
-            Server server = new Server("http://*:2001", properties);
+            Server server = new Server("http://*:20001", properties);
             //注册中间件
             //server.RegisterMiddleware<LoginMiddleware>();
             server.Start();

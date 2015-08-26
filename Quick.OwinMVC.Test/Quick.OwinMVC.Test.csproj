@@ -105,9 +105,6 @@
     <EmbeddedResource Include="view\index.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\scripts\amcharts.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="resource\images\amcharts\dragIcon.gif" />
     <EmbeddedResource Include="resource\images\amcharts\lens.png" />
   </ItemGroup>
@@ -125,7 +122,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resource\scripts\jquery.wysiwyg.js" />
-    <EmbeddedResource Include="resource\scripts\raphael.js" />
     <EmbeddedResource Include="resource\scripts\simpla.jquery.configuration.js" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +132,66 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resource\scripts\charts.function.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\amcharts.js" />
+    <EmbeddedResource Include="resource\amcharts\funnel.js" />
+    <EmbeddedResource Include="resource\amcharts\gantt.js" />
+    <EmbeddedResource Include="resource\amcharts\gauge.js" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIcon.gif" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconBlack.gif" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconH.gif" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconHBlack.gif" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBig.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBig.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlack.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlack.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlackH.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlackH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigH.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmall.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmall.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlack.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlack.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlackH.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlackH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallH.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBig.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBig.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlack.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlack.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlackH.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlackH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigH.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmall.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmall.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlack.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlack.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlackH.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlackH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallH.png" />
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\eraserIcon.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\eraserIconH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\export.png" />
+    <EmbeddedResource Include="resource\amcharts\images\exportWhite.png" />
+    <EmbeddedResource Include="resource\amcharts\images\lens.png" />
+    <EmbeddedResource Include="resource\amcharts\images\lens.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\lensWhite.png" />
+    <EmbeddedResource Include="resource\amcharts\images\lensWhite_old.png" />
+    <EmbeddedResource Include="resource\amcharts\images\lens_old.png" />
+    <EmbeddedResource Include="resource\amcharts\images\lens_white.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\pencilIcon.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\pencilIconH.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\xIcon.svg" />
+    <EmbeddedResource Include="resource\amcharts\images\xIconH.svg" />
+    <EmbeddedResource Include="resource\amcharts\pie.js" />
+    <EmbeddedResource Include="resource\amcharts\radar.js" />
+    <EmbeddedResource Include="resource\amcharts\serial.js" />
+    <EmbeddedResource Include="resource\amcharts\xy.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
