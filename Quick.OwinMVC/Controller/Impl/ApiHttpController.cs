@@ -25,6 +25,7 @@ namespace Quick.OwinMVC.Controller.Impl
                 try
                 {
                     var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
+                    rep.Expires = new DateTimeOffset(DateTime.Now);
                     rep.ContentType = "text/json";
                     rep.ContentLength = content.Length;
                     rep.Write(content);

@@ -20,7 +20,6 @@ namespace Quick.OwinMVC.Test.Controller
 
         public string Service(IOwinContext context, IDictionary<String, Object> data)
         {
-            data["currentTime"] = DateTime.Now;
             data["computerInfo"] = new
             {
                 computer_name = computer.Name,
