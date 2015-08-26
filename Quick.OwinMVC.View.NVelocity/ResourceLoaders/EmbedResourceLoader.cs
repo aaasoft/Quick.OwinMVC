@@ -50,7 +50,7 @@ namespace Quick.OwinMVC.View.NVelocity.ResourceLoaders
                 this.pluginNameAndPathSplitString = ":";
             this.viewNamePrefix = configuration.GetString("class.viewNamePrefix");
             if (this.viewNamePrefix == null)
-                this.viewNamePrefix = "View/";
+                this.viewNamePrefix = "view/";
             this.viewNameSuffix = configuration.GetString("class.viewNameSuffix");
             if (this.viewNameSuffix == null)
                 this.viewNameSuffix = ".html";

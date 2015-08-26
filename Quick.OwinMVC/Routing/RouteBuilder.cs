@@ -29,7 +29,7 @@ namespace Quick.OwinMVC.Routing
                     )
                 );
 
-            return new Regex("^/" + string.Join("/", parts) + "$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            return new Regex("^/" + string.Join("/", parts) + "$", RegexOptions.Compiled);
         }
     }
 }

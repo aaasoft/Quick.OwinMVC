@@ -18,8 +18,14 @@ namespace Quick.OwinMVC.Controller.Impl
         {
             var rep = context.Response;
 
-            Uri uri = new Uri($"resource://{plugin}/Resource/{path}");
-            var resourceResponse = WebRequest.Create(uri).GetResponse();
+            Uri uri = new Uri($"resource://{plugin}/resource/{path}");
+            WebResponse resourceResponse = null;
+            try
+            {
+                resourceResponse = WebRequest.Create(uri).GetResponse();
+            }
+            catch { }
+
             if (resourceResponse == null)
             {
                 rep.StatusCode = 404;
