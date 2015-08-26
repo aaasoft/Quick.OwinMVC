@@ -13,6 +13,7 @@ using Quick.OwinMVC.View;
 using Quick.OwinMVC.Resource;
 using System.Net;
 using Quick.OwinMVC.Utils;
+using Microsoft.Owin;
 
 namespace Quick.OwinMVC
 {
@@ -24,6 +25,7 @@ namespace Quick.OwinMVC
         private String url;
         private IViewRender viewRender;
         private IDisposable webApp;
+        private Stack<Action<IAppBuilder>> middlewareRegisterActionStack = new Stack<Action<IAppBuilder>>();
 
         static Server()
         {
@@ -40,9 +42,41 @@ namespace Quick.OwinMVC
 
             if (!properties.ContainsKey(VIEWRENDER_CLASS))
                 throw new ApplicationException($"Cann't find '{VIEWRENDER_CLASS}' in properties.");
+            //创建视图渲染器
             String viewRenderClassName = properties[VIEWRENDER_CLASS];
             this.viewRender = (IViewRender)AssemblyUtils.CreateObject(viewRenderClassName);
             this.viewRender.Init(properties);
+            //注册Quick.OwinMVC中间件
+            RegisterMiddleware<Middleware>(viewRender);
+        }
+
+        /// <summary>
+        /// 注册中间件
+        /// </summary>
+        /// <param name="middlewareClass"></param>
+        /// <param name="args"></param>
+        public void RegisterMiddleware(Type middlewareClass, params object[] args)
+        {
+            Action<IAppBuilder> action = app =>
+            {
+                app.Use(middlewareClass, args);
+            };
+            middlewareRegisterActionStack.Push(action);
+        }
+
+        /// <summary>
+        /// 注册中间件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="args"></param>
+        public void RegisterMiddleware<T>(params object[] args)
+            where T : OwinMiddleware
+        {
+            Action<IAppBuilder> action = app =>
+             {
+                 app.Use<T>(args);
+             };
+            middlewareRegisterActionStack.Push(action);
         }
 
         public void Start()
@@ -52,7 +86,11 @@ namespace Quick.OwinMVC
 #if DEBUG
                 app.UseErrorPage();
 #endif
-                app.Use<Controller.Middleware>(viewRender);
+                //加载所有的中间件
+                while (middlewareRegisterActionStack.Count > 0)
+                {
+                    middlewareRegisterActionStack.Pop().Invoke(app);
+                }
             }
             );
         }

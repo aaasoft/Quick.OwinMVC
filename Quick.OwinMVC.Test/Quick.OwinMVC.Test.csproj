@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Controller\IndexController.cs" />
     <Compile Include="Controller\PerformanceController.cs" />
+    <Compile Include="Middleware\LoginMiddleware.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
