@@ -41,7 +41,7 @@
                 radius: 100
             });
 
-            var cpuSerialCharts_MaxDataCount = 50;
+            var cpuSerialCharts_MaxDataCount = 100;
             var cpuSerialCharts_Data = [];
             var currentTime = new Date();
             currentTime.setSeconds(currentTime.getSeconds() - cpuSerialCharts_MaxDataCount);
@@ -100,7 +100,7 @@
                         while (cpuSerialCharts_Data.length > cpuSerialCharts_MaxDataCount) {
                             cpuSerialCharts_Data.shift();
                         }
-                        cpuSerialCharts_Data.push(json);
+                        cpuSerialCharts_Data.push({ time: json.time, value: Math.round(json.value) });
                         cpuSerialCharts.validateData();
                     }
                 });
@@ -160,12 +160,10 @@
                     </div>
                 </div>
             </div>
-            <div class="clear"></div>
-            <!-- End .clear -->
             <div class="content-box">
                 <!-- Start Content Box -->
                 <div class="content-box-header">
-                    <h3>内存信息</h3>
+                    <h3>性能信息</h3>
                     <ul class="content-box-tabs"></ul>
                     <div class="clear"></div>
                 </div>
@@ -173,27 +171,27 @@
                 <div class="content-box-content">
                     <div class="tab-content default-tab" id="tab1">
                         <p id="page-intro">
-                            <div style="width: 300px;height: 300px;">
-                                <div id="divMemoryChart" style="float:left; width: 100%;height: 100%; text-align:center;"></div>
-                            </div>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="content-box">
-                <!-- Start Content Box -->
-                <div class="content-box-header">
-                    <h3>CPU信息</h3>
-                    <ul class="content-box-tabs"></ul>
-                    <div class="clear"></div>
-                </div>
-                <!-- End .content-box-header -->
-                <div class="content-box-content">
-                    <div class="tab-content default-tab" id="tab1">
-                        <p id="page-intro">
-                            <div style="width: 100%;height: 300px;">
-                                <div id="divCpuChart" style="float:left; width: 100%;height: 100%; text-align:center;"></div>
-                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td style="font-weight:700">CPU</td>
+                                        <td style="font-weight:700">内存</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="width: 100%;height: 300px;">
+                                            <div id="divCpuChart" style="float:left; width: 100%;height: 100%; text-align:center;"></div>
+                                        </td>
+                                        <td>
+                                            <div style="width: 300px;height: 300px;">
+                                                <div id="divMemoryChart" style="float:left; width: 100%;height: 100%; text-align:center;"></div>
+                                            </div>                                            
+                                        </td>                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
                         </p>
                     </div>
                 </div>
