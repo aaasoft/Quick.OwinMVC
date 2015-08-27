@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Owin;
 using Microsoft.Owin.Hosting;
-using Quick.OwinMVC.Controller;
-using Quick.OwinMVC.Controller.Impl;
-using System.Reflection;
-using Quick.OwinMVC.Routing;
 using Quick.OwinMVC.View;
 using Quick.OwinMVC.Resource;
 using System.Net;
 using Quick.OwinMVC.Utils;
 using Microsoft.Owin;
+using Quick.OwinMVC.Middleware;
 
 namespace Quick.OwinMVC
 {
@@ -24,6 +20,8 @@ namespace Quick.OwinMVC
         private IDictionary<String, String> properties;
         private String url;
         private IViewRender viewRender;
+        private IDictionary<String, String> redirectDict;
+        private IDictionary<String, String> rewriteDict;
         private IDisposable webApp;
         private Stack<Action<IAppBuilder>> middlewareRegisterActionStack = new Stack<Action<IAppBuilder>>();
 
@@ -42,12 +40,18 @@ namespace Quick.OwinMVC
 
             if (!properties.ContainsKey(VIEWRENDER_CLASS))
                 throw new ApplicationException($"Cann't find '{VIEWRENDER_CLASS}' in properties.");
+            redirectDict = new Dictionary<String, String>();
+            rewriteDict = new Dictionary<String, String>();
             //创建视图渲染器
             String viewRenderClassName = properties[VIEWRENDER_CLASS];
             this.viewRender = (IViewRender)AssemblyUtils.CreateObject(viewRenderClassName);
             this.viewRender.Init(properties);
             //注册Quick.OwinMVC中间件
-            RegisterMiddleware<Middleware>(viewRender);
+            RegisterMiddleware<MvcMiddleware>(viewRender);
+            //注册URL重定向中间件
+            RegisterMiddleware<RedirectMiddleware>(redirectDict);
+            //注册URL重写中间件
+            RegisterMiddleware<RewriteMiddleware>(rewriteDict);
         }
 
         /// <summary>
@@ -62,6 +66,26 @@ namespace Quick.OwinMVC
                 app.Use(middlewareClass, args);
             };
             middlewareRegisterActionStack.Push(action);
+        }
+
+        /// <summary>
+        /// 注册重定向
+        /// </summary>
+        /// <param name="srcPath"></param>
+        /// <param name="desPath"></param>
+        public void RegisterRedirect(String srcPath, String desPath)
+        {
+            redirectDict[srcPath] = desPath;
+        }
+
+        /// <summary>
+        /// 注册重写
+        /// </summary>
+        /// <param name="srcPath"></param>
+        /// <param name="desPath"></param>
+        public void RegisterRewrite(String srcPath, String desPath)
+        {
+            rewriteDict[srcPath] = desPath;
         }
 
         /// <summary>

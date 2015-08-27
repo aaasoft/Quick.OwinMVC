@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using Newtonsoft.Json;
 using Quick.OwinMVC.Routing;
+using Quick.OwinMVC.Middleware;
 
 namespace Quick.OwinMVC.Controller.Impl
 {
-    [Route("/:" + Middleware.QOMVC_PLUGIN_KEY + "/api/:" + Middleware.QOMVC_PATH_KEY)]
+    [Route("/:" + MvcMiddleware.QOMVC_PLUGIN_KEY + "/api/:" + MvcMiddleware.QOMVC_PATH_KEY)]
     internal class ApiHttpController : ExtendHttpController<IApiController>
     {
         public override void ExecuteController(IApiController controller, IOwinContext context, string plugin, string path)

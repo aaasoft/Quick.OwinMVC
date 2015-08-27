@@ -11,9 +11,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Quick.OwinMVC.Controller
+namespace Quick.OwinMVC.Middleware
 {
-    public class Middleware : OwinMiddleware
+    public class MvcMiddleware : OwinMiddleware
     {
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
@@ -22,7 +22,7 @@ namespace Quick.OwinMVC.Controller
         private IDictionary<String, String> pluginAliasDict;
         public IDictionary<Regex, IHttpController> routes;
 
-        public Middleware(OwinMiddleware next, IViewRender viewRender) : base(next)
+        public MvcMiddleware(OwinMiddleware next, IViewRender viewRender) : base(next)
         {
             this.viewRender = viewRender;
             this.pluginAliasDict = new Dictionary<String, String>();
@@ -34,7 +34,7 @@ namespace Quick.OwinMVC.Controller
         {
             return Task.Factory.StartNew(() =>
             {
-                String path = context.Environment["owin.RequestPath"].ToString();
+                String path = context.Get<String>("owin.RequestPath");
                 IHttpController controller = null;
                 foreach (Regex regex in routes.Keys)
                 {

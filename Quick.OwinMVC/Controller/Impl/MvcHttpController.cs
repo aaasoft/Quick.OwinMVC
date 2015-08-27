@@ -7,10 +7,11 @@ using Microsoft.Owin;
 using System.Dynamic;
 using Quick.OwinMVC.View;
 using Quick.OwinMVC.Routing;
+using Quick.OwinMVC.Middleware;
 
 namespace Quick.OwinMVC.Controller.Impl
 {
-    [Route("/:" + Middleware.QOMVC_PLUGIN_KEY + "/view/:" + Middleware.QOMVC_PATH_KEY)]
+    [Route("/:" + MvcMiddleware.QOMVC_PLUGIN_KEY + "/view/:" + MvcMiddleware.QOMVC_PATH_KEY)]
     internal class MvcHttpController : ExtendHttpController<IMvcController>
     {
         public IViewRender ViewRender { get; set; }
