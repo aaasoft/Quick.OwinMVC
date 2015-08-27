@@ -16,6 +16,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="Quick.OwinMVC\bin\Release\Quick.OwinMVC.dll" target="lib\net45\Quick.OwinMVC.dll" />
+        <file src="bin\Release\Quick.OwinMVC.dll" target="lib\net45\Quick.OwinMVC.dll" />
     </files>
 </package>
