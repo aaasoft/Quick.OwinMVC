@@ -44,5 +44,15 @@ namespace Quick.OwinMVC.Controller
             }
             return sessionDict;
         }
+
+        /// <summary>
+        /// 获取POST提交的表单数据
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static IFormCollection GetFormData(this IOwinContext context)
+        {
+            return context.Request.ReadFormAsync().Result;
+        }
     }
 }
