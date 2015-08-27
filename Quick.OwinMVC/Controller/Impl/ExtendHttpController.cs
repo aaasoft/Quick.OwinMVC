@@ -8,6 +8,7 @@ using Microsoft.Owin;
 namespace Quick.OwinMVC.Controller.Impl
 {
     public abstract class ExtendHttpController<T> : HttpController
+        where T : IPluginController
     {
         protected Encoding encoding = new UTF8Encoding(false);
 
@@ -15,13 +16,12 @@ namespace Quick.OwinMVC.Controller.Impl
 
         internal void RegisterController(string plugin, string path, T controller)
         {
+            controller.Init(properties);
             controllerDict[$"{plugin}:{path}"] = controller;
         }
 
         public override void Service(IOwinContext context, string plugin, string path)
         {
-
-
             if (!controllerDict.ContainsKey($"{plugin}:{path}"))
             {
                 context.Response.StatusCode = 404;

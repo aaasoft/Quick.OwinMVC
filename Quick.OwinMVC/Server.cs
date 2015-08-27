@@ -15,11 +15,8 @@ namespace Quick.OwinMVC
 {
     public class Server
     {
-        public const String VIEWRENDER_CLASS = "Quick.OwinMVC.VIEWRENDER_CLASS";
-
         private IDictionary<String, String> properties;
         private String url;
-        private IViewRender viewRender;
         private IDictionary<String, String> redirectDict;
         private IDictionary<String, String> rewriteDict;
         private IDisposable webApp;
@@ -38,16 +35,11 @@ namespace Quick.OwinMVC
             this.properties = properties;
             this.url = url;
 
-            if (!properties.ContainsKey(VIEWRENDER_CLASS))
-                throw new ApplicationException($"Cann't find '{VIEWRENDER_CLASS}' in properties.");
             redirectDict = new Dictionary<String, String>();
             rewriteDict = new Dictionary<String, String>();
-            //创建视图渲染器
-            String viewRenderClassName = properties[VIEWRENDER_CLASS];
-            this.viewRender = (IViewRender)AssemblyUtils.CreateObject(viewRenderClassName);
-            this.viewRender.Init(properties);
+
             //注册Quick.OwinMVC中间件
-            RegisterMiddleware<MvcMiddleware>(viewRender);
+            RegisterMiddleware<MvcMiddleware>(properties);
             //注册URL重定向中间件
             RegisterMiddleware<RedirectMiddleware>(redirectDict);
             //注册URL重写中间件

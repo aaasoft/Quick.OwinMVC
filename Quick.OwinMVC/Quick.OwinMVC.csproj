@@ -74,6 +74,7 @@
     <Compile Include="Controller\IOwinContextSessionExtension.cs" />
     <Compile Include="Controller\Impl\MvcHttpController.cs" />
     <Compile Include="Controller\Impl\ResourceHttpController.cs" />
+    <Compile Include="Controller\IPluginController.cs" />
     <Compile Include="Middleware\MvcMiddleware.cs" />
     <Compile Include="Middleware\RedirectMiddleware.cs" />
     <Compile Include="Middleware\RewriteMiddleware.cs" />

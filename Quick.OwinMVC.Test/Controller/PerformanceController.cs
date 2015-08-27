@@ -26,6 +26,11 @@ namespace Quick.OwinMVC.Test.Controller
             cpuCounter.NextValue();
         }
 
+        public void Init(IDictionary<string, string> properties)
+        {
+            
+        }
+
         public object Service(IOwinContext context)
         {
             switch (context.Request.Query["type"])

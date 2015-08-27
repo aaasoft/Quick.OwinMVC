@@ -18,6 +18,11 @@ namespace Quick.OwinMVC.Test.Controller
     {
         private Microsoft.VisualBasic.Devices.Computer computer = new Microsoft.VisualBasic.Devices.Computer();
 
+        public void Init(IDictionary<string, string> properties)
+        {
+            
+        }
+
         public string Service(IOwinContext context, IDictionary<String, Object> data)
         {
             data["computerInfo"] = new

@@ -2,6 +2,7 @@
 using Quick.OwinMVC.Controller;
 using Quick.OwinMVC.Controller.Impl;
 using Quick.OwinMVC.Routing;
+using Quick.OwinMVC.Utils;
 using Quick.OwinMVC.View;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,26 @@ namespace Quick.OwinMVC.Middleware
 {
     public class MvcMiddleware : OwinMiddleware
     {
+        public const String VIEWRENDER_CLASS = "Quick.OwinMVC.VIEWRENDER_CLASS";
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
 
+        private IDictionary<String, String> properties;
         private IViewRender viewRender;
         private IDictionary<String, String> pluginAliasDict;
         public IDictionary<Regex, IHttpController> routes;
 
-        public MvcMiddleware(OwinMiddleware next, IViewRender viewRender) : base(next)
+        public MvcMiddleware(OwinMiddleware next, IDictionary<String, String> properties) : base(next)
         {
-            this.viewRender = viewRender;
+            this.properties = properties;
+            if (!properties.ContainsKey(VIEWRENDER_CLASS))
+                throw new ApplicationException($"Cann't find '{VIEWRENDER_CLASS}' in properties.");
+
+            //创建视图渲染器
+            String viewRenderClassName = properties[VIEWRENDER_CLASS];
+            this.viewRender = (IViewRender)AssemblyUtils.CreateObject(viewRenderClassName);
+            this.viewRender.Init(properties);
+
             this.pluginAliasDict = new Dictionary<String, String>();
             this.routes = new Dictionary<Regex, IHttpController>();
             scanController();
@@ -95,6 +106,7 @@ namespace Quick.OwinMVC.Middleware
 
         private void RegisterController(string path, IHttpController httpController)
         {
+            httpController.Init(properties);
             routes.Add(RouteBuilder.RouteToRegex(path), httpController);
         }
 

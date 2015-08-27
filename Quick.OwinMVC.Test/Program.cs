@@ -14,7 +14,7 @@ namespace Quick.OwinMVC.Test
             IDictionary<String, String> properties = new Dictionary<String, String>
             {
                 //Quick.OwinMVC Server配置部分
-                [Server.VIEWRENDER_CLASS] = "Quick.OwinMVC.View.NVelocity.ViewRender; Quick.OwinMVC.View.NVelocity",
+                ["Quick.OwinMVC.VIEWRENDER_CLASS"] = "Quick.OwinMVC.View.NVelocity.ViewRender; Quick.OwinMVC.View.NVelocity",
 
                 //NVelocity配置部分
                 ["resource.loader"] = "class",

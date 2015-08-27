@@ -9,6 +9,12 @@ namespace Quick.OwinMVC.Controller
 {
     public abstract class HttpController : IHttpController
     {
+        protected IDictionary<string, string> properties;
+        public virtual void Init(IDictionary<string, string> properties)
+        {
+            this.properties = properties;
+        }
+
         public virtual void DoGet(IOwinContext context, String plugin, String path)
         { }
         public virtual void DoPost(IOwinContext context, String plugin, String path)
