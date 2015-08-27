@@ -191,10 +191,10 @@
     <EmbeddedResource Include="resource\amcharts\xy.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\scripts\jquery-1.6.2.min.js" />
+    <EmbeddedResource Include="resource\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\favicon.ico" />
+    <EmbeddedResource Include="resource\scripts\jquery.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
