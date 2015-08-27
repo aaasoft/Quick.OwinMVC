@@ -28,10 +28,7 @@ namespace Quick.OwinMVC.Resource
             resourceName = $"{assemblyName}.{resourceName}";
 
             //从嵌入资源中搜索
-            var resourceInfo = assembly.GetManifestResourceInfo(resourceName);
-            if (resourceInfo == null)
-                return null;
-            return new EmbedWebResponse(assembly, resourceName);
+            return new EmbedWebResponse(new Uri($"embed://{assemblyName}/{resourceName}"));
         }
     }
 

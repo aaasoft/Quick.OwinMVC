@@ -85,6 +85,7 @@
     <Compile Include="Routing\RouteBuilder.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Utils\AssemblyUtils.cs" />
+    <Compile Include="Utils\HashUtils.cs" />
     <Compile Include="Utils\MimeUtils.cs" />
     <Compile Include="View\IViewRender.cs" />
   </ItemGroup>
