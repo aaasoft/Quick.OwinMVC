@@ -17,10 +17,10 @@ namespace Quick.OwinMVC.Test.Middleware
         public override Task Invoke(IOwinContext context)
         {
             var session = context.GetSession();
-            if (session.ContainsKey("UserId"))
-            {
+            if (session == null)
                 return Next.Invoke(context);
-            }
+            if (session.ContainsKey("UserId"))
+                return Next.Invoke(context);
             session["UserId"] = Guid.NewGuid().ToString();
             context.Response.Write("Login success,please refresh.");
             return Task.FromResult(0);

@@ -20,7 +20,12 @@ namespace Quick.OwinMVC
         private IDictionary<String, String> redirectDict;
         private IDictionary<String, String> rewriteDict;
         private IDisposable webApp;
-        private Stack<Action<IAppBuilder>> middlewareRegisterActionStack = new Stack<Action<IAppBuilder>>();
+        //头部中间件堆栈
+        private Stack<Action<IAppBuilder>> headMiddlewareRegisterActionStack = new Stack<Action<IAppBuilder>>();
+        //中部中间件堆栈
+        private Stack<Action<IAppBuilder>> middleMiddlewareRegisterActionStack = new Stack<Action<IAppBuilder>>();
+        //尾部中间件堆栈
+        private Stack<Action<IAppBuilder>> tailMiddlewareRegisterActionStack = new Stack<Action<IAppBuilder>>();
 
         static Server()
         {
@@ -38,26 +43,50 @@ namespace Quick.OwinMVC
             redirectDict = new Dictionary<String, String>();
             rewriteDict = new Dictionary<String, String>();
 
+            //注册Session中间件
+            registerMiddleware<SessionMiddleware>(headMiddlewareRegisterActionStack, properties);
+
             //注册Quick.OwinMVC中间件
-            RegisterMiddleware<MvcMiddleware>(properties);
+            registerMiddleware<MvcMiddleware>(tailMiddlewareRegisterActionStack, properties);
             //注册URL重定向中间件
-            RegisterMiddleware<RedirectMiddleware>(redirectDict);
+            registerMiddleware<RedirectMiddleware>(tailMiddlewareRegisterActionStack, redirectDict);
             //注册URL重写中间件
-            RegisterMiddleware<RewriteMiddleware>(rewriteDict);
+            registerMiddleware<RewriteMiddleware>(tailMiddlewareRegisterActionStack, rewriteDict);
         }
 
-        /// <summary>
-        /// 注册中间件
-        /// </summary>
-        /// <param name="middlewareClass"></param>
-        /// <param name="args"></param>
-        public void RegisterMiddleware(Type middlewareClass, params object[] args)
+        private void registerMiddleware(Stack<Action<IAppBuilder>> middlewareRegisterActionStack, Type middlewareClass, params object[] args)
         {
             Action<IAppBuilder> action = app =>
             {
                 app.Use(middlewareClass, args);
             };
             middlewareRegisterActionStack.Push(action);
+        }
+        private void registerMiddleware<T>(Stack<Action<IAppBuilder>> middlewareRegisterActionStack, params object[] args)
+            where T : OwinMiddleware
+        {
+            registerMiddleware(middlewareRegisterActionStack, typeof(T), args);
+        }
+
+        /// <summary>
+        /// 注册用户中间件
+        /// </summary>
+        /// <param name="middlewareClass"></param>
+        /// <param name="args"></param>
+        public void RegisterMiddleware(Type middlewareClass, params object[] args)
+        {
+            registerMiddleware(middleMiddlewareRegisterActionStack, middlewareClass, args);
+        }
+
+        /// <summary>
+        /// 注册用户中间件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="args"></param>
+        public void RegisterMiddleware<T>(params object[] args)
+            where T : OwinMiddleware
+        {
+            registerMiddleware<T>(middleMiddlewareRegisterActionStack, args);
         }
 
         /// <summary>
@@ -80,21 +109,6 @@ namespace Quick.OwinMVC
             rewriteDict[srcPath] = desPath;
         }
 
-        /// <summary>
-        /// 注册中间件
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="args"></param>
-        public void RegisterMiddleware<T>(params object[] args)
-            where T : OwinMiddleware
-        {
-            Action<IAppBuilder> action = app =>
-             {
-                 app.Use<T>(args);
-             };
-            middlewareRegisterActionStack.Push(action);
-        }
-
         public void Start()
         {
             webApp = WebApp.Start(url, app =>
@@ -102,11 +116,15 @@ namespace Quick.OwinMVC
 #if DEBUG
                 app.UseErrorPage();
 #endif
-                //加载所有的中间件
-                while (middlewareRegisterActionStack.Count > 0)
-                {
-                    middlewareRegisterActionStack.Pop().Invoke(app);
-                }
+                //加载头部的中间件
+                while (headMiddlewareRegisterActionStack.Count > 0)
+                    headMiddlewareRegisterActionStack.Pop().Invoke(app);
+                //加载中部的中间件
+                while (middleMiddlewareRegisterActionStack.Count > 0)
+                    middleMiddlewareRegisterActionStack.Pop().Invoke(app);
+                //加载尾部的中间件
+                while (tailMiddlewareRegisterActionStack.Count > 0)
+                    tailMiddlewareRegisterActionStack.Pop().Invoke(app);
             }
             );
         }
