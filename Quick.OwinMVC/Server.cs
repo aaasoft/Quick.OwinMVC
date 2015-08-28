@@ -29,8 +29,6 @@ namespace Quick.OwinMVC
 
         static Server()
         {
-            //注册embed:前缀URI处理程序
-            WebRequest.RegisterPrefix("embed:", new EmbedWebRequestFactory());
             //注册resource:前缀URI处理程序
             WebRequest.RegisterPrefix("resource:", new ResourceWebRequestFactory());
         }

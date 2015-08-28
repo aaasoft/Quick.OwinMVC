@@ -80,7 +80,6 @@
     <Compile Include="Middleware\RewriteMiddleware.cs" />
     <Compile Include="Middleware\SessionMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resource\EmbedWebRequestFactory.cs" />
     <Compile Include="Resource\ResourceWebRequestFactory.cs" />
     <Compile Include="Routing\RouteAttribute.cs" />
     <Compile Include="Routing\RouteBuilder.cs" />

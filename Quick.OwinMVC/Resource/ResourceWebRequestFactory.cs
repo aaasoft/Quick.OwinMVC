@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
@@ -18,17 +19,70 @@ namespace Quick.OwinMVC.Resource
 
         public override WebResponse GetResponse()
         {
-            Assembly assembly = Assembly.Load(uri.Host);
+            return new ResourceWebResponse(uri);
+        }
+    }
+
+    public class ResourceWebResponse : WebResponse
+    {
+        private Uri uri;
+        private Assembly assembly;
+        private String resourceName;
+        public ResourceWebResponse(Uri uri)
+        {
+            this.uri = uri;
+            assembly = Assembly.Load(uri.Host);
             String assemblyName = assembly.GetName().Name;
-            String resourceName = uri.LocalPath;
+            resourceName = uri.LocalPath;
             while (resourceName.StartsWith("/"))
                 resourceName = resourceName.Substring(1);
-
             resourceName = resourceName.Replace("/", ".");
             resourceName = $"{assemblyName}.{resourceName}";
+        }
+        private ManifestResourceInfo GetResourceInfo()
+        {
+            return assembly.GetManifestResourceInfo(resourceName);
+        }
+        public override System.IO.Stream GetResponseStream()
+        {
+            var resourceInfo = GetResourceInfo();
+            if (resourceInfo == null)
+                return null;
+            return assembly.GetManifestResourceStream(resourceName);
+        }
 
-            //从嵌入资源中搜索
-            return new EmbedWebResponse(new Uri($"embed://{assemblyName}/{resourceName}"));
+        public override Uri ResponseUri { get { return uri; } }
+
+        public override long ContentLength
+        {
+            get
+            {
+                var resourceInfo = GetResourceInfo();
+                if (resourceInfo == null)
+                    return -1;
+                using (var stream = GetResponseStream())
+                {
+                    return stream.Length;
+                }
+            }
+            set { base.ContentLength = value; }
+        }
+
+        public override string ContentType
+        {
+            get { return "application/octet-stream"; }
+            set { base.ContentType = value; }
+        }
+
+        /// <summary>
+        /// 最后修改时间
+        /// </summary>
+        public DateTime LastModified
+        {
+            get
+            {
+                return File.GetLastWriteTime(assembly.Location);
+            }
         }
     }
 

@@ -9,14 +9,16 @@ using System.Net;
 using Quick.OwinMVC.Utils;
 using Quick.OwinMVC.Routing;
 using Quick.OwinMVC.Middleware;
+using Quick.OwinMVC.Resource;
 
 namespace Quick.OwinMVC.Controller.Impl
 {
     [Route("/:" + MvcMiddleware.QOMVC_PLUGIN_KEY + "/resource/:" + MvcMiddleware.QOMVC_PATH_KEY)]
     internal class ResourceHttpController : HttpController
     {
-        private double resourceExpires = 6 * 60 * 60;
-        private Boolean useMd5ETag = true;
+        //默认一天
+        private double resourceExpires = 86400;
+        private Boolean useMd5ETag = false;
 
         public override void Init(IDictionary<string, string> properties)
         {
@@ -33,10 +35,10 @@ namespace Quick.OwinMVC.Controller.Impl
             var rep = context.Response;
 
             Uri uri = new Uri($"resource://{plugin}/resource/{path}");
-            WebResponse resourceResponse = null;
+            ResourceWebResponse resourceResponse = null;
             try
             {
-                resourceResponse = WebRequest.Create(uri).GetResponse();
+                resourceResponse = WebRequest.Create(uri).GetResponse() as ResourceWebResponse;
             }
             catch { }
 
@@ -65,6 +67,8 @@ namespace Quick.OwinMVC.Controller.Impl
                 rep.ContentType = mime;
             rep.ContentLength = stream.Length;
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(resourceExpires));
+            rep.Headers["Cache-Control"] = $"max-age={resourceExpires}";
+            rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
             stream.CopyTo(rep.Body);
         }
     }
