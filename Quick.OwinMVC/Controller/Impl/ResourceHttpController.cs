@@ -29,6 +29,7 @@ namespace Quick.OwinMVC.Controller.Impl
 
         public override void DoGet(IOwinContext context, string plugin, string path)
         {
+            var req = context.Request;
             var rep = context.Response;
 
             Uri uri = new Uri($"resource://{plugin}/resource/{path}");
@@ -46,16 +47,24 @@ namespace Quick.OwinMVC.Controller.Impl
                 rep.Write($"Resource '{path}' in plugin '{plugin}' not found!");
                 return;
             }
+            if (useMd5ETag)
+            {
+                var serverETag = HashUtils.ComputeETagByMd5(stream);
+                var clientETag = req.Headers.Get("If-None-Match");
+                //如果客户端的ETag值与服务端相同，则返回304，表示资源未修改
+                if (serverETag == clientETag)
+                {
+                    rep.StatusCode = 304;
+                    return;
+                }
+                rep.ETag = serverETag;
+                stream.Position = 0;
+            }
             var mime = MimeUtils.GetMime(path);
             if (mime != null)
                 rep.ContentType = mime;
             rep.ContentLength = stream.Length;
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(resourceExpires));
-            if (useMd5ETag)
-            {
-                rep.ETag = HashUtils.ComputeETagByMd5(stream);
-                stream.Position = 0;
-            }
             stream.CopyTo(rep.Body);
         }
     }

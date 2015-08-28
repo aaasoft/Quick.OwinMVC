@@ -16,11 +16,14 @@ namespace Quick.OwinMVC.Test.Middleware
 
         public override Task Invoke(IOwinContext context)
         {
-            return Task.Factory.StartNew(() =>
-                {
-                    var session = context.GetSession();
-                    context.Response.Write("I'm a middleware.");
-                });
+            var session = context.GetSession();
+            if (session.ContainsKey("UserId"))
+            {
+                return Next.Invoke(context);
+            }
+            session["UserId"] = Guid.NewGuid().ToString();
+            context.Response.Write("Login success,please refresh.");
+            return Task.FromResult(0);
         }
     }
 }

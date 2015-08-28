@@ -25,7 +25,7 @@ namespace Quick.OwinMVC.Test
             //Server server = new Server("http://127.0.0.1:8094", properties);
             Server server = new Server("http://*:20002", properties);
             //注册中间件
-            //server.RegisterMiddleware<LoginMiddleware>();
+            server.RegisterMiddleware<LoginMiddleware>();
             //注册重定向和重写
             server.RegisterRedirect("/", "/test/view/index");
             server.RegisterRewrite("/favicon.ico", "/test/resource/favicon.ico");
