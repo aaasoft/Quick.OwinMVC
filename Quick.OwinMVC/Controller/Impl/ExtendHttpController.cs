@@ -16,7 +16,6 @@ namespace Quick.OwinMVC.Controller.Impl
 
         internal void RegisterController(string plugin, string path, T controller)
         {
-            controller.Init(properties);
             controllerDict[$"{plugin}:{path}"] = controller;
         }
 

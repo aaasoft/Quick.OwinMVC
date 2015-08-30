@@ -92,10 +92,16 @@ namespace Quick.OwinMVC.Middleware
                     {
                         if (typeof(IHttpController).IsAssignableFrom(type))
                             RegisterController(attr.Path, (IHttpController)Activator.CreateInstance(type));
-                        if (typeof(IApiController).IsAssignableFrom(type))
-                            registerControllerActionList.Add(() => RegisterController(pluginName, attr.Path, (IApiController)Activator.CreateInstance(type)));
-                        else if (typeof(IMvcController).IsAssignableFrom(type))
-                            registerControllerActionList.Add(() => RegisterController(pluginName, attr.Path, (IMvcController)Activator.CreateInstance(type)));
+                        if (typeof(IApiController).IsAssignableFrom(type)
+                            || typeof(IMvcController).IsAssignableFrom(type))
+                        {
+                            IPluginController controller = (IPluginController)Activator.CreateInstance(type);
+                            controller.Init(properties);
+                            if (typeof(IApiController).IsAssignableFrom(type))
+                                registerControllerActionList.Add(() => RegisterController(pluginName, attr.Path, (IApiController)controller));
+                            if (typeof(IMvcController).IsAssignableFrom(type))
+                                registerControllerActionList.Add(() => RegisterController(pluginName, attr.Path, (IMvcController)controller));
+                        }
                     }
                 }
             }
