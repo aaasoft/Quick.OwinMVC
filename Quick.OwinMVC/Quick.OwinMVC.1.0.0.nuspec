@@ -9,13 +9,13 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>An simple MVC framework for Owin.</description>
         <dependencies>
-            <group targetFramework=".NETFramework4.5">
+            <group targetFramework=".NETFramework4.0">
                 <dependency id="Newtonsoft.Json" version="7.0.1" />
-                <dependency id="Microsoft.Owin.SelfHost" version="3.0.1" />
+                <dependency id="Microsoft.Owin.SelfHost" version="2.1.0" />
             </group>
         </dependencies>
     </metadata>
     <files>
-        <file src="bin\Release\Quick.OwinMVC.dll" target="lib\net45\Quick.OwinMVC.dll" />
+        <file src="bin\Release\Quick.OwinMVC.dll" target="lib\net40\Quick.OwinMVC.dll" />
     </files>
 </package>
