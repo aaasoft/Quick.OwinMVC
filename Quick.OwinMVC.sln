@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerManage", "ServerManage\ServerManage.csproj", "{C56C37DF-E979-4169-AD8D-146BBB1B05E8}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC", "Quick.OwinMVC\Quick.OwinMVC.csproj", "{17F47358-C8E5-49B2-BCAC-0B315F93E114}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC.View.NVelocity", "Quick.OwinMVC.View.NVelocity\Quick.OwinMVC.View.NVelocity.csproj", "{F30AE8B8-023F-4814-8C44-A2EDF2933A58}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC.Test", "Quick.OwinMVC.Test\Quick.OwinMVC.Test.csproj", "{575B4D46-F631-4DDF-BBAE-FC8E37724130}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B19DDEE8-6724-4592-B0F7-25D18A107624}"
 EndProject
@@ -25,10 +25,10 @@ Global
 		{F30AE8B8-023F-4814-8C44-A2EDF2933A58}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F30AE8B8-023F-4814-8C44-A2EDF2933A58}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F30AE8B8-023F-4814-8C44-A2EDF2933A58}.Release|Any CPU.Build.0 = Release|Any CPU
-		{575B4D46-F631-4DDF-BBAE-FC8E37724130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{575B4D46-F631-4DDF-BBAE-FC8E37724130}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{575B4D46-F631-4DDF-BBAE-FC8E37724130}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{575B4D46-F631-4DDF-BBAE-FC8E37724130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C56C37DF-E979-4169-AD8D-146BBB1B05E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C56C37DF-E979-4169-AD8D-146BBB1B05E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C56C37DF-E979-4169-AD8D-146BBB1B05E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C56C37DF-E979-4169-AD8D-146BBB1B05E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

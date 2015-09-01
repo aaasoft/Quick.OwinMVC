@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Quick.OwinMVC.Test")]
+[assembly: AssemblyTitle("ServerManage")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Quick.OwinMVC.Test")]
+[assembly: AssemblyProduct("ServerManage")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("575b4d46-f631-4ddf-bbae-fc8e37724130")]
+[assembly: Guid("c56c37df-e979-4169-ad8d-146bbb1b05e8")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

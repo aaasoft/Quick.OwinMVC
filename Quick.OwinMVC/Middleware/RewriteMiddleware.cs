@@ -10,9 +10,9 @@ namespace Quick.OwinMVC.Middleware
     public class RewriteMiddleware : OwinMiddleware
     {
         private IDictionary<String, String> rewriteDict;
-        public RewriteMiddleware(OwinMiddleware next, IDictionary<String, String> redirectDict) : base(next)
+        public RewriteMiddleware(OwinMiddleware next) : base(next)
         {
-            this.rewriteDict = redirectDict;
+            this.rewriteDict = Server.Instance.rewriteDict;
         }
 
         public override Task Invoke(IOwinContext context)

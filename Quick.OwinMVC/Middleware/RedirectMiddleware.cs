@@ -10,9 +10,9 @@ namespace Quick.OwinMVC.Middleware
     public class RedirectMiddleware : OwinMiddleware
     {
         private IDictionary<String, String> redirectDict;
-        public RedirectMiddleware(OwinMiddleware next, IDictionary<String, String> redirectDict) : base(next)
+        public RedirectMiddleware(OwinMiddleware next) : base(next)
         {
-            this.redirectDict = redirectDict;
+            this.redirectDict = Server.Instance.redirectDict;
         }
 
         public override Task Invoke(IOwinContext context)

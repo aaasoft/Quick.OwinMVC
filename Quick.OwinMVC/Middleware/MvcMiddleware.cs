@@ -25,9 +25,9 @@ namespace Quick.OwinMVC.Middleware
         private IDictionary<String, String> pluginAliasDict;
         public IDictionary<Regex, IHttpController> routes;
 
-        public MvcMiddleware(OwinMiddleware next, IDictionary<String, String> properties) : base(next)
+        public MvcMiddleware(OwinMiddleware next) : base(next)
         {
-            this.properties = properties;
+            this.properties = Server.Instance.properties;
             if (!properties.ContainsKey(VIEWRENDER_CLASS))
                 throw new ApplicationException($"Cann't find '{VIEWRENDER_CLASS}' in properties.");
 

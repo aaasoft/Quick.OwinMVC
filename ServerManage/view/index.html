@@ -1,11 +1,11 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Quick.OwinMVC.Test Demo</title>
+    <title>服务器监控系统</title>
     #*
     <script type="text/javascript" src="../resource/scripts/jquery.min.js"></script>
     *#
-    #parse("Quick.OwinMVC.Test:part_head_content")
+    #parse("ServerManage:part_head_content")
     <script type="text/javascript" src="../resource/amcharts/amcharts.js"></script>
     <script type="text/javascript" src="../resource/amcharts/pie.js"></script>
     <script type="text/javascript" src="../resource/amcharts/serial.js"></script>
@@ -53,7 +53,7 @@
                 currentTime.setSeconds(currentTime.getSeconds() + 1);
                 cpuSerialCharts_Data.push({ time: currentTime.format("yyyy-MM-dd HH:mm:ss") });
             }
-            
+
             var cpuSerialCharts = createSerialCharts({
                 divName: "divCpuChart",
                 dataProvider: cpuSerialCharts_Data,
@@ -66,63 +66,57 @@
                 dataDateFormat: "YYYY-MM-DD JJ:NN:SS"
             });
             
+            var isContinue = true;
             var refrashDataFunc = function () {
-                //刷新基本信息数据
+                //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "../api/performance?type=info",
+                    url: "../api/index?type=info",
                     success: function (json) {
-                        jQuery("#tdOSName").html(json.os_name);
-                        jQuery("#tdComputerName").html(json.computer_name);
-                        jQuery("#tdProcessRunTime").html(json.process_run_time);
-                    }
-                });
+                        var basic = json.basic;
+                        var cpu = json.cpu;
+                        var memory = json.memory;
 
-                //刷新内存饼图数据
-                jQuery.ajax({
-                    dataType: "json",
-                    url: "../api/performance?type=memory",
-                    success: function (json) {
-                        var usedRamM = Math.round(json.used / 1024 / 1024);
+                        //基本信息
+                        jQuery("#tdOSName").html(basic.os_name);
+                        jQuery("#tdComputerName").html(basic.computer_name);
+                        jQuery("#tdProcessRunTime").html(basic.process_run_time);
+
+                        //内存信息
+                        var usedRamM = Math.round(memory.used / 1024 / 1024);
                         //仅当已使用内存的数据变化时，才更新饼图
                         if (usedRamM != ramPieCharts_LastUsedRamM) {
                             ramPieCharts_LastUsedRamM = usedRamM;
-                            var freeRamM = Math.round(json.free / 1024 / 1024);
+                            var freeRamM = Math.round(memory.free / 1024 / 1024);
                             ramPieCharts_Data.splice(0, ramPieCharts_Data.length
                             , { title: "剩余内存", value: freeRamM }
                             , { title: "已使用内存", value: usedRamM });
                             ramPieCharts.validateData();
                         }
-                    }
-                });
-                
-                //刷新CPU折线图
-                jQuery.ajax({
-                    dataType: "json",
-                    url: "../api/performance?type=cpu",
-                    success: function (json) {
+
+                        //CPU信息
                         while (cpuSerialCharts_Data.length > cpuSerialCharts_MaxDataCount) {
                             cpuSerialCharts_Data.shift();
                         }
-                        cpuSerialCharts_Data.push({ time: json.time, value: Math.round(json.value) });
+                        cpuSerialCharts_Data.push({ time: json.time, value: Math.round(cpu.used) });
                         cpuSerialCharts.validateData();
                     }
+                }).error(function (obj, textStatus, ex) {
+                    if (obj.status == 401)
+                        isContinue = false;
                 });
-                
                 //5秒后再次执行
-                setTimeout(refrashDataFunc, 1000);
+                if (isContinue)
+                    setTimeout(refrashDataFunc, $refreshInterval);
             }
             refrashDataFunc();
         });
     </script>
-    <script>
-        
-    </script>
 </head>
 <body>
     <div id="body-wrapper">
-        #parse("Quick.OwinMVC.Test:part_systembar")
-        #parse("Quick.OwinMVC.Test:part_sidebar")
+        #parse("ServerManage:part_systembar")
+        #parse("ServerManage:part_sidebar")
         <div id="main-content">
             <div class="content-box">
                 <!-- Start Content Box -->
@@ -137,28 +131,24 @@
                         <div id="page-intro">
                             <div>
                                 <table>
-                                    <thead>
-                                        <tr>
-                                            <td></td>
-                                            <td style="font-weight:700">静态数据(HTML输出)</td>
-                                            <td style="font-weight:700">动态数据(AJAX刷新)</td>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         <tr>
                                             <td style="font-weight:700">计算机：</td>
-                                            <td>${computerInfo.computer_name}</td>
-                                            <td id="tdComputerName"></td>                                            
+                                            <td id="tdComputerName"></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight:700">操作系统：</td>
-                                            <td>${computerInfo.os_name}</td>
                                             <td id="tdOSName"></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                         <tr>
                                             <td style="font-weight:700">进程运行时长：</td>
-                                            <td>${computerInfo.process_run_time}</td>
                                             <td id="tdProcessRunTime"></td>
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -204,7 +194,7 @@
             </div>
             <div class="clear"></div>
             <!-- End .clear -->
-            #parse("Quick.OwinMVC.Test:part_footer")
+            #parse("ServerManage:part_footer")
         </div>
     </div>
 </body>

@@ -38,9 +38,9 @@ namespace Quick.OwinMVC.Middleware
             public DateTime Expires { get; set; }
         }
 
-        public SessionMiddleware(OwinMiddleware next, IDictionary<String, String> properties) : base(next)
+        public SessionMiddleware(OwinMiddleware next) : base(next)
         {
-            this.properties = properties;
+            this.properties = Server.Instance.properties;
             if (properties.ContainsKey(QUICK_OWINMVC_SESSION_EXPIRES_SECONDS_KEY))
                 expiresSeconds = Int32.Parse(properties[QUICK_OWINMVC_SESSION_EXPIRES_SECONDS_KEY]);
             if (properties.ContainsKey(QUICK_OWINMVC_SESSION_CHECK_EXPIRES_PERIOD_KEY))
