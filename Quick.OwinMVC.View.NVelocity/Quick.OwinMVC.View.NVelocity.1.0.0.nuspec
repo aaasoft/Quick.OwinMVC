@@ -9,13 +9,13 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>NVelocity support for Quick.OwinMVC.</description>
         <dependencies>
-            <group targetFramework=".NETFramework4.5">
-                <dependency id="Quick.OwinMVC" version="1.0.0" />
+            <group targetFramework=".NETFramework4.0">
                 <dependency id="NVelocity" version="1.0.3" />
+                <dependency id="Quick.OwinMVC" version="1.0.6" />
             </group>
         </dependencies>
     </metadata>
     <files>
-        <file src="bin\Release\Quick.OwinMVC.View.NVelocity.dll" target="lib\net45\Quick.OwinMVC.View.NVelocity.dll" />
+        <file src="bin\Release\Quick.OwinMVC.View.NVelocity.dll" target="lib\net40\Quick.OwinMVC.View.NVelocity.dll" />
     </files>
 </package>
