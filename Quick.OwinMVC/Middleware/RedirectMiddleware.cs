@@ -21,7 +21,8 @@ namespace Quick.OwinMVC.Middleware
             if (redirectDict.ContainsKey(path))
             {
                 context.Response.Redirect(redirectDict[path]);
-                return Task.FromResult(0);
+                context.Response.ContentLength = 0;
+                return context.Response.WriteAsync(String.Empty);
             }
             return Next.Invoke(context);
         }

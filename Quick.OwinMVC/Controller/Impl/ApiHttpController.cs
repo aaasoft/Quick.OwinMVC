@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Owin;
-using Newtonsoft.Json;
 using Quick.OwinMVC.Routing;
 using Quick.OwinMVC.Middleware;
+using Newtonsoft.Json;
 
 namespace Quick.OwinMVC.Controller.Impl
 {

@@ -70,7 +70,7 @@ namespace Quick.OwinMVC.Middleware
                 }
                 //交给HttpController
                 controller.Service(context, context.Get<String>(QOMVC_PLUGIN_KEY), context.Get<String>(QOMVC_PATH_KEY));
-                return Task.FromResult(0);
+                return new Task(() => { });
             });
         }
 
@@ -80,7 +80,6 @@ namespace Quick.OwinMVC.Middleware
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 String pluginName = assembly.GetName().Name;
-
                 foreach (RouteAttribute attr in assembly.GetCustomAttributes<RouteAttribute>())
                 {
                     pluginAliasDict[attr.Path] = pluginName;

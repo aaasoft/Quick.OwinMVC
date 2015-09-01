@@ -75,13 +75,13 @@ namespace Quick.OwinMVC.Resource
         }
 
         /// <summary>
-        /// 最后修改时间
+        /// 最后修改时间(UTC时间)
         /// </summary>
         public DateTime LastModified
         {
             get
             {
-                return File.GetLastWriteTime(assembly.Location);
+                return File.GetLastWriteTimeUtc(assembly.Location);
             }
         }
     }

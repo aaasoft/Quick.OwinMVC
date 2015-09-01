@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Threading;
 using Quick.OwinMVC.Middleware;
+using System.Reflection;
 
 namespace Quick.OwinMVC.Controller
 {
@@ -31,7 +32,30 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static IFormCollection GetFormData(this IOwinContext context)
         {
-            return context.Request.ReadFormAsync().Result;
+            IFormCollection form = context.Request.Get<IFormCollection>("Microsoft.Owin.Form#collection");
+            return form;
+        }
+
+        public static IEnumerable<T> GetCustomAttributes<T>(this Assembly assembly)
+            where T : Attribute
+        {
+            return GetCustomAttributes<T>(assembly, true);
+        }
+        public static IEnumerable<T> GetCustomAttributes<T>(this Assembly assembly, Boolean inherit)
+            where T : Attribute
+        {
+            return assembly.GetCustomAttributes(typeof(T), inherit).Cast<T>();
+        }
+
+        public static IEnumerable<T> GetCustomAttributes<T>(this Type type)
+            where T : Attribute
+        {
+            return GetCustomAttributes<T>(type, true);
+        }
+        public static IEnumerable<T> GetCustomAttributes<T>(this Type type, Boolean inherit)
+            where T : Attribute
+        {
+            return type.GetCustomAttributes(typeof(T), inherit).Cast<T>();
         }
     }
 }

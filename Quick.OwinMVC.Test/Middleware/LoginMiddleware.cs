@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Quick.OwinMVC.Controller;
+using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Test.Middleware
 {
@@ -22,8 +22,7 @@ namespace Quick.OwinMVC.Test.Middleware
             if (session.ContainsKey("UserId"))
                 return Next.Invoke(context);
             session["UserId"] = Guid.NewGuid().ToString();
-            context.Response.Write("Login success,please refresh.");
-            return Task.FromResult(0);
+            return context.Response.WriteAsync("Login success,please refresh.");
         }
     }
 }

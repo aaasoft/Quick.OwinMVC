@@ -49,21 +49,41 @@ namespace Quick.OwinMVC.Controller.Impl
                 rep.Write($"Resource '{path}' in plugin '{plugin}' not found!");
                 return;
             }
-            //ETag设置判断部分
-            String serverETag = null;
-            if (useMd5ETag)
-                serverETag = HashUtils.ComputeETagByMd5(stream);
-            else
-                serverETag = resourceResponse.LastModified.Ticks.ToString();
-            var clientETag = req.Headers.Get("If-None-Match");
-            //如果客户端的ETag值与服务端相同，则返回304，表示资源未修改
-            if (serverETag == clientETag)
+            //验证缓存有效
             {
-                rep.StatusCode = 304;
-                return;
+                //===================
+                //先验证最后修改时间
+                //===================
+                var resourceLastModified = resourceResponse.LastModified;
+                //最后修改时间判断部分
+                var clientLastModified= req.Headers.Get("If-Modified-Since");
+                if (clientLastModified != null)
+                {
+                    if (clientLastModified == resourceLastModified.ToString("R"))
+                    {
+                        rep.StatusCode = 304;
+                        return;
+                    }
+                }
+                //===================
+                //然后验证ETag
+                //===================
+                //ETag设置判断部分
+                String serverETag = null;
+                if (useMd5ETag)
+                    serverETag = HashUtils.ComputeETagByMd5(stream);
+                else
+                    serverETag = resourceResponse.LastModified.Ticks.ToString();
+                var clientETag = req.Headers.Get("If-None-Match");
+                //如果客户端的ETag值与服务端相同，则返回304，表示资源未修改
+                if (serverETag == clientETag)
+                {
+                    rep.StatusCode = 304;
+                    return;
+                }
+                rep.ETag = serverETag;
+                stream.Position = 0;
             }
-            rep.ETag = serverETag;
-            stream.Position = 0;
             //设置MIME类型
             var mime = MimeUtils.GetMime(path);
             if (mime != null)
