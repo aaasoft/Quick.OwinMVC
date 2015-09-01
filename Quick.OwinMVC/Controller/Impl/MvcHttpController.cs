@@ -19,7 +19,7 @@ namespace Quick.OwinMVC.Controller.Impl
             var bytes = encoding.GetBytes(content);
 
             var rep = context.Response;
-            rep.ContentType = "text/html";
+            rep.ContentType = "text/html; charset=UTF-8";
             rep.ContentLength = bytes.Length;
             rep.Write(content);
         }

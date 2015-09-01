@@ -21,8 +21,9 @@ namespace Quick.OwinMVC.Test
                 ["class.resource.loader.class"] = "Quick.OwinMVC.View.NVelocity.ResourceLoaders.EmbedResourceLoader; Quick.OwinMVC.View.NVelocity",
                 ["velocimacro.library"] = "Quick.OwinMVC.Test:vm_global_library",
             };
-            String httpUrl = "http://*:2001";
-            Server server = new Server(httpUrl, properties);
+
+            Server server = new Server(properties, 2001, "localhost");
+            server.OutputErrorToResponse = true;
             //注册中间件
             server.RegisterMiddleware<LoginMiddleware>();
             //注册重定向和重写
@@ -30,7 +31,7 @@ namespace Quick.OwinMVC.Test
             server.RegisterRewrite("/favicon.ico", "/test/resource/favicon.ico");
             //启动服务
             server.Start();
-            Console.WriteLine($"WebServer is started as {httpUrl}.");
+            Console.WriteLine($"WebServer is started as {server.GetUrl()}.");
             Console.ReadKey();
         }
     }

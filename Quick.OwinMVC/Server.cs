@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Owin;
-using Microsoft.Owin.Hosting;
-using Quick.OwinMVC.View;
 using Quick.OwinMVC.Resource;
 using System.Net;
-using Quick.OwinMVC.Utils;
 using Microsoft.Owin;
 using Quick.OwinMVC.Middleware;
+using Microsoft.Owin.Builder;
 
 namespace Quick.OwinMVC
 {
     public class Server
     {
         private IDictionary<String, String> properties;
+        private EndPoint endpoint;
         private String url;
+
         private IDictionary<String, String> redirectDict;
         private IDictionary<String, String> rewriteDict;
         private IDisposable webApp;
@@ -27,16 +27,53 @@ namespace Quick.OwinMVC
         //尾部中间件堆栈
         private Stack<Action<IAppBuilder>> tailMiddlewareRegisterActionStack = new Stack<Action<IAppBuilder>>();
 
+        /// <summary>
+        /// 是否输出错误信息到响应中
+        /// </summary>
+        public Boolean OutputErrorToResponse { get; set; } = false;
+
         static Server()
         {
             //注册resource:前缀URI处理程序
             WebRequest.RegisterPrefix("resource:", new ResourceWebRequestFactory());
         }
 
-        public Server(String url, IDictionary<String, String> properties)
+        public String GetUrl()
+        {
+            if (url == null)
+                url = $"http://{endpoint.ToString()}";
+            return url;
+        }
+
+        public Server(IDictionary<String, String> properties, Uri url) : this(properties, url.Port, url.Host) { }
+        public Server(IDictionary<String, String> properties, int port) : this(properties, new IPEndPoint(IPAddress.Any, port)) { }
+        public Server(IDictionary<String, String> properties, int port, string hostname)
+        {
+            url = $"http://{hostname}:{port}";
+            EndPoint endpoint = null;
+            switch (hostname)
+            {
+                case "*":
+                case "+":
+                case "0.0.0.0":
+                    endpoint = new IPEndPoint(IPAddress.Any, port);
+                    break;
+                default:
+                    endpoint = new IPEndPoint(Dns.GetHostAddresses(hostname).FirstOrDefault(), port);
+                    break;
+            }
+            init(properties, endpoint);
+        }
+
+        public Server(IDictionary<String, String> properties, EndPoint endpoint)
+        {
+            init(properties, endpoint);
+        }
+
+        private void init(IDictionary<String, String> properties, EndPoint endpoint)
         {
             this.properties = properties;
-            this.url = url;
+            this.endpoint = endpoint;
 
             redirectDict = new Dictionary<String, String>();
             rewriteDict = new Dictionary<String, String>();
@@ -109,22 +146,21 @@ namespace Quick.OwinMVC
 
         public void Start()
         {
-            webApp = WebApp.Start(url, app =>
-            {
-#if DEBUG
-                app.UseErrorPage();
-#endif
-                //加载头部的中间件
-                while (headMiddlewareRegisterActionStack.Count > 0)
-                    headMiddlewareRegisterActionStack.Pop().Invoke(app);
-                //加载中部的中间件
-                while (middleMiddlewareRegisterActionStack.Count > 0)
-                    middleMiddlewareRegisterActionStack.Pop().Invoke(app);
-                //加载尾部的中间件
-                while (tailMiddlewareRegisterActionStack.Count > 0)
-                    tailMiddlewareRegisterActionStack.Pop().Invoke(app);
-            }
-            );
+            var app = new AppBuilder();
+
+            if (OutputErrorToResponse)
+                app.Use<ErrorMiddleware>();
+
+            //加载头部的中间件
+            while (headMiddlewareRegisterActionStack.Count > 0)
+                headMiddlewareRegisterActionStack.Pop().Invoke(app);
+            //加载中部的中间件
+            while (middleMiddlewareRegisterActionStack.Count > 0)
+                middleMiddlewareRegisterActionStack.Pop().Invoke(app);
+            //加载尾部的中间件
+            while (tailMiddlewareRegisterActionStack.Count > 0)
+                tailMiddlewareRegisterActionStack.Pop().Invoke(app);
+            webApp = new Firefly.Http.ServerFactory().Create(app.Build(), endpoint);
         }
 
         public void Stop()
