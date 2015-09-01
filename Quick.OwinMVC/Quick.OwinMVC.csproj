@@ -67,11 +67,15 @@
     <Compile Include="Controller\Impl\MvcHttpController.cs" />
     <Compile Include="Controller\Impl\ResourceHttpController.cs" />
     <Compile Include="Controller\IPluginController.cs" />
+    <Compile Include="Middleware\AbstractPluginPathMiddleware.cs" />
+    <Compile Include="Middleware\ApiMiddleware.cs" />
     <Compile Include="Middleware\ErrorMiddleware.cs" />
     <Compile Include="Middleware\MvcMiddleware.cs" />
     <Compile Include="Middleware\RedirectMiddleware.cs" />
+    <Compile Include="Middleware\ResourceMiddleware.cs" />
     <Compile Include="Middleware\RewriteMiddleware.cs" />
     <Compile Include="Middleware\SessionMiddleware.cs" />
+    <Compile Include="Middleware\ViewMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\ResourceWebRequestFactory.cs" />
     <Compile Include="Routing\RouteAttribute.cs" />
