@@ -10,6 +10,8 @@ using System.Linq.Expressions;
 using System.Threading;
 using Quick.OwinMVC.Middleware;
 using System.Reflection;
+using System.IO;
+using System.Web;
 
 namespace Quick.OwinMVC.Controller
 {
@@ -32,8 +34,22 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static IFormCollection GetFormData(this IOwinContext context)
         {
-            IFormCollection form = context.Request.Get<IFormCollection>("Microsoft.Owin.Form#collection");
-            return form;
+            StreamReader reader = new StreamReader(context.Request.Body);
+            var formData = reader.ReadToEnd();
+            IDictionary<String, IList<String>> dict = new Dictionary<String, IList<String>>();
+            foreach (var line in formData.Split('&'))
+            {
+                var strs = line.Split('=');
+                if (line.Length < 2)
+                    continue;
+                var key = strs[0].Trim();
+                var value = strs[1].Trim();
+                value = HttpUtility.UrlDecode(value);
+                if (!dict.ContainsKey(key))
+                    dict.Add(key, new List<String>());
+                dict[key].Add(value);
+            }
+            return new FormCollection(dict.ToDictionary(t => t.Key, t => t.Value.ToArray()));
         }
 
         public static IEnumerable<T> GetCustomAttributes<T>(this Assembly assembly)
