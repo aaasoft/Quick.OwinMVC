@@ -19,8 +19,7 @@ namespace Quick.OwinMVC
         internal static Server Instance { get; private set; }
 
         internal IDictionary<String, String> properties;
-        internal IDictionary<String, String> redirectDict;
-        internal IDictionary<String, String> rewriteDict;
+        internal IDictionary<Type, OwinMiddleware> middlewareInstanceDict;
 
         private EndPoint endpoint;
         private String url;
@@ -71,13 +70,9 @@ namespace Quick.OwinMVC
         {
             this.properties = properties;
             this.endpoint = endpoint;
+            middlewareInstanceDict = new Dictionary<Type, OwinMiddleware>();
 
             Server.Instance = this;
-
-            redirectDict = new Dictionary<String, String>();
-            rewriteDict = new Dictionary<String, String>();
-
-
             foreach (var key in properties.Keys)
             {
                 if (key.StartsWith(MIDDLEWARE_PREFIX))
@@ -103,6 +98,17 @@ namespace Quick.OwinMVC
             middlewareRegisterActionList.Add(action);
         }
 
+        public T GetMiddlewareInstance<T>()
+            where T : OwinMiddleware
+        {
+            if (webApp == null)
+                throw new ApplicationException("Can't invoke this method before Server.Start() method invoded.");
+            Type type = typeof(T);
+            if (middlewareInstanceDict.ContainsKey(type))
+                return middlewareInstanceDict[type] as T;
+            return null;
+        }
+
         /// <summary>
         /// 注册用户中间件
         /// </summary>
@@ -114,26 +120,6 @@ namespace Quick.OwinMVC
             RegisterMiddleware(typeof(T), args);
         }
 
-        /// <summary>
-        /// 注册重定向
-        /// </summary>
-        /// <param name="srcPath"></param>
-        /// <param name="desPath"></param>
-        public void RegisterRedirect(String srcPath, String desPath)
-        {
-            redirectDict[srcPath] = desPath;
-        }
-
-        /// <summary>
-        /// 注册重写
-        /// </summary>
-        /// <param name="srcPath"></param>
-        /// <param name="desPath"></param>
-        public void RegisterRewrite(String srcPath, String desPath)
-        {
-            rewriteDict[srcPath] = desPath;
-        }
-
         public void Start()
         {
             var app = new AppBuilder();
@@ -141,7 +127,6 @@ namespace Quick.OwinMVC
             //加载中部的中间件
             foreach (var register in middlewareRegisterActionList)
                 register.Invoke(app);
-
             webApp = new Firefly.Http.ServerFactory().Create(app.Build(), endpoint);
         }
 

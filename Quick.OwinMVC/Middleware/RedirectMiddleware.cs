@@ -7,12 +7,24 @@ using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class RedirectMiddleware : OwinMiddleware
+    public class RedirectMiddleware : OwinMiddleware, IPropertyHunter
     {
+        public const String REDIRECT_PREFIX = "Quick.OwinMVC.Server.Redirect.";
+
         private IDictionary<String, String> redirectDict;
         public RedirectMiddleware(OwinMiddleware next) : base(next)
         {
-            this.redirectDict = Server.Instance.redirectDict;
+            redirectDict = new Dictionary<String, String>();
+        }
+
+        /// <summary>
+        /// 注册重定向
+        /// </summary>
+        /// <param name="srcPath"></param>
+        /// <param name="desPath"></param>
+        public void RegisterRedirect(String srcPath, String desPath)
+        {
+            redirectDict[srcPath] = desPath;
         }
 
         public override Task Invoke(IOwinContext context)
@@ -25,6 +37,12 @@ namespace Quick.OwinMVC.Middleware
                 return context.Response.WriteAsync(String.Empty);
             }
             return Next.Invoke(context);
+        }
+
+        public void Hunt(string key, string value)
+        {
+            if (key.StartsWith(REDIRECT_PREFIX))
+                RegisterRedirect(key.Substring(REDIRECT_PREFIX.Length), value);
         }
     }
 }

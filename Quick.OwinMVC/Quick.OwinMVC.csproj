@@ -66,10 +66,11 @@
     <Compile Include="Middleware\AbstractControllerMiddleware.cs" />
     <Compile Include="Middleware\AbstractPluginPathMiddleware.cs" />
     <Compile Include="Middleware\ApiMiddleware.cs" />
-    <Compile Include="Middleware\AssemblyScanMiddleware.cs" />
+    <Compile Include="Middleware\MiddlewareContext.cs" />
     <Compile Include="Middleware\ErrorMiddleware.cs" />
     <Compile Include="Middleware\HttpMiddleware.cs" />
     <Compile Include="Middleware\IAssemblyHunter.cs" />
+    <Compile Include="Middleware\IPropertyHunter.cs" />
     <Compile Include="Middleware\ITypeHunter.cs" />
     <Compile Include="Middleware\RedirectMiddleware.cs" />
     <Compile Include="Middleware\ResourceMiddleware.cs" />
