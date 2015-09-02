@@ -13,7 +13,7 @@ namespace ServerManage.Controller
     [Route("logout")]
     public class LogoutController : HttpController
     {
-        public override void Service(IOwinContext context, string plugin, string path)
+        public override void Service(IOwinContext context)
         {
             var rep = context.Response;
 

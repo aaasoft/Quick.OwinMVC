@@ -19,8 +19,6 @@ namespace Quick.OwinMVC.Controller
         /// 提供服务
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="plugin"></param>
-        /// <param name="path"></param>
-        void Service(IOwinContext context, String plugin, String path);
+        void Service(IOwinContext context);
     }
 }

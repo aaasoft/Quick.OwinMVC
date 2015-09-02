@@ -15,35 +15,35 @@ namespace Quick.OwinMVC.Controller
             this.properties = properties;
         }
 
-        public virtual void DoGet(IOwinContext context, String plugin, String path)
+        public virtual void DoGet(IOwinContext context)
         { }
-        public virtual void DoPost(IOwinContext context, String plugin, String path)
+        public virtual void DoPost(IOwinContext context)
         { }
-        public virtual void DoHead(IOwinContext context, String plugin, String path)
+        public virtual void DoHead(IOwinContext context)
         { }
-        public virtual void DoDelete(IOwinContext context, String plugin, String path)
+        public virtual void DoDelete(IOwinContext context)
         { }
-        public virtual void DoTrace(IOwinContext context, String plugin, String path)
+        public virtual void DoTrace(IOwinContext context)
         { }
 
-        public virtual void Service(IOwinContext context, String plugin, String path)
+        public virtual void Service(IOwinContext context)
         {
             switch (context.Request.Method)
             {
                 case "GET":
-                    DoGet(context, plugin, path);
+                    DoGet(context);
                     break;
                 case "POST":
-                    DoPost(context, plugin, path);
+                    DoPost(context);
                     break;
                 case "DELETE":
-                    DoDelete(context, plugin, path);
+                    DoDelete(context);
                     break;
                 case "HEAD":
-                    DoHead(context, plugin, path);
+                    DoHead(context);
                     break;
                 case "TRACE":
-                    DoTrace(context, plugin, path);
+                    DoTrace(context);
                     break;
             }
         }

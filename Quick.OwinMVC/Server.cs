@@ -94,6 +94,8 @@ namespace Quick.OwinMVC
         /// <param name="args"></param>
         public void RegisterMiddleware(Type middlewareClass, params object[] args)
         {
+            if (middlewareClass == null)
+                throw new ArgumentNullException("Argument 'middlewareClass' must not be null.");
             Action<IAppBuilder> action = app =>
             {
                 app.Use(middlewareClass, args);

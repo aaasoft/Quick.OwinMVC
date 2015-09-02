@@ -58,19 +58,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\IApiController.cs" />
-    <Compile Include="Controller\Impl\ApiHttpController.cs" />
     <Compile Include="Controller\HttpController.cs" />
     <Compile Include="Controller\IHttpController.cs" />
-    <Compile Include="Controller\Impl\ExtendHttpController.cs" />
     <Compile Include="Controller\IMvcController.cs" />
     <Compile Include="Controller\IOwinContextExtension.cs" />
-    <Compile Include="Controller\Impl\MvcHttpController.cs" />
-    <Compile Include="Controller\Impl\ResourceHttpController.cs" />
     <Compile Include="Controller\IPluginController.cs" />
+    <Compile Include="Middleware\AbstractControllerMiddleware.cs" />
     <Compile Include="Middleware\AbstractPluginPathMiddleware.cs" />
     <Compile Include="Middleware\ApiMiddleware.cs" />
     <Compile Include="Middleware\ErrorMiddleware.cs" />
-    <Compile Include="Middleware\MvcMiddleware.cs" />
+    <Compile Include="Middleware\HttpMiddleware.cs" />
     <Compile Include="Middleware\RedirectMiddleware.cs" />
     <Compile Include="Middleware\ResourceMiddleware.cs" />
     <Compile Include="Middleware\RewriteMiddleware.cs" />
