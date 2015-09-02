@@ -141,6 +141,7 @@ namespace Quick.OwinMVC
             //加载中部的中间件
             foreach (var register in middlewareRegisterActionList)
                 register.Invoke(app);
+
             webApp = new Firefly.Http.ServerFactory().Create(app.Build(), endpoint);
         }
 

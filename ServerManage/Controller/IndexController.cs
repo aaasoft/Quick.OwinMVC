@@ -10,9 +10,8 @@ using System.Diagnostics;
 
 namespace ServerManage.Controller
 {
-    [Route("/")]
     [Route("index")]
-    public class IndexController : IMvcController, IApiController
+    public class IndexController : IViewController, IApiController
     {
         private String refreshInterval;
 

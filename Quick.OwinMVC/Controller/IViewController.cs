@@ -10,7 +10,7 @@ namespace Quick.OwinMVC.Controller
     /// <summary>
     /// MVC控制器
     /// </summary>
-    public interface IMvcController : IPluginController
+    public interface IViewController : IPluginController
     {
         /// <summary>
         /// 执行MVC控制器，返回视图名称

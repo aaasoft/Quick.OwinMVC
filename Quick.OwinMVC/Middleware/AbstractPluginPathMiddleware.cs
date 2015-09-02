@@ -11,23 +11,18 @@ using Quick.OwinMVC.Controller;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public abstract class AbstractPluginPathMiddleware : OwinMiddleware
+    public abstract class AbstractPluginPathMiddleware : OwinMiddleware, IAssemblyHunter
     {
         public const String VIEWRENDER_CLASS = "Quick.OwinMVC.VIEWRENDER_CLASS";
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
 
-        private static IDictionary<String, String> pluginAliasDict;
+        private IDictionary<String, String> pluginAliasDict;
         private Regex route;
-
-        static AbstractPluginPathMiddleware()
-        {
-            pluginAliasDict = new Dictionary<String, String>();
-            scanController();
-        }
-
+        
         public AbstractPluginPathMiddleware(OwinMiddleware next) : base(next)
         {
+            pluginAliasDict = new Dictionary<String, String>();
             String fullRoute = $"/:{QOMVC_PLUGIN_KEY}/{GetRouteMiddle()}/:{QOMVC_PATH_KEY}";
             route = RouteBuilder.RouteToRegex(fullRoute);
         }
@@ -61,17 +56,12 @@ namespace Quick.OwinMVC.Middleware
         public abstract String GetRouteMiddle();
         public abstract Task Invoke(IOwinContext context, String plugin, String path);
 
-
-        private static void scanController()
+        public void Hunt(Assembly assembly)
         {
-            List<Action> registerControllerActionList = new List<Action>();
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            String pluginName = assembly.GetName().Name;
+            foreach (RouteAttribute attr in assembly.GetCustomAttributes<RouteAttribute>())
             {
-                String pluginName = assembly.GetName().Name;
-                foreach (RouteAttribute attr in assembly.GetCustomAttributes<RouteAttribute>())
-                {
-                    pluginAliasDict[attr.Path] = pluginName;
-                }
+                pluginAliasDict[attr.Path] = pluginName;
             }
         }
     }

@@ -11,14 +11,13 @@ using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class HttpMiddleware : OwinMiddleware
+    public class HttpMiddleware : OwinMiddleware, ITypeHunter
     {
         public IDictionary<Regex, IHttpController> routes;
 
         public HttpMiddleware(OwinMiddleware next) : base(next)
         {
             routes = new Dictionary<Regex, IHttpController>();
-            scanController();
         }
 
         public override Task Invoke(IOwinContext context)
@@ -45,27 +44,19 @@ namespace Quick.OwinMVC.Middleware
             });
         }
 
-        private void scanController()
-        {
-            List<Action> registerControllerActionList = new List<Action>();
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-            {
-                String pluginName = assembly.GetName().Name;
-                foreach (Type type in assembly.GetTypes())
-                {
-                    foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
-                    {
-                        if (typeof(IHttpController).IsAssignableFrom(type))
-                            RegisterController(attr.Path, (IHttpController)Activator.CreateInstance(type));
-                    }
-                }
-            }
-        }
-
         private void RegisterController(string path, IHttpController httpController)
         {
             httpController.Init(Server.Instance.properties);
             routes.Add(RouteBuilder.RouteToRegex(path), httpController);
+        }
+
+        public void Hunt(Assembly assembly, Type type)
+        {
+            foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
+            {
+                if (typeof(IHttpController).IsAssignableFrom(type))
+                    RegisterController(attr.Path, (IHttpController)Activator.CreateInstance(type));
+            }
         }
     }
 }

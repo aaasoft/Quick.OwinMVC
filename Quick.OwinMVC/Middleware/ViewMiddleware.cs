@@ -10,7 +10,7 @@ using Quick.OwinMVC.Utils;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class ViewMiddleware : AbstractControllerMiddleware<IMvcController>
+    public class ViewMiddleware : AbstractControllerMiddleware<IViewController>
     {
         private IViewRender viewRender;
 
@@ -28,7 +28,7 @@ namespace Quick.OwinMVC.Middleware
             return "view";
         }
 
-        public override void ExecuteController(IMvcController controller, IOwinContext context, string plugin, string path)
+        public override void ExecuteController(IViewController controller, IOwinContext context, string plugin, string path)
         {
             //执行MVC控制器，返回视图名称
             String viewName = controller.Service(context, context.Environment);

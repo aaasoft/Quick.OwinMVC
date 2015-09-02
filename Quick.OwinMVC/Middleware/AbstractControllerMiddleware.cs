@@ -10,11 +10,10 @@ using Quick.OwinMVC.Routing;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public abstract class AbstractControllerMiddleware<T> : AbstractPluginPathMiddleware
+    public abstract class AbstractControllerMiddleware<T> : AbstractPluginPathMiddleware,ITypeHunter
         where T : IPluginController
     {
         protected Encoding encoding = new UTF8Encoding(false);
-
         private IDictionary<String, T> controllerDict = new Dictionary<String, T>();
 
         internal void RegisterController(string plugin, string path, T controller)
@@ -22,28 +21,20 @@ namespace Quick.OwinMVC.Middleware
             controllerDict[$"{plugin}:{path}"] = controller;
         }
 
-        public AbstractControllerMiddleware(OwinMiddleware next) : base(next)
-        {
-            scanController();
-        }
+        public AbstractControllerMiddleware(OwinMiddleware next) : base(next) { }
 
-        private void scanController()
+
+        public void Hunt(Assembly assembly, Type type)
         {
-            List<Action> registerControllerActionList = new List<Action>();
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+            String pluginName = assembly.GetName().Name;
+            foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
             {
-                String pluginName = assembly.GetName().Name;
-                foreach (Type type in assembly.GetTypes())
+                if (typeof(T).IsAssignableFrom(type))
                 {
-                    foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
-                    {
-                        if (typeof(T).IsAssignableFrom(type))
-                        {
-                            T controller = (T)Activator.CreateInstance(type);
-                            controller.Init(Server.Instance.properties);
-                            RegisterController(pluginName, attr.Path, controller);
-                        }
-                    }
+
+                    T controller = (T)Activator.CreateInstance(type);
+                    controller.Init(Server.Instance.properties);
+                    RegisterController(pluginName, attr.Path, controller);
                 }
             }
         }
