@@ -15,17 +15,20 @@ namespace Quick.OwinMVC.Middleware
 
         public override Task Invoke(IOwinContext context)
         {
-            try
+            return Task.Factory.StartNew(() =>
             {
-                return Next.Invoke(context);
-            }
-            catch (Exception ex)
-            {
-                var rep = context.Response;
-                rep.StatusCode = 500;
-                rep.ContentType = "text/plain; charset=UTF-8";
-                return context.Response.WriteAsync(ex.ToString());
-            }
+                try
+                {
+                    Next.Invoke(context).Wait();
+                }
+                catch (Exception ex)
+                {
+                    var rep = context.Response;
+                    rep.StatusCode = 500;
+                    rep.ContentType = "text/plain; charset=UTF-8";
+                    context.Response.Write(ex.ToString());
+                }
+            });
         }
     }
 }
