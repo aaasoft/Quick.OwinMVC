@@ -32,6 +32,8 @@ namespace Quick.OwinMVC.Middleware
         {
             //执行MVC控制器，返回视图名称
             String viewName = controller.Service(context, context.Environment);
+            if (viewName == null)
+                return;
             viewName = $"{plugin}:{viewName}";
             //根据视图名称与数据，渲染输出页面
             var content = viewRender.Render(viewName, context.Environment);
