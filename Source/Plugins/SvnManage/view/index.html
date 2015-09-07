@@ -1,16 +1,125 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <title>服务器监控系统</title>
-    #*
-    <script type="text/javascript" src="../resource/scripts/jquery.min.js"></script>
-    *#
-    #parse("SvnManage:part_head_content")
+    <title>主页 - 服务器管理系统</title>
+#parse("SvnManage:part_head")
+</head>
+<body>
+#parse("SvnManage:part_navbar")
+    <div class="main-container" id="main-container">
+        <div class="main-container-inner">
+            <a class="menu-toggler" id="menu-toggler" href="#">
+                <span class="menu-text"></span>
+            </a>
+<!--左侧菜单-->
+#parse("SvnManage:part_sidebar")
+            <div class="main-content">
+<!--面包屑导航-->
+#parse("SvnManage:part_breadcrumbs")
+                <div class="page-content">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- PAGE CONTENT BEGINS -->
+                            <div class="alert alert-block alert-success">
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <i class="icon-remove"></i>
+                                </button>
+
+                                <i class="icon-ok green"></i>
+
+                                欢迎使用
+                                <strong class="green">
+                                    服务器管理系统
+                                </strong>
+                            </div>
+
+                            <div class="row">
+                                <div class="vspace-sm"></div>
+                                <div class="col-sm-5">
+                                    <div class="widget-box">
+                                        <div class="widget-header widget-header-flat widget-header-small">
+                                            <h5>
+                                                <i class="icon-desktop"></i>
+                                                基本信息
+                                            </h5>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <table class="table table-striped table-bordered table-hover no-margin-bottom no-border-top">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="font-weight:700">计算机：</td>
+                                                            <td id="tdComputerName"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight:700">操作系统：</td>
+                                                            <td id="tdOSName"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="font-weight:700">进程运行时长：</td>
+                                                            <td id="tdProcessRunTime"></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div><!-- /widget-main -->
+                                        </div><!-- /widget-body -->
+                                    </div><!-- /widget-box -->
+                                </div><!-- /span -->
+
+                                <div class="vspace-sm"></div>
+                                <div class="col-sm-5">
+                                    <div class="widget-box">
+                                        <div class="widget-header widget-header-flat widget-header-small">
+                                            <h5>
+                                                <i class="icon-bar-chart"></i>
+                                                内存信息
+                                            </h5>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <div id="divMemoryChart" style="min-height:250px"></div>
+                                            </div><!-- /widget-main -->
+                                        </div><!-- /widget-body -->
+                                    </div><!-- /widget-box -->
+                                </div><!-- /span -->
+
+                                <div class="vspace-sm"></div>
+                                <div class="col-xs-12">
+                                    <div class="widget-box">
+                                        <div class="widget-header widget-header-flat widget-header-small">
+                                            <h5>
+                                                <i class="icon-signal"></i>
+                                                CPU信息
+                                            </h5>
+                                        </div>
+
+                                        <div class="widget-body">
+                                            <div class="widget-main">
+                                                <div id="divCpuChart" style="min-height: 300px; text-align:center;"></div>
+                                            </div><!-- /widget-main -->
+                                        </div><!-- /widget-body -->
+                                    </div><!-- /widget-box -->
+                                </div><!-- /span -->
+                            </div><!-- /row -->
+
+                            <div class="hr hr32 hr-dotted"></div>
+                            <!-- PAGE CONTENT ENDS -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.page-content -->
+            </div><!-- /.main-content -->
+        </div><!-- /#ace-settings-container -->
+    </div><!-- /.main-container-inner -->
+    <!-- /.main-container -->
+    #parse("SvnManage:part_footer")
+    <!-- inline scripts related to this page -->
     <script type="text/javascript" src="../resource/amcharts/amcharts.js"></script>
     <script type="text/javascript" src="../resource/amcharts/pie.js"></script>
     <script type="text/javascript" src="../resource/amcharts/serial.js"></script>
-    <script type="text/javascript" src="../resource/scripts/charts.function.js"></script>
-    <script type="text/javascript" language="javascript">
+    <script type="text/javascript" src="../resource/js/charts.function.js"></script>
+    <script type="text/javascript">
         // 对Date的扩展，将 Date 转化为指定格式的String
         // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
         // 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
@@ -65,7 +174,7 @@
                 minPeriod: "ss",
                 dataDateFormat: "YYYY-MM-DD JJ:NN:SS"
             });
-            
+
             var isContinue = true;
             var refrashDataFunc = function () {
                 //刷新数据
@@ -112,90 +221,5 @@
             refrashDataFunc();
         });
     </script>
-</head>
-<body>
-    <div id="body-wrapper">
-        #parse("SvnManage:part_systembar")
-        #parse("SvnManage:part_sidebar")
-        <div id="main-content">
-            <div class="content-box">
-                <!-- Start Content Box -->
-                <div class="content-box-header">
-                    <h3>基本信息</h3>
-                    <ul class="content-box-tabs"></ul>
-                    <div class="clear"></div>
-                </div>
-                <!-- End .content-box-header -->
-                <div class="content-box-content">
-                    <div class="tab-content default-tab" id="tab1">
-                        <div id="page-intro">
-                            <div>
-                                <table>
-                                    <tbody>
-                                        <tr>
-                                            <td style="font-weight:700">计算机：</td>
-                                            <td id="tdComputerName"></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="font-weight:700">操作系统：</td>
-                                            <td id="tdOSName"></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="font-weight:700">进程运行时长：</td>
-                                            <td id="tdProcessRunTime"></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="content-box">
-                <!-- Start Content Box -->
-                <div class="content-box-header">
-                    <h3>性能信息</h3>
-                    <ul class="content-box-tabs"></ul>
-                    <div class="clear"></div>
-                </div>
-                <!-- End .content-box-header -->
-                <div class="content-box-content">
-                    <div class="tab-content default-tab" id="tab1">
-                        <div id="page-intro">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <td style="font-weight:700">CPU</td>
-                                        <td style="font-weight:700">内存</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td style="width: 100%;">
-                                            <div id="divCpuChart" style="float:left; width: 100%;height: 300px; text-align:center;"></div>
-                                        </td>
-                                        <td>
-                                            <div style="width: 300px;height: 300px;">
-                                                <div id="divMemoryChart" style="float:left; width: 100%;height: 100%; text-align:center;"></div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="clear"></div>
-            <!-- End .clear -->
-            #parse("SvnManage:part_footer")
-        </div>
-    </div>
 </body>
 </html>

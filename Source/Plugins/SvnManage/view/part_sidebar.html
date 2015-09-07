@@ -1,52 +1,30 @@
-﻿<!-- Start #sidebar -->
-<div id="sidebar">
-    <div id="sidebar-wrapper">
-        <h1 id="sidebar-title"><a href="#">Demo</a></h1>
-        <!-- Logo (221px wide) -->
-        <img src="../resource/images/logo.png" alt="Simpla Admin logo" width="221" height="124" id="logo" />
-        <!-- Sidebar Profile links -->
-        <div id="profile-links">
-            &#27426;&#36814;&#29992;&#25143; <a href="#" title="编辑个人资料">$account</a> <br />
-        </div>
-        <ul id="main-nav">
-            <li><a href="index" class="nav-top-item no-submenu">首页</a></li>
-            <li>
-                <a href="#" class="nav-top-item">SVN管理</a>
-                <ul>
-                    <li><a href="svn.modify_password">密码修改</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" class="nav-top-item">一级菜单</a>
-                <ul>
-                    <li><a href="#">二级菜单</a></li>
-                    <li><a href="#">二级菜单</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" class="nav-top-item">一级菜单</a>
-                <ul>
-                    <li><a href="#">二级菜单</a></li>
-                    <li><a href="#">二级菜单</a></li>
-                    <li><a href="#">二级菜单</a></li>
-                    <li><a href="#">二级菜单</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#" class="nav-top-item no-submenu">一级菜单</a>
-            </li>
-            <li>
-                <a href="#" class="nav-top-item">一级菜单</a>
-                <ul>
-                    <li><a href="#">二级菜单</a></li>
-                    <li><a href="#">二级菜单</a></li>
-                    <li><a href="#">二级菜单</a></li>
-                    <li><a href="#">二级菜单</a></li>
-                    <li><a href="#">二级菜单</a></li>
-                </ul>
-            </li>
-        </ul>
-        <!-- End #main-nav -->
-    </div>
-</div>
-<!-- End #sidebar -->
+﻿            <div class="sidebar" id="sidebar">
+                <ul class="nav nav-list">
+                    <li class="active">
+                        <a href="index">
+                            <i class="icon-dashboard"></i>
+                            <span class="menu-text"> 首页 </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-desktop"></i>
+                            <span class="menu-text"> SVN管理 </span>
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="#">
+                                    <i class="icon-double-angle-right"></i>
+                                    密码修改
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul><!-- /.nav-list -->
+
+                <div class="sidebar-collapse" id="sidebar-collapse">
+                    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+                </div>
+            </div>

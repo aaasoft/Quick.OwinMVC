@@ -29,6 +29,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -37,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\IndexController.cs" />
+    <Compile Include="Controller\LoginController.cs" />
     <Compile Include="Controller\LogoutController.cs" />
     <Compile Include="Controller\Svn\ApiController.cs" />
     <Compile Include="Controller\Svn\ModifyPasswordController.cs" />
@@ -45,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <EmbeddedResource Include="resource\font\fontawesome-webfont.woff" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resource\amcharts\amcharts.js" />
@@ -221,103 +224,13 @@
     <EmbeddedResource Include="resource\amcharts\xy.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\css\invalid.css" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\css\reset.css" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\css\style.css" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="resource\favicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\images\b.png" />
+    <EmbeddedResource Include="resource\js\charts.function.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-body.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-button-green.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-content-box.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-form-field.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-login-top.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-login.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-menu-item-current.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-menu-item-green.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-radial-gradient.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bg-sidebar.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\bl.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\br.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\loading.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\menu-current-arrow.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\shortcut-button-bg.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\tl.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\images\tr.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\scripts\charts.function.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\scripts\jquery.min.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\scripts\jquery.msgbox.min.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\scripts\jquery.wysiwyg.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\scripts\simpla.jquery.configuration.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="view\index.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="view\part_footer.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="view\part_head_content.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="view\part_sidebar.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="view\part_systembar.html" />
+    <EmbeddedResource Include="resource\js\jquery.msgbox.min.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="view\svn\modify_password.html" />
@@ -331,6 +244,100 @@
       <Name>Quick.OwinMVC</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="view\index.html" />
+    <EmbeddedResource Include="view\login.html" />
+    <EmbeddedResource Include="view\part_breadcrumbs.html" />
+    <EmbeddedResource Include="view\part_footer.html" />
+    <EmbeddedResource Include="view\part_head.html" />
+    <EmbeddedResource Include="view\part_navbar.html" />
+    <EmbeddedResource Include="view\part_sidebar.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\js\base64.js" />
+    <EmbeddedResource Include="resource\avatars\user.png" />
+    <EmbeddedResource Include="resource\css\ace-ie.min.css" />
+    <EmbeddedResource Include="resource\css\ace-rtl.min.css" />
+    <EmbeddedResource Include="resource\css\ace-skins.min.css" />
+    <EmbeddedResource Include="resource\css\ace.min.css" />
+    <EmbeddedResource Include="resource\css\bootstrap-editable.css" />
+    <EmbeddedResource Include="resource\css\bootstrap-timepicker.css" />
+    <EmbeddedResource Include="resource\css\bootstrap.min.css" />
+    <EmbeddedResource Include="resource\css\chosen.css" />
+    <EmbeddedResource Include="resource\css\colorbox.css" />
+    <EmbeddedResource Include="resource\css\colorpicker.css" />
+    <EmbeddedResource Include="resource\css\datepicker.css" />
+    <EmbeddedResource Include="resource\css\daterangepicker.css" />
+    <EmbeddedResource Include="resource\css\dropzone.css" />
+    <EmbeddedResource Include="resource\css\font-awesome-ie7.min.css" />
+    <EmbeddedResource Include="resource\css\font-awesome.min.css" />
+    <EmbeddedResource Include="resource\css\fullcalendar.css" />
+    <EmbeddedResource Include="resource\css\images\loading.gif" />
+    <EmbeddedResource Include="resource\css\jquery-ui-1.10.3.custom.min.css" />
+    <EmbeddedResource Include="resource\css\jquery-ui-1.10.3.full.min.css" />
+    <EmbeddedResource Include="resource\css\jquery.gritter.css" />
+    <EmbeddedResource Include="resource\css\select2.css" />
+    <EmbeddedResource Include="resource\css\ui.jqgrid.css" />
+    <EmbeddedResource Include="resource\js\ace-elements.min.js" />
+    <EmbeddedResource Include="resource\js\ace-extra.min.js" />
+    <EmbeddedResource Include="resource\js\ace.min.js" />
+    <EmbeddedResource Include="resource\js\additional-methods.min.js" />
+    <EmbeddedResource Include="resource\js\bootbox.min.js" />
+    <EmbeddedResource Include="resource\js\bootstrap-colorpicker.min.js" />
+    <EmbeddedResource Include="resource\js\bootstrap-tag.min.js" />
+    <EmbeddedResource Include="resource\js\bootstrap-wysiwyg.min.js" />
+    <EmbeddedResource Include="resource\js\bootstrap.min.js" />
+    <EmbeddedResource Include="resource\js\chosen.jquery.min.js" />
+    <EmbeddedResource Include="resource\js\date-time\bootstrap-datepicker.min.js" />
+    <EmbeddedResource Include="resource\js\date-time\bootstrap-timepicker.min.js" />
+    <EmbeddedResource Include="resource\js\date-time\daterangepicker.min.js" />
+    <EmbeddedResource Include="resource\js\date-time\moment.min.js" />
+    <EmbeddedResource Include="resource\js\dropzone.min.js" />
+    <EmbeddedResource Include="resource\js\excanvas.min.js" />
+    <EmbeddedResource Include="resource\js\flot\jquery.flot.min.js" />
+    <EmbeddedResource Include="resource\js\flot\jquery.flot.pie.min.js" />
+    <EmbeddedResource Include="resource\js\flot\jquery.flot.resize.min.js" />
+    <Content Include="resource\js\fuelux\data\fuelux.tree-sampledata.js" />
+    <EmbeddedResource Include="resource\js\fuelux\fuelux.spinner.min.js" />
+    <EmbeddedResource Include="resource\js\fuelux\fuelux.tree.min.js" />
+    <EmbeddedResource Include="resource\js\fuelux\fuelux.wizard.min.js" />
+    <EmbeddedResource Include="resource\js\fullcalendar.min.js" />
+    <EmbeddedResource Include="resource\js\html5shiv.js" />
+    <Content Include="resource\js\jqGrid\i18n\grid.locale-en.js" />
+    <EmbeddedResource Include="resource\js\jqGrid\jquery.jqGrid.min.js" />
+    <EmbeddedResource Include="resource\js\jquery-1.10.2.min.js" />
+    <EmbeddedResource Include="resource\js\jquery-2.0.3.min.js" />
+    <EmbeddedResource Include="resource\js\jquery-ui-1.10.3.custom.min.js" />
+    <EmbeddedResource Include="resource\js\jquery-ui-1.10.3.full.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.autosize.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.colorbox-min.js" />
+    <EmbeddedResource Include="resource\js\jquery.dataTables.bootstrap.js" />
+    <EmbeddedResource Include="resource\js\jquery.dataTables.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.easy-pie-chart.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.gritter.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.hotkeys.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.inputlimiter.1.3.1.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.knob.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.maskedinput.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.mobile.custom.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.nestable.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.slimscroll.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.sparkline.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.ui.touch-punch.min.js" />
+    <EmbeddedResource Include="resource\js\jquery.validate.min.js" />
+    <EmbeddedResource Include="resource\js\markdown\bootstrap-markdown.min.js" />
+    <EmbeddedResource Include="resource\js\markdown\markdown.min.js" />
+    <EmbeddedResource Include="resource\js\md5.js" />
+    <EmbeddedResource Include="resource\js\respond.min.js" />
+    <EmbeddedResource Include="resource\js\select2.min.js" />
+    <EmbeddedResource Include="resource\js\typeahead-bs2.min.js" />
+    <EmbeddedResource Include="resource\js\x-editable\ace-editable.min.js" />
+    <EmbeddedResource Include="resource\js\x-editable\bootstrap-editable.min.js" />
+    <EmbeddedResource Include="resource\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="resource\images\" />
   </ItemGroup>
   <Import Project="$(SolutionDir)Setting\Plugin.setting" />
 </Project>

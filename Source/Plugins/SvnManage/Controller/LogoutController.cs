@@ -1,25 +1,26 @@
 ﻿using Quick.OwinMVC.Controller;
+using Quick.OwinMVC.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Owin;
-using Quick.OwinMVC.Routing;
-using SvnManage.Middleware;
 
 namespace SvnManage.Controller
 {
     [Route("logout")]
-    public class LogoutController : HttpController
+    public class LogoutController : IViewController
     {
-        public override void Service(IOwinContext context)
+        public void Init(IDictionary<string, string> properties)
+        {
+        }
+
+        public string Service(IOwinContext context, IDictionary<string, object> data)
         {
             var rep = context.Response;
-
-            //清除所有Session记录
             context.GetSession().Clear();
-            LoginMiddleware.AuthorizationRequired(context).Wait();
+            rep.Redirect("../../");
+            return null;
         }
     }
 }

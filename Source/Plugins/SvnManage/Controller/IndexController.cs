@@ -31,13 +31,13 @@ namespace SvnManage.Controller
             cpuCounter.NextValue();
         }
 
-        public string Service(IOwinContext context, IDictionary<String, Object> data)
+        string IViewController.Service(IOwinContext context, IDictionary<String, Object> data)
         {
             data["refreshInterval"] = refreshInterval;
             return "index";
         }
 
-        public object Service(IOwinContext context)
+        object IApiController.Service(IOwinContext context)
         {
             switch (context.Request.Query["type"])
             {

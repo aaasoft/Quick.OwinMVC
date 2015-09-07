@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerManage", "Source\ServerManage\ServerManage.csproj", "{C56C37DF-E979-4169-AD8D-146BBB1B05E8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{702F8491-75B4-4FAA-927B-3A97604088BB} = {702F8491-75B4-4FAA-927B-3A97604088BB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC", "Source\Quick.OwinMVC\Quick.OwinMVC.csproj", "{17F47358-C8E5-49B2-BCAC-0B315F93E114}"
 EndProject
