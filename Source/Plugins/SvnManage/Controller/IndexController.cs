@@ -49,7 +49,8 @@ namespace SvnManage.Controller
                         {
                             computer_name = computer.Name,
                             os_name = computer.Info.OSFullName,
-                            process_run_time = (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString(@"dd\.hh\:mm\:ss")
+                            process_run_time = (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString(@"dd\.hh\:mm\:ss"),
+                            server_run_time = new TimeSpan(0, 0, Environment.TickCount / 1000).ToString(@"dd\.hh\:mm\:ss")
                         },
                         cpu = new
                         {
@@ -62,6 +63,14 @@ namespace SvnManage.Controller
                             used = computer.Info.TotalPhysicalMemory - computer.Info.AvailablePhysicalMemory
                         }
                     };
+                case "disk":
+                    return System.IO.DriveInfo.GetDrives().Where(t => t.IsReady).Select(t => new
+                    {
+                        name = t.Name,
+                        totalSize = t.TotalSize,
+                        totalFreeSpace = t.TotalFreeSpace,
+                        driveFormat = t.DriveFormat
+                    });
             }
             return null;
         }
