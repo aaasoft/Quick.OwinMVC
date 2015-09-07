@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
-using ServerManage.Middleware;
+using SvnManage.Middleware;
 
-namespace ServerManage.Controller
+namespace SvnManage.Controller
 {
     [Route("logout")]
     public class LogoutController : HttpController

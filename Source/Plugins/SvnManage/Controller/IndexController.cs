@@ -8,7 +8,7 @@ using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
 using System.Diagnostics;
 
-namespace ServerManage.Controller
+namespace SvnManage.Controller
 {
     [Route("index")]
     public class IndexController : IViewController, IApiController
@@ -20,7 +20,7 @@ namespace ServerManage.Controller
 
         public void Init(IDictionary<string, string> properties)
         {
-            refreshInterval = properties["ServerManage.Controller.IndexController.refreshInterval"];
+            refreshInterval = properties["SvnManage.Controller.IndexController.refreshInterval"];
 
             computer = new Microsoft.VisualBasic.Devices.Computer();
 

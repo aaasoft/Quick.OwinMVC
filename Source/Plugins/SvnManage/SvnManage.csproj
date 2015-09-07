@@ -4,61 +4,27 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C56C37DF-E979-4169-AD8D-146BBB1B05E8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{702F8491-75B4-4FAA-927B-3A97604088BB}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ServerManage</RootNamespace>
-    <AssemblyName>ServerManage</AssemblyName>
+    <RootNamespace>SvnManage</RootNamespace>
+    <AssemblyName>SvnManage</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CryptSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\CryptSharpOfficial.2.1.0.0\lib\CryptSharp.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Firefly, Version=0.6.3.0, Culture=neutral, PublicKeyToken=1d0e30769d803c61, processorArchitecture=MSIL">
-      <HintPath>..\packages\Firefly.0.6.3\lib\Firefly.dll</HintPath>
+      <HintPath>..\..\..\packages\CryptSharpOfficial.2.1.0.0\lib\CryptSharp.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net40\Microsoft.Owin.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\packages\Microsoft.Owin.2.1.0\lib\net40\Microsoft.Owin.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NVelocity, Version=1.0.3.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\NVelocity.1.0.3\lib\NVelocity.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
-      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -75,129 +41,296 @@
     <Compile Include="Controller\Svn\ApiController.cs" />
     <Compile Include="Controller\Svn\ModifyPasswordController.cs" />
     <Compile Include="Middleware\LoginMiddleware.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\PropertyUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Quick.OwinMVC.properties">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="view\index.html" />
-    <EmbeddedResource Include="view\part_footer.html" />
-    <EmbeddedResource Include="view\part_head_content.html" />
-    <EmbeddedResource Include="view\part_sidebar.html" />
-    <EmbeddedResource Include="view\part_systembar.html" />
-    <EmbeddedResource Include="view\vm_global_library.html" />
+    <EmbeddedResource Include="resource\amcharts\amcharts.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\funnel.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\gantt.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\gauge.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIcon.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconBlack.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconH.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconHBlack.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBig.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBig.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlack.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlackH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlackH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmall.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlack.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlackH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlackH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBig.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBig.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlack.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlackH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlackH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmall.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlack.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlackH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlackH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallH.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\eraserIcon.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\eraserIconH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\exportWhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\lens.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\lens.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\lens_old.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\lens_white.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\lensWhite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\lensWhite_old.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\pencilIcon.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\pencilIconH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\xIcon.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\images\xIconH.svg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\pie.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\radar.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\serial.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\amcharts\xy.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\css\invalid.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\css\reset.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\css\style.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\favicon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\b.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-body.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-button-green.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-content-box.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-form-field.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-login-top.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-login.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-menu-item-current.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-menu-item-green.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-radial-gradient.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bg-sidebar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\bl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\br.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\loading.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\menu-current-arrow.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\shortcut-button-bg.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\tl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\images\tr.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\scripts\charts.function.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resource\scripts\jquery.min.js" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resource\scripts\jquery.msgbox.min.js" />
-    <EmbeddedResource Include="view\svn\modify_password.html" />
-    <EmbeddedResource Include="resource\amcharts\amcharts.js" />
-    <EmbeddedResource Include="resource\amcharts\funnel.js" />
-    <EmbeddedResource Include="resource\amcharts\gantt.js" />
-    <EmbeddedResource Include="resource\amcharts\gauge.js" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIcon.gif" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconBlack.gif" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconH.gif" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconHBlack.gif" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBig.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBig.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlack.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlack.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlackH.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigBlackH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigH.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectBigH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmall.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmall.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlack.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlack.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlackH.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallBlackH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallH.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRectSmallH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBig.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBig.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlack.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlack.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlackH.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigBlackH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigH.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundBigH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmall.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmall.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlack.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlack.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlackH.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallBlackH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallH.png" />
-    <EmbeddedResource Include="resource\amcharts\images\dragIconRoundSmallH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\eraserIcon.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\eraserIconH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\export.png" />
-    <EmbeddedResource Include="resource\amcharts\images\exportWhite.png" />
-    <EmbeddedResource Include="resource\amcharts\images\lens.png" />
-    <EmbeddedResource Include="resource\amcharts\images\lens.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\lensWhite.png" />
-    <EmbeddedResource Include="resource\amcharts\images\lensWhite_old.png" />
-    <EmbeddedResource Include="resource\amcharts\images\lens_old.png" />
-    <EmbeddedResource Include="resource\amcharts\images\lens_white.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\pencilIcon.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\pencilIconH.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\xIcon.svg" />
-    <EmbeddedResource Include="resource\amcharts\images\xIconH.svg" />
-    <EmbeddedResource Include="resource\amcharts\pie.js" />
-    <EmbeddedResource Include="resource\amcharts\radar.js" />
-    <EmbeddedResource Include="resource\amcharts\serial.js" />
-    <EmbeddedResource Include="resource\amcharts\xy.js" />
-    <EmbeddedResource Include="resource\css\invalid.css" />
-    <EmbeddedResource Include="resource\css\reset.css" />
-    <EmbeddedResource Include="resource\css\style.css" />
-    <EmbeddedResource Include="resource\favicon.ico" />
-    <EmbeddedResource Include="resource\images\b.png" />
-    <EmbeddedResource Include="resource\images\bg-body.gif" />
-    <EmbeddedResource Include="resource\images\bg-button-green.gif" />
-    <EmbeddedResource Include="resource\images\bg-content-box.gif" />
-    <EmbeddedResource Include="resource\images\bg-form-field.gif" />
-    <EmbeddedResource Include="resource\images\bg-login-top.png" />
-    <EmbeddedResource Include="resource\images\bg-login.gif" />
-    <EmbeddedResource Include="resource\images\bg-menu-item-current.gif" />
-    <EmbeddedResource Include="resource\images\bg-menu-item-green.gif" />
-    <EmbeddedResource Include="resource\images\bg-radial-gradient.gif" />
-    <EmbeddedResource Include="resource\images\bg-sidebar.gif" />
-    <EmbeddedResource Include="resource\images\bl.png" />
-    <EmbeddedResource Include="resource\images\br.png" />
-    <EmbeddedResource Include="resource\images\loading.gif" />
-    <EmbeddedResource Include="resource\images\logo.png" />
-    <EmbeddedResource Include="resource\images\menu-current-arrow.gif" />
-    <EmbeddedResource Include="resource\images\shortcut-button-bg.gif" />
-    <EmbeddedResource Include="resource\images\tl.png" />
-    <EmbeddedResource Include="resource\images\tr.png" />
-    <EmbeddedResource Include="resource\scripts\charts.function.js" />
-    <EmbeddedResource Include="resource\scripts\jquery.min.js" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="resource\scripts\jquery.wysiwyg.js" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="resource\scripts\simpla.jquery.configuration.js" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Quick.OwinMVC.View.NVelocity\Quick.OwinMVC.View.NVelocity.csproj">
-      <Project>{f30ae8b8-023f-4814-8c44-a2edf2933a58}</Project>
-      <Name>Quick.OwinMVC.View.NVelocity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Quick.OwinMVC\Quick.OwinMVC.csproj">
+    <EmbeddedResource Include="view\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="view\part_footer.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="view\part_head_content.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="view\part_sidebar.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="view\part_systembar.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="view\svn\modify_password.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="view\vm_global_library.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Quick.OwinMVC\Quick.OwinMVC.csproj">
       <Project>{17f47358-c8e5-49b2-bcac-0b315f93e114}</Project>
       <Name>Quick.OwinMVC</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="$(SolutionDir)Setting\Plugin.setting" />
 </Project>

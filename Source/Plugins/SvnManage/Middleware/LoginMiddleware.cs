@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Quick.OwinMVC.Controller;
 
-namespace ServerManage.Middleware
+namespace SvnManage.Middleware
 {
     public class LoginMiddleware : OwinMiddleware
     {

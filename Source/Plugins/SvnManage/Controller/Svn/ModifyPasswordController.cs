@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
 
-namespace ServerManage.Controller.Svn
+namespace SvnManage.Controller.Svn
 {
     [Route("svn.modify_password")]
     public class ModifyPasswordController : IViewController
