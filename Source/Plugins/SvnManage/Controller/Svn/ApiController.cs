@@ -8,6 +8,7 @@ using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
 using System.IO;
 using System.Management;
+using SvnManage.Middleware;
 
 namespace SvnManage.Controller.Svn
 {
@@ -37,7 +38,7 @@ namespace SvnManage.Controller.Svn
                     if (method != "POST")
                         return null;
                     var formData = context.GetFormData();
-                    var account = context.GetSession()["account"]?.ToString();
+                    var account = context.GetSession()[LoginMiddleware.LOGINED_USER_KEY]?.ToString();
                     var pre_password = formData.Get("pre_password");
                     var new_password = formData.Get("new_password");
                     try
