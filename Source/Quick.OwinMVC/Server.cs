@@ -21,7 +21,7 @@ namespace Quick.OwinMVC
         internal IDictionary<String, String> properties;
         internal IDictionary<Type, OwinMiddleware> middlewareInstanceDict;
 
-        private EndPoint endpoint;
+        private IPEndPoint endpoint;
         private String url;
         private IDisposable webApp;
 
@@ -46,7 +46,7 @@ namespace Quick.OwinMVC
         public Server(IDictionary<String, String> properties, int port, string hostname)
         {
             url = $"http://{hostname}:{port}";
-            EndPoint endpoint = null;
+            IPEndPoint endpoint = null;
             switch (hostname)
             {
                 case "*":
@@ -61,12 +61,12 @@ namespace Quick.OwinMVC
             init(properties, endpoint);
         }
 
-        public Server(IDictionary<String, String> properties, EndPoint endpoint)
+        public Server(IDictionary<String, String> properties, IPEndPoint endpoint)
         {
             init(properties, endpoint);
         }
 
-        private void init(IDictionary<String, String> properties, EndPoint endpoint)
+        private void init(IDictionary<String, String> properties, IPEndPoint endpoint)
         {
             this.properties = properties;
             this.endpoint = endpoint;
@@ -127,7 +127,9 @@ namespace Quick.OwinMVC
             //加载中部的中间件
             foreach (var register in middlewareRegisterActionList)
                 register.Invoke(app);
-            webApp = new Firefly.Http.ServerFactory().Create(app.Build(), endpoint);
+
+            var builder = Nowin.ServerBuilder.New().SetEndPoint(endpoint).SetOwinApp(app.Build());
+            webApp = builder.Start();
         }
 
         public void Stop()
