@@ -95,6 +95,13 @@
             jQuery('#' + id).addClass('visible');
         }
 
+        $(document).ready(function(){
+            $('input').keypress(function(e){
+                if(e.keyCode==13)
+                    login();
+            });
+        });
+
         function login() {
             var account = jQuery('#account').val();
             var password = jQuery('#password').val();
