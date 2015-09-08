@@ -13,7 +13,6 @@ namespace Quick.OwinMVC.Middleware
 {
     public abstract class AbstractPluginPathMiddleware : OwinMiddleware, IAssemblyHunter
     {
-        public const String VIEWRENDER_CLASS = "Quick.OwinMVC.VIEWRENDER_CLASS";
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
 

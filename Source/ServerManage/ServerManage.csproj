@@ -40,7 +40,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Static\AssemblyAutoSearcher.cs" />
     <Compile Include="Static\Startup.cs" />
-    <Compile Include="Utils\PropertyUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

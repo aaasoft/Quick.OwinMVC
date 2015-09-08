@@ -1,12 +1,5 @@
-﻿using Quick.OwinMVC;
-using Quick.OwinMVC.Routing;
-using ServerManage.Static;
-using ServerManage.Utils;
+﻿using ServerManage.Static;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServerManage
 {

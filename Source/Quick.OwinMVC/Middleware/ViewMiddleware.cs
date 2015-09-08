@@ -12,6 +12,8 @@ namespace Quick.OwinMVC.Middleware
 {
     public class ViewMiddleware : AbstractControllerMiddleware<IViewController>
     {
+        public static readonly String VIEWRENDER_CLASS = $"{typeof(ViewMiddleware).FullName}.{nameof(VIEWRENDER_CLASS)}";
+
         private IViewRender viewRender;
 
         public ViewMiddleware(OwinMiddleware next) : base(next)

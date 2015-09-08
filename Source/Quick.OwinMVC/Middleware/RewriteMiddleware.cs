@@ -9,7 +9,6 @@ namespace Quick.OwinMVC.Middleware
 {
     public class RewriteMiddleware : OwinMiddleware, IPropertyHunter
     {
-        public const String REWRITE_PREFIX = "Quick.OwinMVC.Server.Rewrite.";
         private IDictionary<String, String> rewriteDict;
         public RewriteMiddleware(OwinMiddleware next) : base(next)
         {
@@ -36,8 +35,7 @@ namespace Quick.OwinMVC.Middleware
 
         public void Hunt(string key, string value)
         {
-            if (key.StartsWith(REWRITE_PREFIX))
-                RegisterRewrite(key.Substring(REWRITE_PREFIX.Length), value);
+            RegisterRewrite(key, value);
         }
     }
 }

@@ -9,8 +9,6 @@ namespace Quick.OwinMVC.Middleware
 {
     public class RedirectMiddleware : OwinMiddleware, IPropertyHunter
     {
-        public const String REDIRECT_PREFIX = "Quick.OwinMVC.Server.Redirect.";
-
         private IDictionary<String, String> redirectDict;
         public RedirectMiddleware(OwinMiddleware next) : base(next)
         {
@@ -41,8 +39,7 @@ namespace Quick.OwinMVC.Middleware
 
         public void Hunt(string key, string value)
         {
-            if (key.StartsWith(REDIRECT_PREFIX))
-                RegisterRedirect(key.Substring(REDIRECT_PREFIX.Length), value);
+            RegisterRedirect(key, value);
         }
     }
 }

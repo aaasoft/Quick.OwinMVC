@@ -18,8 +18,9 @@ namespace Quick.OwinMVC.View.NVelocity
         {
             //初始化NVelocity引擎
             var nv_properties = new Commons.Collections.ExtendedProperties();
-            foreach (String key in properties.Keys)
-                nv_properties.SetProperty(key, properties[key]);
+            var prefix = this.GetType().FullName + ".";
+            foreach (String key in properties.Keys.Where(t => t.StartsWith(prefix)))
+                nv_properties.SetProperty(key.Substring(prefix.Length), properties[key]);
             engine = new VelocityEngine(nv_properties);
             engine.Init();
         }

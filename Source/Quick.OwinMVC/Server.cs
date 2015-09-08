@@ -9,18 +9,18 @@ using Microsoft.Owin;
 using Quick.OwinMVC.Middleware;
 using Microsoft.Owin.Builder;
 using Quick.OwinMVC.Utils;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Quick.OwinMVC
 {
     public class Server
     {
-        public const String MIDDLEWARE_PREFIX = "Quick.OwinMVC.Server.Middleware.";
-
         internal static Server Instance { get; private set; }
 
         internal IDictionary<String, String> properties;
         internal IDictionary<Type, OwinMiddleware> middlewareInstanceDict;
 
+        private X509Certificate cert;
         private IPEndPoint endpoint;
         private String url;
         private IDisposable webApp;
@@ -32,6 +32,15 @@ namespace Quick.OwinMVC
         {
             //注册resource:前缀URI处理程序
             WebRequest.RegisterPrefix("resource:", new ResourceWebRequestFactory());
+        }
+
+        /// <summary>
+        /// 设置证书
+        /// </summary>
+        /// <param name="cert"></param>
+        public void SetCertificate(X509Certificate cert)
+        {
+            this.cert = cert;
         }
 
         public String GetUrl()
@@ -73,11 +82,20 @@ namespace Quick.OwinMVC
             middlewareInstanceDict = new Dictionary<Type, OwinMiddleware>();
 
             Server.Instance = this;
-            foreach (var key in properties.Keys)
+
+            var prefix = this.GetType().FullName + ".";
+            foreach (var key in properties.Keys.Where(t => t.StartsWith(prefix)))
             {
-                if (key.StartsWith(MIDDLEWARE_PREFIX))
+                var serverKey = key.Substring(prefix.Length);
+
+                switch (serverKey)
                 {
-                    RegisterMiddleware(AssemblyUtils.GetType(properties[key]));
+                    //如果是中间件定义
+                    case "Middlewares":
+                        var value = properties[key];
+                        value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                            .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));
+                        break;
                 }
             }
         }
@@ -129,6 +147,9 @@ namespace Quick.OwinMVC
                 register.Invoke(app);
 
             var builder = Nowin.ServerBuilder.New().SetEndPoint(endpoint).SetOwinApp(app.Build());
+            //如果配置了证书，则设置证书
+            if (cert != null)
+                builder.SetCertificate(cert);
             webApp = builder.Start();
         }
 

@@ -31,8 +31,12 @@ namespace Quick.OwinMVC.Middleware
             }
 
             //扫描配置
-            foreach (String key in Server.Instance.properties.Keys)
-                propertyHunterList.ForEach(t => t.Hunt(key, Server.Instance.properties[key]));
+            propertyHunterList.ForEach(hunter =>
+            {
+                var prefix = hunter.GetType().FullName + ".";
+                foreach (String key in Server.Instance.properties.Keys.Where(t => t.StartsWith(prefix)))
+                    hunter.Hunt(key.Substring(prefix.Length), Server.Instance.properties[key]);
+            });
             //扫描程序集和类
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies().Where(t => !t.IsDynamic && !t.GlobalAssemblyCache))
             {
