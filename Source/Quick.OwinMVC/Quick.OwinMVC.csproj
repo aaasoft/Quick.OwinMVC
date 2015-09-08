@@ -51,12 +51,12 @@
     <Compile Include="Middleware\ApiMiddleware.cs" />
     <Compile Include="Middleware\IOwinContextCleaner.cs" />
     <Compile Include="Middleware\MiddlewareContext.cs" />
-    <Compile Include="Middleware\ErrorMiddleware.cs" />
+    <Compile Include="Middleware\Error500Middleware.cs" />
     <Compile Include="Middleware\HttpMiddleware.cs" />
     <Compile Include="Middleware\IAssemblyHunter.cs" />
     <Compile Include="Middleware\IPropertyHunter.cs" />
     <Compile Include="Middleware\ITypeHunter.cs" />
-    <Compile Include="Middleware\NotFoundMiddleware.cs" />
+    <Compile Include="Middleware\Error404Middleware.cs" />
     <Compile Include="Middleware\RedirectMiddleware.cs" />
     <Compile Include="Middleware\ResourceMiddleware.cs" />
     <Compile Include="Middleware\RewriteMiddleware.cs" />

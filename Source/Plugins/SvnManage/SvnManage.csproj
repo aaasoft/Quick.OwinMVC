@@ -257,6 +257,7 @@
     <EmbeddedResource Include="view\part_sidebar.html" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="view\500.html" />
     <EmbeddedResource Include="view\404.html" />
     <EmbeddedResource Include="resource\js\base64.js" />
     <EmbeddedResource Include="resource\avatars\user.png" />

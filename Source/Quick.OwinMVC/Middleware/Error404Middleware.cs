@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class NotFoundMiddleware : OwinMiddleware, IPropertyHunter
+    public class Error404Middleware : OwinMiddleware, IPropertyHunter
     {
         private Server server;
         private String RewritePath;
 
-        public NotFoundMiddleware(OwinMiddleware next) : base(next)
+        public Error404Middleware(OwinMiddleware next) : base(next)
         {
             this.server = Server.Instance;
         }
 
-        public void Hunt(string key, string value)
+        void IPropertyHunter.Hunt(string key, string value)
         {
             if (key == nameof(RewritePath))
                 RewritePath = value;
@@ -27,8 +27,7 @@ namespace Quick.OwinMVC.Middleware
         {
             if (String.IsNullOrEmpty(RewritePath))
                 throw new ArgumentNullException($"Property '{this.GetType().FullName}.{RewritePath}' must be set.");
-
-            String path = context.Get<String>("owin.RequestPath");
+            
             context.Set<String>("owin.RequestPath", RewritePath);
             OwinMiddleware first = server.GetFirstMiddlewareInstance();
             if (first == null)
