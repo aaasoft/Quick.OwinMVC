@@ -16,6 +16,6 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="bin\Release\Quick.OwinMVC.View.NVelocity.dll" target="lib\net40\Quick.OwinMVC.View.NVelocity.dll" />
+        <file src="..\..\#build#\1_bin\Release\ServerManage\Libs\Quick.OwinMVC.View.NVelocity.dll" target="lib\net40\Quick.OwinMVC.View.NVelocity.dll" />
     </files>
 </package>
