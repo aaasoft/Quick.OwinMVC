@@ -14,11 +14,9 @@ namespace ServerManage.Static
             IDictionary<String, String> properties = PropertyUtils.LoadFile("Quick.OwinMVC.properties");
             String httpUrl = properties["http.url"];
             Server server = new Server(properties, new Uri(httpUrl));
-
-            //server.SetCertificate(new System.Security.Cryptography.X509Certificates.X509Certificate2("device.scbeta.com.pfx", "1qaz2wsx1qaz"));
             //启动服务
             server.Start();
-            Console.WriteLine($"ServerManage WebServer is started on {httpUrl}.");
+            Console.WriteLine($"ServerManage WebServer is started on {server.GetUrl()}");
         }
     }
 }

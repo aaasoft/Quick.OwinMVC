@@ -45,8 +45,13 @@ namespace Quick.OwinMVC
 
         public String GetUrl()
         {
+            var protocol = cert == null ? "http" : "https";
+            var defaultPort = cert == null ? 80 : 443;
+
             if (url == null)
-                url = $"http://{endpoint.ToString()}";
+                url = $"{protocol}://{endpoint.Address.ToString()}";
+            if (endpoint.Port != defaultPort)
+                url += $":{endpoint.Port}";
             return url;
         }
 
@@ -54,7 +59,6 @@ namespace Quick.OwinMVC
         public Server(IDictionary<String, String> properties, int port) : this(properties, new IPEndPoint(IPAddress.Any, port)) { }
         public Server(IDictionary<String, String> properties, int port, string hostname)
         {
-            url = $"http://{hostname}:{port}";
             IPEndPoint endpoint = null;
             switch (hostname)
             {
@@ -95,6 +99,14 @@ namespace Quick.OwinMVC
                         var value = properties[key];
                         value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                             .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));
+                        break;
+                    case "Cert":
+                        var enableCert = bool.Parse(properties[key]);
+                        if (!enableCert)
+                            continue;
+                        var certFile = properties[prefix + "Cert.File"];
+                        var certPassword = properties[prefix + "Cert.Password"];
+                        SetCertificate(new X509Certificate2(certFile, certPassword));
                         break;
                 }
             }
