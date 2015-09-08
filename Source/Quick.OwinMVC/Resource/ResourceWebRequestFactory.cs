@@ -12,14 +12,17 @@ namespace Quick.OwinMVC.Resource
     public class ResourceWebRequest : WebRequest
     {
         private Uri uri;
-        public ResourceWebRequest(Uri uri)
+        private String staticFileFolder;
+
+        public ResourceWebRequest(Uri uri, String staticFileFolder)
         {
             this.uri = uri;
+            this.staticFileFolder = staticFileFolder;
         }
 
         public override WebResponse GetResponse()
         {
-            return new ResourceWebResponse(uri);
+            return new ResourceWebResponse(uri, staticFileFolder);
         }
     }
 
@@ -28,7 +31,9 @@ namespace Quick.OwinMVC.Resource
         private Uri uri;
         private Assembly assembly;
         private String resourceName;
-        public ResourceWebResponse(Uri uri)
+        private FileInfo resourceFile;
+
+        public ResourceWebResponse(Uri uri, String staticFileFolder)
         {
             this.uri = uri;
             assembly = Assembly.Load(uri.Host);
@@ -36,8 +41,15 @@ namespace Quick.OwinMVC.Resource
             resourceName = uri.LocalPath;
             while (resourceName.StartsWith("/"))
                 resourceName = resourceName.Substring(1);
-            resourceName = resourceName.Replace("/", ".");
-            resourceName = $"{assemblyName}.{resourceName}";
+
+            String fullFilePath = Path.Combine(staticFileFolder, assemblyName, resourceName);
+            if (File.Exists(fullFilePath))
+                resourceFile = new FileInfo(fullFilePath);
+            else
+            {
+                resourceName = resourceName.Replace("/", ".");
+                resourceName = $"{assemblyName}.{resourceName}";
+            }
         }
         private ManifestResourceInfo GetResourceInfo()
         {
@@ -45,10 +57,17 @@ namespace Quick.OwinMVC.Resource
         }
         public override System.IO.Stream GetResponseStream()
         {
-            var resourceInfo = GetResourceInfo();
-            if (resourceInfo == null)
-                return null;
-            return assembly.GetManifestResourceStream(resourceName);
+            if (resourceFile == null)
+            {
+                var resourceInfo = GetResourceInfo();
+                if (resourceInfo == null)
+                    return null;
+                return assembly.GetManifestResourceStream(resourceName);
+            }
+            else
+            {
+                return resourceFile.OpenRead();
+            }
         }
 
         public override Uri ResponseUri { get { return uri; } }
@@ -57,13 +76,18 @@ namespace Quick.OwinMVC.Resource
         {
             get
             {
-                var resourceInfo = GetResourceInfo();
-                if (resourceInfo == null)
-                    return -1;
-                using (var stream = GetResponseStream())
+                if (resourceFile == null)
                 {
-                    return stream.Length;
+                    var resourceInfo = GetResourceInfo();
+                    if (resourceInfo == null)
+                        return -1;
+                    using (var stream = GetResponseStream())
+                    {
+                        return stream.Length;
+                    }
                 }
+                else
+                    return resourceFile.Length;
             }
             set { base.ContentLength = value; }
         }
@@ -88,9 +112,11 @@ namespace Quick.OwinMVC.Resource
 
     public class ResourceWebRequestFactory : IWebRequestCreate
     {
+        public String StaticFileFolder { get; set; } = String.Empty;
+
         public WebRequest Create(Uri uri)
         {
-            return new ResourceWebRequest(uri);
+            return new ResourceWebRequest(uri, StaticFileFolder);
         }
     }
 }

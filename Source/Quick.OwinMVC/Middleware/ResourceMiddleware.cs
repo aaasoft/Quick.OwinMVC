@@ -10,11 +10,16 @@ using Quick.OwinMVC.Utils;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class ResourceMiddleware : AbstractPluginPathMiddleware
+    public class ResourceMiddleware : AbstractPluginPathMiddleware,IPropertyHunter
     {
         //默认一天
         private double resourceExpires = 86400;
         private Boolean useMd5ETag = false;
+        private ResourceWebRequestFactory resourceWebRequestFactory;
+        private String StaticFileFolder
+        {
+            set { resourceWebRequestFactory.StaticFileFolder = value; }
+        }
 
         public ResourceMiddleware(OwinMiddleware next) : base(next)
         {
@@ -23,6 +28,10 @@ namespace Quick.OwinMVC.Middleware
                 resourceExpires = double.Parse(properties["Quick.OwinMVC.useMd5ETag"]);
             if (properties.ContainsKey("Quick.OwinMVC.resourceExpires"))
                 useMd5ETag = Boolean.Parse(properties["Quick.OwinMVC.useMd5ETag"]);
+
+            resourceWebRequestFactory = new ResourceWebRequestFactory();
+            //注册resource:前缀URI处理程序
+            WebRequest.RegisterPrefix("resource:", resourceWebRequestFactory);
         }
 
         public override string GetRouteMiddle()
@@ -93,7 +102,15 @@ namespace Quick.OwinMVC.Middleware
                 rep.Headers["Cache-Control"] = $"max-age={resourceExpires}";
                 rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
                 stream.CopyTo(rep.Body);
+                stream.Close();
+                stream.Dispose();
             });
+        }
+
+        void IPropertyHunter.Hunt(string key, string value)
+        {
+            if (key == nameof(StaticFileFolder))
+                resourceWebRequestFactory.StaticFileFolder = value;
         }
     }
 }

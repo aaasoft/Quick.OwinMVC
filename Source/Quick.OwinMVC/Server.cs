@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Owin;
-using Quick.OwinMVC.Resource;
 using System.Net;
 using Microsoft.Owin;
 using Quick.OwinMVC.Middleware;
@@ -27,13 +25,7 @@ namespace Quick.OwinMVC
 
         //中间件队列
         private List<Action<IAppBuilder>> middlewareRegisterActionList = new List<Action<IAppBuilder>>();
-
-        static Server()
-        {
-            //注册resource:前缀URI处理程序
-            WebRequest.RegisterPrefix("resource:", new ResourceWebRequestFactory());
-        }
-
+        
         /// <summary>
         /// 设置证书
         /// </summary>
