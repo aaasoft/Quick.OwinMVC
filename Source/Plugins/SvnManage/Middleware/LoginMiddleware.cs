@@ -10,7 +10,7 @@ namespace SvnManage.Middleware
 {
     public class LoginMiddleware : OwinMiddleware
     {
-        private const String loginPath = "/base/view/login";
+        private const String loginPath = "/login";
         internal const String LOGINED_USER_KEY = "SVN_USER";
         internal const String RETURN_URL_KEY = "returnUrl";
 
@@ -26,22 +26,28 @@ namespace SvnManage.Middleware
                 return Next.Invoke(context);
             }
 
-
+            var req = context.Request;
+            var sourceRequestPath = req.Get<String>("Quick.OwinMVC.SourceRequestPath");
+            if (sourceRequestPath == null)
+                sourceRequestPath = req.Get<String>("owin.RequestPath");
             //如果是登录页面，则允许访问
-            if (context.Request.Path.Equals(new PathString(loginPath)))
+            if (new PathString(sourceRequestPath).Equals(new PathString(loginPath)))
                 return Next.Invoke(context);
             else
             //否则，跳转到登录页面
             {
                 return Task.Factory.StartNew(() =>
                 {
-                    var req = context.Request;
+
                     var rep = context.Response;
 
+                    if (sourceRequestPath != null)
+                        req.Set("owin.RequestPath", sourceRequestPath);
                     var returnUrl = req.Uri.ToString();
                     //对URL进行编码
                     returnUrl = System.Web.HttpUtility.UrlEncode(returnUrl);
-                    rep.Redirect($"../..{loginPath}?{RETURN_URL_KEY}={returnUrl}");
+                    var redirectUrl = $"{req.Get<String>("ContextPath")}{loginPath}?{RETURN_URL_KEY}={returnUrl}";
+                    rep.Redirect(redirectUrl);
                 });
             }
         }

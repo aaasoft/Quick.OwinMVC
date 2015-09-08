@@ -124,10 +124,10 @@
     <!--以#*..*#包括的内容会作为Velocity的注释而不被输出s-->
     <script src="../resource/js/jquery-1.10.2.min.js"></script>
     *#
-    <script type="text/javascript" src="../resource/amcharts/amcharts.js"></script>
-    <script type="text/javascript" src="../resource/amcharts/pie.js"></script>
-    <script type="text/javascript" src="../resource/amcharts/serial.js"></script>
-    <script type="text/javascript" src="../resource/js/charts.function.js"></script>
+    <script type="text/javascript" src="${ContextPath}/base/resource/amcharts/amcharts.js"></script>
+    <script type="text/javascript" src="${ContextPath}/base/resource/amcharts/pie.js"></script>
+    <script type="text/javascript" src="${ContextPath}/base/resource/amcharts/serial.js"></script>
+    <script type="text/javascript" src="${ContextPath}/base/resource/js/charts.function.js"></script>
     <script type="text/javascript">
         // 对Date的扩展，将 Date 转化为指定格式的String
         // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
@@ -188,7 +188,7 @@
                 //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "../api/index?type=info",
+                    url: "${ContextPath}/base/api/index?type=info",
                     success: function (json) {
                         var basic = json.basic;
                         var cpu = json.cpu;
@@ -228,7 +228,7 @@
                 //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "../api/index?type=disk",
+                    url: "${ContextPath}/base/api/index?type=disk",
                     success: function (json) {
                         //磁盘信息
                         var disk = json;

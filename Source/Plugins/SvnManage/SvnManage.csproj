@@ -37,6 +37,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\Error404Controller.cs" />
     <Compile Include="Controller\IndexController.cs" />
     <Compile Include="Controller\LoginController.cs" />
     <Compile Include="Controller\LogoutController.cs" />
@@ -255,6 +256,7 @@
     <EmbeddedResource Include="view\part_sidebar.html" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="view\404.html" />
     <EmbeddedResource Include="resource\js\base64.js" />
     <EmbeddedResource Include="resource\avatars\user.png" />
     <EmbeddedResource Include="resource\css\ace-ie.min.css" />

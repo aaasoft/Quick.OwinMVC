@@ -14,6 +14,17 @@ namespace Quick.OwinMVC.Utils
         {
             IDictionary<String, String> dict = new Dictionary<String, String>();
 
+            StringBuilder sb = new StringBuilder();
+            //先去掉注释行
+            foreach (var str in content.Split(new Char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var line = str.Trim();
+                if (line.StartsWith("#"))
+                    continue;
+                sb.AppendLine(line);
+            }
+            content = sb.ToString();
+
             //参考正则表达式: (?!#)(?'key'[^#][^\s]*)\s*=\s*(?'value'.*)\s*
             content = content.Replace("\\\r\n", "").Replace("\\\r", "").Replace("\\\n", "");
 

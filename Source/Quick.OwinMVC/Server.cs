@@ -18,7 +18,7 @@ namespace Quick.OwinMVC
         internal static Server Instance { get; private set; }
 
         internal IDictionary<String, String> properties;
-        internal IDictionary<Type, OwinMiddleware> middlewareInstanceDict;
+        internal IList<OwinMiddleware> middlewareInstanceList;
 
         private X509Certificate cert;
         private IPEndPoint endpoint;
@@ -83,7 +83,7 @@ namespace Quick.OwinMVC
         {
             this.properties = properties;
             this.endpoint = endpoint;
-            middlewareInstanceDict = new Dictionary<Type, OwinMiddleware>();
+            middlewareInstanceList = new List<OwinMiddleware>();
 
             Server.Instance = this;
 
@@ -134,9 +134,12 @@ namespace Quick.OwinMVC
             if (webApp == null)
                 throw new ApplicationException("Can't invoke this method before Server.Start() method invoded.");
             Type type = typeof(T);
-            if (middlewareInstanceDict.ContainsKey(type))
-                return middlewareInstanceDict[type] as T;
-            return null;
+            return middlewareInstanceList.Where(m => m.GetType() == type).FirstOrDefault() as T;
+        }
+
+        public OwinMiddleware GetFirstMiddlewareInstance()
+        {
+            return middlewareInstanceList.First();
         }
 
         /// <summary>
