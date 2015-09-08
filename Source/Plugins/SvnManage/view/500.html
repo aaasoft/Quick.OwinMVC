@@ -44,14 +44,19 @@
                                                 </div>
 
                                                 <div class="modal-body no-padding">
-                                                    <pre class="prettyprint linenums">${Exception.ToString()}</pre>
+                                                    <pre id="exception" class="prettyprint linenums">${Exception.ToString()}</pre>
                                                 </div>
 
                                                 <div class="modal-footer no-margin-top">
+                                                    <button class="btn btn-sm btn-primary pull-left" onclick="copyToClipboard('textForCopy')">
+                                                        <i class="icon-copy"></i>
+                                                        复制到剪贴板
+                                                    </button>
                                                     <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
                                                         <i class="icon-remove"></i>
                                                         关闭
                                                     </button>
+                                                    <textarea id="textForCopy" style="display:none">${Exception.ToString()}</textarea>
                                                 </div>
                                             </div><!-- /.modal-content -->
                                         </div><!-- /.modal-dialog -->
@@ -78,5 +83,15 @@
     <!-- /.main-container -->
     #parse("SvnManage:part_footer")
     <!-- inline scripts related to this page -->
+    <script>
+        var copyToClipboard = function (elementId) {
+            var element = document.getElementById(elementId);
+            element.removeAttribute("style");
+            element.focus();
+            element.select();
+            document.execCommand("copy");
+            element.setAttribute("style", "display:none");
+        }
+    </script>
 </body>
 </html>
