@@ -22,19 +22,26 @@ namespace SvnManage.Controller
         {
             refreshInterval = properties["SvnManage.Controller.IndexController.refreshInterval"];
 
-            computer = new Microsoft.VisualBasic.Devices.Computer();
-
-            cpuCounter = new PerformanceCounter();
-            cpuCounter.CategoryName = "Processor";
-            cpuCounter.CounterName = "% Processor Time";
-            cpuCounter.InstanceName = "_Total";
-            cpuCounter.NextValue();
+            if (isWindows())
+            {
+                computer = new Microsoft.VisualBasic.Devices.Computer();
+                cpuCounter = new PerformanceCounter();
+                cpuCounter.CategoryName = "Processor";
+                cpuCounter.CounterName = "% Processor Time";
+                cpuCounter.InstanceName = "_Total";
+                cpuCounter.NextValue();
+            }
         }
 
         string IViewController.Service(IOwinContext context, IDictionary<String, Object> data)
         {
             data["refreshInterval"] = refreshInterval;
             return "index";
+        }
+
+        private bool isWindows()
+        {
+            return Environment.OSVersion.Platform == PlatformID.Win32NT;
         }
 
         object IApiController.Service(IOwinContext context)
@@ -54,13 +61,13 @@ namespace SvnManage.Controller
                         },
                         cpu = new
                         {
-                            used = cpuCounter.NextValue()
+                            used = isWindows() ? cpuCounter.NextValue() : 0
                         },
                         memory = new
                         {
-                            total = computer.Info.TotalPhysicalMemory,
-                            free = computer.Info.AvailablePhysicalMemory,
-                            used = computer.Info.TotalPhysicalMemory - computer.Info.AvailablePhysicalMemory
+                            total = isWindows() ? computer.Info.TotalPhysicalMemory : 0,
+                            free = isWindows() ? computer.Info.AvailablePhysicalMemory : 0,
+                            used = isWindows() ? computer.Info.TotalPhysicalMemory - computer.Info.AvailablePhysicalMemory : 0
                         }
                     };
                 case "disk":
