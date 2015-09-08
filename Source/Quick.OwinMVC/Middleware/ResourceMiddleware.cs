@@ -32,26 +32,23 @@ namespace Quick.OwinMVC.Middleware
 
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
+            var req = context.Request;
+            var rep = context.Response;
+
+            Uri uri = new Uri($"resource://{plugin}/resource/{path}");
+            ResourceWebResponse resourceResponse = null;
+            try
+            {
+                resourceResponse = WebRequest.Create(uri).GetResponse() as ResourceWebResponse;
+            }
+            catch { }
+
+            var stream = resourceResponse?.GetResponseStream();
+            if (stream == null)
+                return Next.Invoke(context);
+
             return Task.Factory.StartNew(() =>
             {
-                var req = context.Request;
-                var rep = context.Response;
-
-                Uri uri = new Uri($"resource://{plugin}/resource/{path}");
-                ResourceWebResponse resourceResponse = null;
-                try
-                {
-                    resourceResponse = WebRequest.Create(uri).GetResponse() as ResourceWebResponse;
-                }
-                catch { }
-
-                var stream = resourceResponse?.GetResponseStream();
-                if (stream == null)
-                {
-                    rep.StatusCode = 404;
-                    rep.Write($"Resource '{path}' in plugin '{plugin}' not found!");
-                    return;
-                }
                 //验证缓存有效
                 {
                     //===================

@@ -33,6 +33,11 @@ namespace Quick.OwinMVC.Middleware
             OwinMiddleware first = server.GetFirstMiddlewareInstance();
             if (first == null)
                 throw new ArgumentException($"Middleware '{this.GetType().FullName};{this.GetType().Assembly.GetName().Name}' must not be the first middleware,and recommand to be set to the last one.");
+
+            //清理OwinContext
+            foreach (var cleaner in server.GetMiddlewares<IOwinContextCleaner>())
+                cleaner.Clean(context);
+
             return first.Invoke(context);
         }
     }

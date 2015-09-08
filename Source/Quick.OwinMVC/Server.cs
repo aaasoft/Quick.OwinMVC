@@ -128,13 +128,16 @@ namespace Quick.OwinMVC
             middlewareRegisterActionList.Add(action);
         }
 
-        public T GetMiddlewareInstance<T>()
-            where T : OwinMiddleware
+        public T GetMiddleware<T>()
+        {
+            return GetMiddlewares<T>().FirstOrDefault();
+        }
+
+        public IEnumerable<T> GetMiddlewares<T>()
         {
             if (webApp == null)
                 throw new ApplicationException("Can't invoke this method before Server.Start() method invoded.");
-            Type type = typeof(T);
-            return middlewareInstanceList.Where(m => m.GetType() == type).FirstOrDefault() as T;
+            return middlewareInstanceList.Where(m => m is T).Cast<T>();
         }
 
         public OwinMiddleware GetFirstMiddlewareInstance()
@@ -157,6 +160,8 @@ namespace Quick.OwinMVC
         {
             var app = new AppBuilder();
 
+            //中间件上下文
+            app.Use<MiddlewareContext>();
             //加载中部的中间件
             foreach (var register in middlewareRegisterActionList)
                 register.Invoke(app);

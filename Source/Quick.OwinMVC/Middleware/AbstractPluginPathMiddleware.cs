@@ -11,14 +11,14 @@ using Quick.OwinMVC.Controller;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public abstract class AbstractPluginPathMiddleware : OwinMiddleware, IAssemblyHunter
+    public abstract class AbstractPluginPathMiddleware : OwinMiddleware, IAssemblyHunter, IOwinContextCleaner
     {
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
 
         private IDictionary<String, String> pluginAliasDict;
         private Regex route;
-        
+
         public AbstractPluginPathMiddleware(OwinMiddleware next) : base(next)
         {
             pluginAliasDict = new Dictionary<String, String>();
@@ -55,13 +55,21 @@ namespace Quick.OwinMVC.Middleware
         public abstract String GetRouteMiddle();
         public abstract Task Invoke(IOwinContext context, String plugin, String path);
 
-        public void Hunt(Assembly assembly)
+        void IAssemblyHunter.Hunt(Assembly assembly)
         {
             String pluginName = assembly.GetName().Name;
             foreach (RouteAttribute attr in assembly.GetCustomAttributes<RouteAttribute>())
             {
                 pluginAliasDict[attr.Path] = pluginName;
             }
+        }
+
+        void IOwinContextCleaner.Clean(IOwinContext context)
+        {
+            if (context.Environment.ContainsKey(QOMVC_PLUGIN_KEY))
+                context.Environment.Remove(QOMVC_PLUGIN_KEY);
+            if (context.Environment.ContainsKey(QOMVC_PATH_KEY))
+                context.Environment.Remove(QOMVC_PATH_KEY);
         }
     }
 }

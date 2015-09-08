@@ -10,7 +10,7 @@ using Quick.OwinMVC.Routing;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public abstract class AbstractControllerMiddleware<T> : AbstractPluginPathMiddleware,ITypeHunter
+    public abstract class AbstractControllerMiddleware<T> : AbstractPluginPathMiddleware, ITypeHunter
         where T : IPluginController
     {
         protected Encoding encoding = new UTF8Encoding(false);
@@ -42,10 +42,7 @@ namespace Quick.OwinMVC.Middleware
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
             if (!controllerDict.ContainsKey($"{plugin}:{path}"))
-            {
-                context.Response.StatusCode = 404;
-                return context.Response.WriteAsync($"Controller '{path}' in plugin '{plugin}' not found!");
-            }
+                return Next.Invoke(context);
             T controller = controllerDict[$"{plugin}:{path}"];
             return Task.Factory.StartNew(() => ExecuteController(controller, context, plugin, path));
         }

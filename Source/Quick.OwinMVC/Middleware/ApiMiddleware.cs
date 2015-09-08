@@ -30,23 +30,11 @@ namespace Quick.OwinMVC.Middleware
             }
             else
             {
-                try
-                {
-                    var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
-                    rep.Expires = new DateTimeOffset(DateTime.Now);
-                    rep.ContentType = "text/json";
-                    rep.ContentLength = content.Length;
-                    rep.Write(content);
-                }
-                catch (Exception ex)
-                {
-                    rep.StatusCode = 500;
-#if DEBUG
-                    rep.Write(ex.ToString());
-#else
-                    rep.Write(ex.Message);
-#endif
-                }
+                var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
+                rep.Expires = new DateTimeOffset(DateTime.Now);
+                rep.ContentType = "text/json";
+                rep.ContentLength = content.Length;
+                rep.Write(content);
             }
         }
     }
