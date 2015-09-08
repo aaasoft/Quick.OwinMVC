@@ -21,7 +21,7 @@
     </Reference>
     <Reference Include="Nowin, Version=0.17.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Nowin40.0.17.2.0\lib\net40\Nowin.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -74,6 +74,12 @@
     </None>
     <None Include="..\..\packages\Owin.1.0\lib\net40\Owin.dll">
       <Link>Libs\Owin.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\packages\Nowin40.0.17.2.0\lib\net40\Nowin.dll">
+      <Link>Libs\Nowin.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
