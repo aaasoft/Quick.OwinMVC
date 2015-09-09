@@ -63,7 +63,9 @@
     <Compile Include="Middleware\SessionMiddleware.cs" />
     <Compile Include="Middleware\ViewMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\ResourceWebRequest.cs" />
     <Compile Include="Resource\ResourceWebRequestFactory.cs" />
+    <Compile Include="Resource\ResourceWebResponse.cs" />
     <Compile Include="Routing\RouteAttribute.cs" />
     <Compile Include="Routing\RouteBuilder.cs" />
     <Compile Include="Server.cs" />

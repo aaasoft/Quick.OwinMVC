@@ -16,7 +16,7 @@ namespace Quick.OwinMVC.Middleware
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
 
-        private IDictionary<String, String> pluginAliasDict;
+        protected IDictionary<String, String> pluginAliasDict;
         private Regex route;
 
         public AbstractPluginPathMiddleware(OwinMiddleware next) : base(next)

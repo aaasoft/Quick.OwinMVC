@@ -2,20 +2,20 @@
 <html>
 <head>
     <title>主页 - 服务器管理系统</title>
-    #parse("SvnManage:part_head")
+    #parse("base:part_head")
 </head>
 <body>
-    #parse("SvnManage:part_navbar")
+    #parse("base:part_navbar")
     <div class="main-container" id="main-container">
         <div class="main-container-inner">
             <a class="menu-toggler" id="menu-toggler" href="#">
                 <span class="menu-text"></span>
             </a>
             <!--左侧菜单-->
-            #parse("SvnManage:part_sidebar")
+            #parse("base:part_sidebar")
             <div class="main-content">
                 <!--面包屑导航-->
-                #parse("SvnManage:part_breadcrumbs")
+                #parse("base:part_breadcrumbs")
                 <div class="page-content">
                     <div class="row">
                         <div class="col-xs-12">
@@ -118,7 +118,7 @@
         </div><!-- /#ace-settings-container -->
     </div><!-- /.main-container-inner -->
     <!-- /.main-container -->
-    #parse("SvnManage:part_footer")
+    #parse("base:part_footer")
     <!-- inline scripts related to this page -->
     #*
     <!--以#*..*#包括的内容会作为Velocity的注释而不被输出s-->

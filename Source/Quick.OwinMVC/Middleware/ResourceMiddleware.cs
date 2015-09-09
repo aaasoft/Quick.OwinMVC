@@ -10,7 +10,7 @@ using Quick.OwinMVC.Utils;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class ResourceMiddleware : AbstractPluginPathMiddleware,IPropertyHunter
+    public class ResourceMiddleware : AbstractPluginPathMiddleware, IPropertyHunter
     {
         //默认一天
         private double resourceExpires = 86400;
@@ -30,6 +30,7 @@ namespace Quick.OwinMVC.Middleware
                 useMd5ETag = Boolean.Parse(properties["Quick.OwinMVC.useMd5ETag"]);
 
             resourceWebRequestFactory = new ResourceWebRequestFactory();
+            resourceWebRequestFactory.PluginAliasMap = base.pluginAliasDict;
             //注册resource:前缀URI处理程序
             WebRequest.RegisterPrefix("resource:", resourceWebRequestFactory);
         }

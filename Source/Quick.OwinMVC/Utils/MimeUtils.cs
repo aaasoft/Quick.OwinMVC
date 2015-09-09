@@ -209,7 +209,7 @@ namespace Quick.OwinMVC.Utils
             String key = Path.GetExtension(resourceName.ToLower()).Replace(".", "");
             if (mimeMap.ContainsKey(key))
                 return mimeMap[key];
-            return null;
+            return "application/octet-stream";
         }
     }
 }
