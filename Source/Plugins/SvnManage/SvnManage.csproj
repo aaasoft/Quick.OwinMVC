@@ -232,9 +232,6 @@
     <EmbeddedResource Include="resource\js\charts.function.js" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="resource\js\jquery.msgbox.min.js" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="view\svn\modify_password.html" />
   </ItemGroup>
   <ItemGroup>
