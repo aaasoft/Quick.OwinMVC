@@ -9,6 +9,7 @@ namespace Quick.OwinMVC.Middleware
 {
     public class Error404Middleware : OwinMiddleware, IPropertyHunter
     {
+        private static readonly String INVOKE_TIMES = $"{typeof(Error404Middleware).FullName}.{nameof(INVOKE_TIMES)}";
         private Server server;
         private String RewritePath;
 
@@ -25,9 +26,20 @@ namespace Quick.OwinMVC.Middleware
 
         public override Task Invoke(IOwinContext context)
         {
-            if (String.IsNullOrEmpty(RewritePath))
-                throw new ArgumentNullException($"Property '{this.GetType().FullName}.{RewritePath}' must be set.");
-            
+            var rep = context.Response;
+            rep.StatusCode = 404;
+
+            //判断调用次数，避免无限递归
+            var invokeTimes = context.Get<Int32>(INVOKE_TIMES);
+            invokeTimes++;
+            if (invokeTimes > 1 || String.IsNullOrEmpty(RewritePath))
+            {
+                String msg = "404 Not Found";
+                rep.ContentLength = msg.Length;
+                return rep.WriteAsync(msg);
+            }
+            context.Set(INVOKE_TIMES, invokeTimes);
+
             context.Set<String>("owin.RequestPath", RewritePath);
             OwinMiddleware first = server.GetFirstMiddlewareInstance();
             if (first == null)

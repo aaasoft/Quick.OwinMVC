@@ -43,6 +43,8 @@ namespace Quick.OwinMVC.Middleware
                             cleaner.Clean(context);
 
                         Next.Invoke(context).Wait();
+                        if (rep.StatusCode == 404)
+                            throw ex;
                     }
                     catch (Exception ex2)
                     {
