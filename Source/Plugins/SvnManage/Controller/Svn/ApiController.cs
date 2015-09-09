@@ -127,11 +127,13 @@ namespace SvnManage.Controller.Svn
                     break;
                 }
             }
-            return new
+            if (userObj == null)
             {
-                msg = $"未找到名称为[{account}]的账号！"
-            };
-
+                return new
+                {
+                    msg = $"未找到名称为[{account}]的账号！"
+                };
+            }
             // Obtain in-parameters for the method
             ManagementBaseObject inParams =
                 userObj.GetMethodParameters("SetPassword");
