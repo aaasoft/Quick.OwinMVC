@@ -19,7 +19,7 @@ namespace SvnManage.Controller
         {
             var rep = context.Response;
             context.GetSession().Clear();
-            rep.Redirect("../../");
+            rep.Redirect(context.Get<String>("ContextPath"));
             return null;
         }
     }
