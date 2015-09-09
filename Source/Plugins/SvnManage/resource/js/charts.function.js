@@ -7,8 +7,7 @@ var createPieCharts = function (data) {
     var dataProvider = data.dataProvider;
     var balloonText = data.balloonText;
     var radius = getValue(data.radius,"");
-    var colors = getValue(data.colors , [" #28AB17", "#FFCC00"]);
-    
+    var colors = getValue(data.colors, [" #28AB17", "#FFCC00"]);    
 
     //加载饼图
     var pieChart = new AmCharts.AmPieChart();
@@ -32,6 +31,7 @@ var createPieCharts = function (data) {
 }
 
 var createSerialCharts = function (data) {
+    var contextPath = getValue(data.contextPath, ".");
     var divName = data.divName;
     var dataProvider = data.dataProvider;
     var valueFieldList = getValue(data.valueFieldList, [{}]);
@@ -61,7 +61,7 @@ var createSerialCharts = function (data) {
 
     //加载折线图
     var serialChart = new AmCharts.AmSerialChart();
-    serialChart.pathToImages = "../resource/amcharts/images/";
+    serialChart.pathToImages = contextPath + "/base/resource/amcharts/images/";
     if (titleList.length != 0) {
         serialChart.marginTop = 15;
         serialChart.marginLeft = 80;

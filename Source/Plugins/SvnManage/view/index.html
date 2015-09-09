@@ -123,6 +123,7 @@
     #*
     <!--以#*..*#包括的内容会作为Velocity的注释而不被输出s-->
     <script src="../resource/js/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../resource/js/charts.function.js"></script>
     *#
     <script type="text/javascript" src="${ContextPath}/base/resource/amcharts/amcharts.js"></script>
     <script type="text/javascript" src="${ContextPath}/base/resource/amcharts/pie.js"></script>
@@ -181,7 +182,8 @@
                 valueUnit: "%",
                 dateFormat: "JJ:NN:SS",
                 minPeriod: "ss",
-                dataDateFormat: "YYYY-MM-DD JJ:NN:SS"
+                dataDateFormat: "YYYY-MM-DD JJ:NN:SS",
+                contextPath: '${ContextPath}'
             });
 
             var refrashBaseDataFunc = function () {
