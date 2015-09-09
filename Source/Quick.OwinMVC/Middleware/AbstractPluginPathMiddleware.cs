@@ -26,11 +26,16 @@ namespace Quick.OwinMVC.Middleware
             route = RouteBuilder.RouteToRegex(fullRoute);
         }
 
+        public virtual Task InvokeNotMatch(IOwinContext context)
+        {
+            return Next.Invoke(context);
+        }
+
         public override Task Invoke(IOwinContext context)
         {
             String path = context.Get<String>("owin.RequestPath");
             if (!route.IsMatch(path))
-                return Next.Invoke(context);
+                return InvokeNotMatch(context);
 
             //如果还没有解析插件名称和路径
             if (context.Get<String>(QOMVC_PLUGIN_KEY) == null)

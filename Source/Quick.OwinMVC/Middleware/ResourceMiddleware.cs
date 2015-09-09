@@ -40,12 +40,14 @@ namespace Quick.OwinMVC.Middleware
             return "resource";
         }
 
-        public override Task Invoke(IOwinContext context, string plugin, string path)
+        public override Task InvokeNotMatch(IOwinContext context)
         {
-            var req = context.Request;
-            var rep = context.Response;
+            return invokeWithUrl(context, $"resource://.{context.Request.Path}");
+        }
 
-            Uri uri = new Uri($"resource://{plugin}/resource/{path}");
+        private Task invokeWithUrl(IOwinContext context, String url)
+        {
+            Uri uri = new Uri(url);
             ResourceWebResponse resourceResponse = null;
             try
             {
@@ -59,6 +61,8 @@ namespace Quick.OwinMVC.Middleware
 
             return Task.Factory.StartNew(() =>
             {
+                var req = context.Request;
+                var rep = context.Response;
                 //验证缓存有效
                 {
                     //===================
@@ -95,7 +99,7 @@ namespace Quick.OwinMVC.Middleware
                     stream.Position = 0;
                 }
                 //设置MIME类型
-                var mime = MimeUtils.GetMime(path);
+                var mime = MimeUtils.GetMime(uri.LocalPath);
                 if (mime != null)
                     rep.ContentType = mime;
                 rep.ContentLength = stream.Length;
@@ -106,6 +110,11 @@ namespace Quick.OwinMVC.Middleware
                 stream.Close();
                 stream.Dispose();
             });
+        }
+
+        public override Task Invoke(IOwinContext context, string plugin, string path)
+        {
+            return invokeWithUrl(context, $"resource://{plugin}/resource/{path}");
         }
 
         void IPropertyHunter.Hunt(string key, string value)
