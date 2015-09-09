@@ -15,6 +15,11 @@ namespace Quick.OwinMVC.Resource
         private String resourceName;
         private Assembly assembly;
 
+        /// <summary>
+        /// 关联的Uri对象
+        /// </summary>
+        public Uri Uri { get { return this.uri; } }
+
         public ResourceWebResponse(Uri uri, IDictionary<string, string> pluginAliasMap, String staticFileFolder)
         {
             this.uri = uri;

@@ -44,14 +44,6 @@ namespace Quick.OwinMVC.Middleware
                 var dic = route.GetGroupNames().ToDictionary(name => name, name => groups[name].Value);
                 foreach (var key in dic.Keys.Where(t => t != "0"))
                     context.Environment.Add(key, dic[key]);
-
-                //替换别名为完整的程序集名
-                String pluginName = context.Get<String>(QOMVC_PLUGIN_KEY);
-                if (pluginName != null && pluginAliasDict.ContainsKey(pluginName))
-                {
-                    pluginName = pluginAliasDict[pluginName];
-                    context.Set<String>(QOMVC_PLUGIN_KEY, pluginName);
-                }
             }
             //交给派生的Middleware
             return Invoke(context, context.Get<String>(QOMVC_PLUGIN_KEY), context.Get<String>(QOMVC_PATH_KEY));

@@ -7,6 +7,7 @@ using Microsoft.Owin;
 using Quick.OwinMVC.Resource;
 using System.Net;
 using Quick.OwinMVC.Utils;
+using System.IO;
 
 namespace Quick.OwinMVC.Middleware
 {
@@ -40,25 +41,44 @@ namespace Quick.OwinMVC.Middleware
             return "resource";
         }
 
-        public override Task InvokeNotMatch(IOwinContext context)
-        {
-            return invokeWithUrl(context, $"resource://.{context.Request.Path}");
-        }
-
-        private Task invokeWithUrl(IOwinContext context, String url)
+        private Stream getUrlStream(String url, out ResourceWebResponse response)
         {
             Uri uri = new Uri(url);
-            ResourceWebResponse resourceResponse = null;
-            try
-            {
-                resourceResponse = WebRequest.Create(uri).GetResponse() as ResourceWebResponse;
-            }
+            response = null;
+            try { response = WebRequest.Create(uri).GetResponse() as ResourceWebResponse; }
             catch { }
+            var stream = response?.GetResponseStream();
+            return stream;
+        }
 
-            var stream = resourceResponse?.GetResponseStream();
+        public override Task InvokeNotMatch(IOwinContext context)
+        {
+            ResourceWebResponse resourceResponse;
+            var stream = getUrlStream($"resource://.{context.Request.Path}", out resourceResponse);
             if (stream == null)
-                return Next.Invoke(context);
+                return base.InvokeNotMatch(context);
+            return handleResource(context, stream, resourceResponse);
+        }
 
+        public override Task Invoke(IOwinContext context, string plugin, string path)
+        {
+            Stream stream;
+            ResourceWebResponse resourceResponse;
+
+            stream = getUrlStream($"resource://{plugin}/resource/{path}", out resourceResponse);
+            if (stream == null)
+                if (plugin != null && pluginAliasDict.ContainsKey(plugin))
+                {
+                    plugin = pluginAliasDict[plugin];
+                    stream = getUrlStream($"resource://{plugin}/resource/{path}", out resourceResponse);
+                }
+            if (stream == null)
+                return this.InvokeNotMatch(context);
+            return handleResource(context, stream, resourceResponse);
+        }
+
+        private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse)
+        {
             return Task.Factory.StartNew(() =>
             {
                 var req = context.Request;
@@ -99,7 +119,7 @@ namespace Quick.OwinMVC.Middleware
                     stream.Position = 0;
                 }
                 //设置MIME类型
-                var mime = MimeUtils.GetMime(uri.LocalPath);
+                var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
                 if (mime != null)
                     rep.ContentType = mime;
                 rep.ContentLength = stream.Length;
@@ -110,11 +130,6 @@ namespace Quick.OwinMVC.Middleware
                 stream.Close();
                 stream.Dispose();
             });
-        }
-
-        public override Task Invoke(IOwinContext context, string plugin, string path)
-        {
-            return invokeWithUrl(context, $"resource://{plugin}/resource/{path}");
         }
 
         void IPropertyHunter.Hunt(string key, string value)
