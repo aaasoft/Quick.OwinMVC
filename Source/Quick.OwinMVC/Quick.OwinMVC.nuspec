@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>Quick.OwinMVC</id>
+        <version>1.2.0</version>
+        <authors>scbeta</authors>
+        <owners>scbeta</owners>
+        <projectUrl>https://github.com/aaasoft/Quick.OwinMVC</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>An simple MVC framework for Owin.</description>
+        <dependencies>
+            <group targetFramework=".NETFramework4.0">
+                <dependency id="Newtonsoft.Json" version="7.0.1" />
+                <dependency id="Microsoft.Owin" version="2.1.0" />
+                <dependency id="Nowin40" version="0.17.2.0" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\..\#build#\1_bin\Release\ServerManage\Libs\Quick.OwinMVC.dll" target="lib\net40\Quick.OwinMVC.dll" />
+    </files>
+</package>
