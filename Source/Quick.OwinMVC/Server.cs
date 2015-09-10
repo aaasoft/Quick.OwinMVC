@@ -18,27 +18,17 @@ namespace Quick.OwinMVC
         internal IDictionary<String, String> properties;
         internal IList<OwinMiddleware> middlewareInstanceList;
 
-        private X509Certificate cert;
         private IPEndPoint endpoint;
         private String url;
         private IDisposable webApp;
 
         //中间件队列
         private List<Action<IAppBuilder>> middlewareRegisterActionList = new List<Action<IAppBuilder>>();
-        
-        /// <summary>
-        /// 设置证书
-        /// </summary>
-        /// <param name="cert"></param>
-        public void SetCertificate(X509Certificate cert)
-        {
-            this.cert = cert;
-        }
 
         public String GetUrl()
         {
-            var protocol = cert == null ? "http" : "https";
-            var defaultPort = cert == null ? 80 : 443;
+            var protocol = "http";
+            var defaultPort = 80;
 
             if (url == null)
                 url = $"{protocol}://{endpoint.Address.ToString()}";
@@ -91,14 +81,6 @@ namespace Quick.OwinMVC
                         var value = properties[key];
                         value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                             .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));
-                        break;
-                    case "Cert":
-                        var enableCert = bool.Parse(properties[key]);
-                        if (!enableCert)
-                            continue;
-                        var certFile = properties[prefix + "Cert.File"];
-                        var certPassword = properties[prefix + "Cert.Password"];
-                        SetCertificate(new X509Certificate2(certFile, certPassword));
                         break;
                 }
             }
@@ -158,11 +140,7 @@ namespace Quick.OwinMVC
             foreach (var register in middlewareRegisterActionList)
                 register.Invoke(app);
 
-            var builder = Nowin.ServerBuilder.New().SetEndPoint(endpoint).SetOwinApp(app.Build());
-            //如果配置了证书，则设置证书
-            if (cert != null)
-                builder.SetCertificate(cert);
-            webApp = builder.Start();
+            webApp = new Firefly.Http.ServerFactory().Create(app.Build(), endpoint);
         }
 
         public void Stop()
