@@ -33,8 +33,7 @@ namespace Quick.OwinMVC.Middleware
                 var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
                 rep.Expires = new DateTimeOffset(DateTime.Now);
                 rep.ContentType = "text/json";
-                rep.ContentLength = content.Length;
-                rep.Write(content);
+                Output(context, content);
             }
         }
     }

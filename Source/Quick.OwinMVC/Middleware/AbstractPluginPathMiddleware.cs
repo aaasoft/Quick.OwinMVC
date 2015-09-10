@@ -8,13 +8,20 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Quick.OwinMVC.Controller;
+using System.IO;
+using System.IO.Compression;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public abstract class AbstractPluginPathMiddleware : OwinMiddleware, IAssemblyHunter, IOwinContextCleaner
+    public abstract class AbstractPluginPathMiddleware : OwinMiddleware, IAssemblyHunter, IOwinContextCleaner, IPropertyHunter
     {
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
+
+        /// <summary>
+        /// 是否启用压缩
+        /// </summary>
+        private bool EnableCompress { get; set; } = false;
 
         protected IDictionary<String, String> pluginAliasDict;
         private Regex route;
@@ -52,6 +59,59 @@ namespace Quick.OwinMVC.Middleware
         public abstract String GetRouteMiddle();
         public abstract Task Invoke(IOwinContext context, String plugin, String path);
 
+        private Boolean allowCompress(IOwinRequest req)
+        {
+            if (!EnableCompress)
+                return false;
+            var acceptEncoding = req.Headers.Get("Accept-Encoding");
+            if (acceptEncoding == null)
+                return false;
+            return acceptEncoding.Contains("gzip");
+        }
+
+        public void Output(IOwinContext context, Stream stream)
+        {
+            IOwinResponse rep = context.Response;
+            
+
+            //如果启用压缩
+            if (allowCompress(context.Request))
+            {
+                rep.Headers["Content-Encoding"] = "gzip";
+                var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
+                stream.CopyTo(gzStream);
+                gzStream.Close();
+                gzStream.Dispose();
+            }
+            else
+            {
+                rep.ContentLength = stream.Length;
+                stream.CopyTo(rep.Body);
+            }
+            stream.Close();
+            stream.Dispose();
+        }
+
+        public void Output(IOwinContext context, Byte[] content)
+        {
+            IOwinResponse rep = context.Response;
+
+            //如果启用压缩
+            if (allowCompress(context.Request))
+            {
+                rep.Headers["Content-Encoding"] = "gzip";
+                var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
+                gzStream.Write(content, 0, content.Length);
+                gzStream.Close();
+                gzStream.Dispose();
+            }
+            else
+            {
+                rep.ContentLength = content.Length;
+                rep.Write(content);
+            }
+        }
+
         public virtual void Hunt(Assembly assembly)
         {
             String pluginName = assembly.GetName().Name;
@@ -67,6 +127,16 @@ namespace Quick.OwinMVC.Middleware
                 context.Environment.Remove(QOMVC_PLUGIN_KEY);
             if (context.Environment.ContainsKey(QOMVC_PATH_KEY))
                 context.Environment.Remove(QOMVC_PATH_KEY);
+        }
+
+        public virtual void Hunt(string key, string value)
+        {
+            switch (key)
+            {
+                case nameof(EnableCompress):
+                    EnableCompress = bool.Parse(value);
+                    break;
+            }
         }
     }
 }

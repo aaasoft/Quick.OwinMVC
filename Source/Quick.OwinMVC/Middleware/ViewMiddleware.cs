@@ -7,6 +7,7 @@ using Microsoft.Owin;
 using Quick.OwinMVC.Controller;
 using Quick.OwinMVC.View;
 using Quick.OwinMVC.Utils;
+using System.IO;
 
 namespace Quick.OwinMVC.Middleware
 {
@@ -38,13 +39,13 @@ namespace Quick.OwinMVC.Middleware
                 return;
             viewName = $"{plugin}:{viewName}";
             //根据视图名称与数据，渲染输出页面
-            var content = viewRender.Render(viewName, context.Environment);
-            var bytes = encoding.GetBytes(content);
+            var outputText = viewRender.Render(viewName, context.Environment);
+            var content = encoding.GetBytes(outputText);
+
             //将页面写到响应中
             var rep = context.Response;
             rep.ContentType = "text/html; charset=UTF-8";
-            rep.ContentLength = bytes.Length;
-            rep.Write(content);
+            Output(context, content);
         }
     }
 }

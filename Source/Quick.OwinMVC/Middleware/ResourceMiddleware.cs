@@ -9,6 +9,7 @@ using System.Net;
 using Quick.OwinMVC.Utils;
 using System.IO;
 using System.Reflection;
+using System.IO.Compression;
 
 namespace Quick.OwinMVC.Middleware
 {
@@ -124,22 +125,23 @@ namespace Quick.OwinMVC.Middleware
                 var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
                 if (mime != null)
                     rep.ContentType = mime;
-                rep.ContentLength = stream.Length;
                 rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(resourceExpires));
                 rep.Headers["Cache-Control"] = $"max-age={resourceExpires}";
                 rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-                stream.CopyTo(rep.Body);
-                stream.Close();
-                stream.Dispose();
+                Output(context, stream);
             });
         }
 
 
-
-        void IPropertyHunter.Hunt(string key, string value)
+        public override void Hunt(string key, string value)
         {
-            if (key == nameof(StaticFileFolder))
-                resourceWebRequestFactory.StaticFileFolder = value;
+            switch (key)
+            {
+                case nameof(StaticFileFolder):
+                    resourceWebRequestFactory.StaticFileFolder = value;
+                    break;
+            }
+            base.Hunt(key, value);
         }
 
         public override void Hunt(Assembly assembly)
