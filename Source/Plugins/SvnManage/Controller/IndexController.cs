@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
 using System.Diagnostics;
+using SvnManage.Utils;
 
 namespace SvnManage.Controller
 {
@@ -15,33 +16,15 @@ namespace SvnManage.Controller
     {
         private String refreshInterval;
 
-        private Microsoft.VisualBasic.Devices.Computer computer;
-        private PerformanceCounter cpuCounter;
-
         public void Init(IDictionary<string, string> properties)
         {
             refreshInterval = properties["SvnManage.Controller.IndexController.refreshInterval"];
-
-            if (isWindows())
-            {
-                computer = new Microsoft.VisualBasic.Devices.Computer();
-                cpuCounter = new PerformanceCounter();
-                cpuCounter.CategoryName = "Processor";
-                cpuCounter.CounterName = "% Processor Time";
-                cpuCounter.InstanceName = "_Total";
-                cpuCounter.NextValue();
-            }
         }
 
         string IViewController.Service(IOwinContext context, IDictionary<String, Object> data)
         {
             data["refreshInterval"] = refreshInterval;
             return "index";
-        }
-
-        private bool isWindows()
-        {
-            return Environment.OSVersion.Platform == PlatformID.Win32NT;
         }
 
         object IApiController.Service(IOwinContext context)
@@ -54,20 +37,19 @@ namespace SvnManage.Controller
                         time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                         basic = new
                         {
-                            computer_name = computer.Name,
-                            os_name = computer.Info.OSFullName,
+                            computer_name = SystemInfoUtils.GetComputerName(),
+                            os_name = SystemInfoUtils.GetOsName(),
                             process_run_time = (DateTime.Now - Process.GetCurrentProcess().StartTime).ToString(@"dd\.hh\:mm\:ss"),
                             server_run_time = new TimeSpan(0, 0, Environment.TickCount / 1000).ToString(@"dd\.hh\:mm\:ss")
                         },
                         cpu = new
                         {
-                            used = isWindows() ? cpuCounter.NextValue() : 0
+                            used = SystemInfoUtils.GetCpuUsage()
                         },
                         memory = new
                         {
-                            total = isWindows() ? computer.Info.TotalPhysicalMemory : 0,
-                            free = isWindows() ? computer.Info.AvailablePhysicalMemory : 0,
-                            used = isWindows() ? computer.Info.TotalPhysicalMemory - computer.Info.AvailablePhysicalMemory : 0
+                            total = SystemInfoUtils.GetTotalMemory(),
+                            free = SystemInfoUtils.GetFreeMemory(),
                         }
                     };
                 case "disk":

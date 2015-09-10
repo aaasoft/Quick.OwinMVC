@@ -24,6 +24,9 @@ namespace Quick.OwinMVC.Resource
         {
             this.uri = uri;
             var pluginName = uri.Host;
+            if (pluginName == "0")
+                pluginName = ".";
+
             if (pluginAliasMap != null && pluginAliasMap.ContainsKey(pluginName))
                 pluginName = pluginAliasMap[pluginName];
 
