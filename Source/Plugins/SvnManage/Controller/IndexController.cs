@@ -36,7 +36,7 @@ namespace SvnManage.Controller
                 case "info":
                     return new
                     {
-                        time = TimeUtils.GetTime(DateTime.Now),
+                        time = Convert.ToInt64(TimeUtils.GetTime(DateTime.Now)),
                         basic = new
                         {
                             computer_name = SystemInfoUtils.GetComputerName(),
@@ -55,7 +55,7 @@ namespace SvnManage.Controller
                         }
                     };
                 case "disk":
-                    return System.IO.DriveInfo.GetDrives().Where(t => t.IsReady).Select(t => new
+                    return System.IO.DriveInfo.GetDrives().Where(t => t.IsReady && t.TotalSize > 0).Select(t => new
                     {
                         name = t.Name,
                         totalSize = t.TotalSize,

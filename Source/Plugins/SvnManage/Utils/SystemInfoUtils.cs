@@ -70,7 +70,7 @@ namespace SvnManage.Utils
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic computersystem get Caption", @"^Caption\s*(?'value'.*?)\s*$")]
-        [ShellCmd(PlatformID.Unix, "uname", "-n", @"^\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "bash", "-c uname -n", @"^\s*(?'value'.*?)\s*$")]
         public static String GetComputerName()
         {
             return executeShell();
@@ -81,7 +81,7 @@ namespace SvnManage.Utils
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get Caption", @"^Caption\s*(?'value'.*?)\s*$")]
-        [ShellCmd(PlatformID.Unix, "uname", "-s -r -v -m -o", @"^\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "bash", "-c \"uname -s -r -v -m -o\"", @"^\s*(?'value'.*?)\s*$")]
         public static String GetOsName()
         {
             return executeShell();
@@ -92,18 +92,13 @@ namespace SvnManage.Utils
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic cpu get LoadPercentage", @"^LoadPercentage\s*(?'value'.*?)\s*$")]
-        [ShellCmd(PlatformID.Unix, "grep", "'cpu ' /proc/stat", @"^\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "bash", "-c \"grep 'cpu ' /proc/stat| awk '{value=($2+$4)*100/($2+$4+$5)} END {print value}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static int GetCpuUsage()
         {
             var value = executeShell();
             if (String.IsNullOrEmpty(value))
                 return 0;
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-                return Int32.Parse(value);
-            //| awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage}'
-            var numbers = value.Split(new Char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                .Skip(1).Take(4).Select(t => Int32.Parse(t)).ToArray();
-            return (numbers[0] + numbers[2]) * 100 / (numbers[0] + numbers[2] + numbers[3]);
+            return Convert.ToInt32(Double.Parse(value));
         }
 
         /// <summary>
@@ -111,6 +106,7 @@ namespace SvnManage.Utils
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get TotalVisibleMemorySize", @"^TotalVisibleMemorySize\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "bash", "-c \"grep 'MemTotal:' /proc/meminfo| awk '{value=$2} END {print value}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static long GetTotalMemory()
         {
             var value = executeShell();
@@ -124,6 +120,7 @@ namespace SvnManage.Utils
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get FreePhysicalMemory", @"^FreePhysicalMemory\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "bash", "-c \"grep '' /proc/meminfo | awk 'NR==2{memFree= $2}NR==4{cached= $2}{totalFree=memFree + cached}END{print totalFree}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static long GetFreeMemory()
         {
             var value = executeShell();
