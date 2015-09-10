@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>Quick.OwinMVC</id>
-        <version>1.2.0</version>
+        <version>1.2.3</version>
         <authors>scbeta</authors>
         <owners>scbeta</owners>
         <projectUrl>https://github.com/aaasoft/Quick.OwinMVC</projectUrl>
@@ -12,7 +12,7 @@
             <group targetFramework=".NETFramework4.0">
                 <dependency id="Newtonsoft.Json" version="7.0.1" />
                 <dependency id="Microsoft.Owin" version="2.1.0" />
-                <dependency id="Nowin40" version="0.17.2.0" />
+                <dependency id="Firefly" version="0.6.3" />
             </group>
         </dependencies>
     </metadata>

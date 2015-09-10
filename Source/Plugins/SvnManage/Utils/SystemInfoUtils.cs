@@ -70,7 +70,7 @@ namespace SvnManage.Utils
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic computersystem get Caption", @"^Caption\s*(?'value'.*?)\s*$")]
-        [ShellCmd(PlatformID.Unix, "bash", "-c uname -n", @"^\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "bash", "-c \"uname -n\"", @"^\s*(?'value'.*?)\s*$")]
         public static String GetComputerName()
         {
             return executeShell();
