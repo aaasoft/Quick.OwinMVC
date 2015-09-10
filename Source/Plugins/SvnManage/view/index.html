@@ -168,6 +168,7 @@
             var cpuSerialCharts_MaxDataCount = 100;
             var cpuSerialCharts_Data = [];
             var currentTime = new Date();
+            currentTime.setTime($serverTime);
             currentTime.setSeconds(currentTime.getSeconds() - cpuSerialCharts_MaxDataCount);
 
             for (i = 0; i < cpuSerialCharts_MaxDataCount; i++) {
@@ -220,7 +221,9 @@
                         while (cpuSerialCharts_Data.length > cpuSerialCharts_MaxDataCount) {
                             cpuSerialCharts_Data.shift();
                         }
-                        cpuSerialCharts_Data.push({ time: json.time, value: Math.round(cpu.used) });
+                        var cpuTime = new Date();
+                        cpuTime.setTime(json.time);
+                        cpuSerialCharts_Data.push({ time: cpuTime.format("yyyy-MM-dd HH:mm:ss"), value: Math.round(cpu.used) });
                         cpuSerialCharts.validateData();
                     }
                 });

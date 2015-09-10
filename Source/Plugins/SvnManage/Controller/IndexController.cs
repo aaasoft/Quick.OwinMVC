@@ -8,6 +8,7 @@ using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
 using System.Diagnostics;
 using SvnManage.Utils;
+using Quick.OwinMVC.Utils;
 
 namespace SvnManage.Controller
 {
@@ -23,6 +24,7 @@ namespace SvnManage.Controller
 
         string IViewController.Service(IOwinContext context, IDictionary<String, Object> data)
         {
+            data["serverTime"] = TimeUtils.GetTime(DateTime.Now);
             data["refreshInterval"] = refreshInterval;
             return "index";
         }
@@ -34,7 +36,7 @@ namespace SvnManage.Controller
                 case "info":
                     return new
                     {
-                        time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        time = TimeUtils.GetTime(DateTime.Now),
                         basic = new
                         {
                             computer_name = SystemInfoUtils.GetComputerName(),

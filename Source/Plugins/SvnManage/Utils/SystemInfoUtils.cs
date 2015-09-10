@@ -64,29 +64,52 @@ namespace SvnManage.Utils
             return value;
         }
 
-        //
+
+        /// <summary>
+        /// 获取计算机名称
+        /// </summary>
+        /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic computersystem get Caption", @"^Caption\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "uname", "-n", @"^\s*(?'value'.*?)\s*$")]
         public static String GetComputerName()
         {
             return executeShell();
         }
 
+        /// <summary>
+        /// 获取操作系统名称
+        /// </summary>
+        /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get Caption", @"^Caption\s*(?'value'.*?)\s*$")]
-        [ShellCmd(PlatformID.Unix, "uname", "-a", @"^\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "uname", "-s -r -v -m -o", @"^\s*(?'value'.*?)\s*$")]
         public static String GetOsName()
         {
             return executeShell();
         }
 
+        /// <summary>
+        /// 获取CPU使用率
+        /// </summary>
+        /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic cpu get LoadPercentage", @"^LoadPercentage\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "grep", "'cpu ' /proc/stat", @"^\s*(?'value'.*?)\s*$")]
         public static int GetCpuUsage()
         {
             var value = executeShell();
             if (String.IsNullOrEmpty(value))
                 return 0;
-            return Int32.Parse(value);
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                return Int32.Parse(value);
+            //| awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage}'
+            var numbers = value.Split(new Char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                .Skip(1).Take(4).Select(t => Int32.Parse(t)).ToArray();
+            return (numbers[0] + numbers[2]) * 100 / (numbers[0] + numbers[2] + numbers[3]);
         }
 
+        /// <summary>
+        /// 获取总内存数
+        /// </summary>
+        /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get TotalVisibleMemorySize", @"^TotalVisibleMemorySize\s*(?'value'.*?)\s*$")]
         public static long GetTotalMemory()
         {
@@ -96,6 +119,10 @@ namespace SvnManage.Utils
             return Int64.Parse(value) * 1024;
         }
 
+        /// <summary>
+        /// 获取空闲内存数
+        /// </summary>
+        /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get FreePhysicalMemory", @"^FreePhysicalMemory\s*(?'value'.*?)\s*$")]
         public static long GetFreeMemory()
         {
