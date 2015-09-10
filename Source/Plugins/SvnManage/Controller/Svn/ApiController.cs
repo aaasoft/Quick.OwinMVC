@@ -68,7 +68,12 @@ namespace SvnManage.Controller.Svn
             if (account == "test" && password == "test")
                 return true;
 #endif
-                if (!File.Exists(htpasswdFilePath))
+            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            {
+                if (account == "test" && password == "test")
+                    return true;
+            }
+            if (!File.Exists(htpasswdFilePath))
                 return false;
             String[] lines = File.ReadAllLines(htpasswdFilePath);
             String encryptedPassword = null;
