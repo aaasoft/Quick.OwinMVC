@@ -52,7 +52,7 @@ namespace Quick.OwinMVC.Middleware
         public abstract String GetRouteMiddle();
         public abstract Task Invoke(IOwinContext context, String plugin, String path);
 
-        void IAssemblyHunter.Hunt(Assembly assembly)
+        public virtual void Hunt(Assembly assembly)
         {
             String pluginName = assembly.GetName().Name;
             foreach (RouteAttribute attr in assembly.GetCustomAttributes<RouteAttribute>())

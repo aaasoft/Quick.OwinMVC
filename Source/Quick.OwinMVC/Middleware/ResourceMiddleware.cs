@@ -8,10 +8,11 @@ using Quick.OwinMVC.Resource;
 using System.Net;
 using Quick.OwinMVC.Utils;
 using System.IO;
+using System.Reflection;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class ResourceMiddleware : AbstractPluginPathMiddleware, IPropertyHunter
+    public class ResourceMiddleware : AbstractPluginPathMiddleware, IPropertyHunter, IAssemblyHunter
     {
         //默认一天
         private double resourceExpires = 86400;
@@ -32,6 +33,7 @@ namespace Quick.OwinMVC.Middleware
 
             resourceWebRequestFactory = new ResourceWebRequestFactory();
             resourceWebRequestFactory.PluginAliasMap = base.pluginAliasDict;
+            resourceWebRequestFactory.AssemblyMap = new Dictionary<String, Assembly>();
             //注册resource:前缀URI处理程序
             WebRequest.RegisterPrefix("resource:", resourceWebRequestFactory);
         }
@@ -132,10 +134,18 @@ namespace Quick.OwinMVC.Middleware
             });
         }
 
+
+
         void IPropertyHunter.Hunt(string key, string value)
         {
             if (key == nameof(StaticFileFolder))
                 resourceWebRequestFactory.StaticFileFolder = value;
+        }
+
+        public override void Hunt(Assembly assembly)
+        {
+            resourceWebRequestFactory.AssemblyMap[assembly.GetName().Name.ToLower()] = assembly;
+            base.Hunt(assembly);
         }
     }
 }

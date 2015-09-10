@@ -20,7 +20,7 @@ namespace Quick.OwinMVC.Resource
         /// </summary>
         public Uri Uri { get { return this.uri; } }
 
-        public ResourceWebResponse(Uri uri, IDictionary<string, string> pluginAliasMap, String staticFileFolder)
+        public ResourceWebResponse(Uri uri, IDictionary<String, Assembly> assemblyMap, IDictionary<string, string> pluginAliasMap, String staticFileFolder)
         {
             this.uri = uri;
             var pluginName = uri.Host;
@@ -29,6 +29,7 @@ namespace Quick.OwinMVC.Resource
 
             if (pluginAliasMap != null && pluginAliasMap.ContainsKey(pluginName))
                 pluginName = pluginAliasMap[pluginName];
+            pluginName = pluginName.ToLower();
 
             resourceName = uri.LocalPath;
             while (resourceName.StartsWith("/"))
@@ -40,7 +41,9 @@ namespace Quick.OwinMVC.Resource
             else if (pluginName == ".") { }
             else
             {
-                assembly = Assembly.Load(pluginName);
+                if (!assemblyMap.ContainsKey(pluginName))
+                    return;
+                assembly = assemblyMap[pluginName];
                 String assemblyName = assembly.GetName().Name;
 
                 resourceName = resourceName.Replace("/", ".");
