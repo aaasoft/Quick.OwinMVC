@@ -223,7 +223,7 @@
                         }
                         var cpuTime = new Date();
                         cpuTime.setTime(json.time);
-                        cpuSerialCharts_Data.push({ time: cpuTime.format("yyyy-MM-dd HH:mm:ss"), value: Math.round(cpu.used) });
+                        cpuSerialCharts_Data.push({ time: cpuTime.format("yyyy-MM-dd HH:mm:ss"), value: cpu.used });
                         cpuSerialCharts.validateData();
                     }
                 });

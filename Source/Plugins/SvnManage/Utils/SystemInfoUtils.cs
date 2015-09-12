@@ -31,6 +31,19 @@ namespace SvnManage.Utils
             }
         }
 
+        private static PerformanceCounter cpuCounter = null;
+        private static Microsoft.VisualBasic.Devices.Computer computer = null;
+
+        static SystemInfoUtils()
+        {
+            if (!IsRuningOnWindows())
+                return;
+            cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            cpuCounter.NextValue();
+            computer = new Microsoft.VisualBasic.Devices.Computer();
+        }
+
+
         private static String executeShell()
         {
             PlatformID currentPlatform = Environment.OSVersion.Platform;
@@ -64,6 +77,13 @@ namespace SvnManage.Utils
             return value;
         }
 
+        private static Boolean IsRuningOnWindows()
+        {
+            return Environment.OSVersion.Platform == PlatformID.Win32NT
+                || Environment.OSVersion.Platform == PlatformID.Win32S
+                || Environment.OSVersion.Platform == PlatformID.Win32Windows
+                || Environment.OSVersion.Platform == PlatformID.WinCE;
+        }
 
         /// <summary>
         /// 获取计算机名称
@@ -73,6 +93,8 @@ namespace SvnManage.Utils
         [ShellCmd(PlatformID.Unix, "bash", "-c \"uname -n\"", @"^\s*(?'value'.*?)\s*$")]
         public static String GetComputerName()
         {
+            if (IsRuningOnWindows())
+                return computer.Name;
             return executeShell();
         }
 
@@ -84,6 +106,8 @@ namespace SvnManage.Utils
         [ShellCmd(PlatformID.Unix, "bash", "-c \"uname -s -r -v -m -o\"", @"^\s*(?'value'.*?)\s*$")]
         public static String GetOsName()
         {
+            if (IsRuningOnWindows())
+                return computer.Info.OSFullName;
             return executeShell();
         }
 
@@ -93,12 +117,15 @@ namespace SvnManage.Utils
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic cpu get LoadPercentage", @"^LoadPercentage\s*(?'value'.*?)\s*$")]
         [ShellCmd(PlatformID.Unix, "bash", "-c \"grep 'cpu ' /proc/stat| awk '{value=($2+$4)*100/($2+$4+$5)} END {print value}'\"", @"^\s*(?'value'.*?)\s*$")]
-        public static int GetCpuUsage()
+        public static Double GetCpuUsage()
         {
+            if (IsRuningOnWindows())
+                return cpuCounter.NextValue();
+
             var value = executeShell();
             if (String.IsNullOrEmpty(value))
                 return 0;
-            return Convert.ToInt32(Double.Parse(value));
+            return Double.Parse(value);
         }
 
         /// <summary>
@@ -109,6 +136,8 @@ namespace SvnManage.Utils
         [ShellCmd(PlatformID.Unix, "bash", "-c \"grep 'MemTotal:' /proc/meminfo| awk '{value=$2} END {print value}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static long GetTotalMemory()
         {
+            if (IsRuningOnWindows())
+                return Convert.ToInt64(computer.Info.TotalPhysicalMemory);
             var value = executeShell();
             if (String.IsNullOrEmpty(value))
                 return 0;
@@ -123,6 +152,8 @@ namespace SvnManage.Utils
         [ShellCmd(PlatformID.Unix, "bash", "-c \"grep '' /proc/meminfo | awk 'NR==2{memFree= $2}NR==4{cached= $2}{totalFree=memFree + cached}END{print totalFree}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static long GetFreeMemory()
         {
+            if (IsRuningOnWindows())
+                return Convert.ToInt64(computer.Info.AvailablePhysicalMemory);
             var value = executeShell();
             if (String.IsNullOrEmpty(value))
                 return 0;
