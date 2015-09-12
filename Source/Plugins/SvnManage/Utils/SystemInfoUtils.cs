@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -31,14 +32,37 @@ namespace SvnManage.Utils
             }
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        private class MEMORYSTATUSEX
+        {
+            public uint dwLength;
+            public uint dwMemoryLoad;
+            public ulong ullTotalPhys;
+            public ulong ullAvailPhys;
+            public ulong ullTotalPageFile;
+            public ulong ullAvailPageFile;
+            public ulong ullTotalVirtual;
+            public ulong ullAvailVirtual;
+            public ulong ullAvailExtendedVirtual;
+            public MEMORYSTATUSEX()
+            {
+                this.dwLength = (uint)Marshal.SizeOf(typeof(MEMORYSTATUSEX));
+            }
+        }
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+
+        static extern bool GlobalMemoryStatusEx([In, Out] MEMORYSTATUSEX lpBuffer);
         private static PerformanceCounter cpuCounter = null;
-        
+        private static PerformanceCounter memFreeCounter = null;
+
         static SystemInfoUtils()
         {
             if (!IsRuningOnWindows())
                 return;
             cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
             cpuCounter.NextValue();
+            memFreeCounter = new PerformanceCounter("Memory", "Available KBytes");
         }
 
 
@@ -91,9 +115,7 @@ namespace SvnManage.Utils
         [ShellCmd(PlatformID.Unix, "bash", "-c \"uname -n\"", @"^\s*(?'value'.*?)\s*$")]
         public static String GetComputerName()
         {
-            //if (IsRuningOnWindows())
-            //    return computer.Name;
-            return executeShell();
+            return Environment.MachineName;
         }
 
         /// <summary>
@@ -104,8 +126,8 @@ namespace SvnManage.Utils
         [ShellCmd(PlatformID.Unix, "bash", "-c \"uname -s -r -v -m -o\"", @"^\s*(?'value'.*?)\s*$")]
         public static String GetOsName()
         {
-            //if (IsRuningOnWindows())
-            //    return computer.Info.OSFullName;
+            if (IsRuningOnWindows())
+                return Environment.OSVersion.ToString();
             return executeShell();
         }
 
@@ -134,6 +156,12 @@ namespace SvnManage.Utils
         [ShellCmd(PlatformID.Unix, "bash", "-c \"grep 'MemTotal:' /proc/meminfo| awk '{value=$2} END {print value}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static long GetTotalMemory()
         {
+            if (IsRuningOnWindows())
+            {
+                MEMORYSTATUSEX meminfo = new MEMORYSTATUSEX();
+                GlobalMemoryStatusEx(meminfo);
+                return Convert.ToInt64(meminfo.ullTotalPhys);
+            }
             var value = executeShell();
             if (String.IsNullOrEmpty(value))
                 return 0;
@@ -148,6 +176,15 @@ namespace SvnManage.Utils
         [ShellCmd(PlatformID.Unix, "bash", "-c \"grep '' /proc/meminfo | awk 'NR==2{memFree= $2}NR==4{cached= $2}{totalFree=memFree + cached}END{print totalFree}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static long GetFreeMemory()
         {
+            if (IsRuningOnWindows())
+            {
+                if (IsRuningOnWindows())
+                {
+                    MEMORYSTATUSEX meminfo = new MEMORYSTATUSEX();
+                    GlobalMemoryStatusEx(meminfo);
+                    return Convert.ToInt64(meminfo.ullAvailPhys);
+                }
+            }
             var value = executeShell();
             if (String.IsNullOrEmpty(value))
                 return 0;
