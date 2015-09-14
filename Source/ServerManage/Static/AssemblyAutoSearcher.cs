@@ -16,6 +16,7 @@ namespace ServerManage.Static
         static AssemblyAutoSearcher()
         {
             baseDirectory = Path.GetDirectoryName(typeof(AssemblyAutoSearcher).Assembly.Location);
+            Environment.CurrentDirectory = baseDirectory;
 
             List<String> pathList = new List<string>();
             pathList.Add(baseDirectory);
