@@ -9,23 +9,33 @@ using Quick.OwinMVC.Routing;
 using System.IO;
 using System.Management;
 using SvnManage.Middleware;
+using Quick.OwinMVC.Hunter;
 
 namespace SvnManage.Controller.Svn
 {
     [Route("svn")]
-    public class ApiController : IApiController
+    public class ApiController : IApiController,IPropertyHunter
     {
         public static ApiController Instance;
 
         private String logFilePath;
         private String[] protectAccounts;
         private String htpasswdFilePath;
-        public void Init(IDictionary<string, string> properties)
+
+        void IPropertyHunter.Hunt(string key, string value)
         {
-            Instance = this;
-            logFilePath = properties["SvnManage.Controller.Svn.logFilePath"];
-            htpasswdFilePath = properties["SvnManage.Controller.Svn.htpasswdFilePath"];
-            protectAccounts = properties["SvnManage.Controller.Svn.protectAccounts"].Split(new Char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+            switch(key)
+            {
+                case nameof(logFilePath):
+                    logFilePath = value;
+                    break;
+                case nameof(htpasswdFilePath):
+                    htpasswdFilePath = value;
+                    break;
+                case nameof(protectAccounts):
+                    protectAccounts = value.Split(new Char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    break;
+            }
         }
 
         public object Service(IOwinContext context)

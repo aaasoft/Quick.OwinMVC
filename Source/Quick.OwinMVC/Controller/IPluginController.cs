@@ -8,10 +8,5 @@ namespace Quick.OwinMVC.Controller
 {
     public interface IPluginController
     {
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <param name="properties"></param>
-        void Init(IDictionary<String, String> properties);
     }
 }

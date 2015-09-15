@@ -4,10 +4,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace Quick.OwinMVC.Middleware
+namespace Quick.OwinMVC.Hunter
 {
-    public interface ITypeHunter
+    public interface IAssemblyHunter
     {
-        void Hunt(Assembly assembly, Type type);
+        void Hunt(Assembly assembly);
     }
 }

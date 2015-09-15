@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin;
+using Quick.OwinMVC.Hunter;
 using System;
 using System.Collections.Generic;
 using System.Linq;

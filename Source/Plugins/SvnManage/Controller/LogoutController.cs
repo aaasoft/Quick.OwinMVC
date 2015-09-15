@@ -11,10 +11,6 @@ namespace SvnManage.Controller
     [Route("logout")]
     public class LogoutController : IViewController
     {
-        public void Init(IDictionary<string, string> properties)
-        {
-        }
-
         public string Service(IOwinContext context, IDictionary<string, object> data)
         {
             var rep = context.Response;

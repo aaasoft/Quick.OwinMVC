@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin;
+using Quick.OwinMVC.Hunter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,40 +17,14 @@ namespace Quick.OwinMVC.Middleware
         {
             server = Server.Instance;
 
-            List<IPropertyHunter> propertyHunterList = new List<IPropertyHunter>();
-            List<IAssemblyHunter> assemblyHunterList = new List<IAssemblyHunter>();
-            List<ITypeHunter> typeHunterList = new List<ITypeHunter>();
-
             var nextProperty = typeof(OwinMiddleware).GetProperty("Next", BindingFlags.Instance | BindingFlags.NonPublic);
             var currentMiddleware = next;
             while (currentMiddleware != null)
             {
                 server.middlewareInstanceList.Add(currentMiddleware);
-                if (currentMiddleware is IPropertyHunter)
-                    propertyHunterList.Add((IPropertyHunter)currentMiddleware);
-                if (currentMiddleware is IAssemblyHunter)
-                    assemblyHunterList.Add((IAssemblyHunter)currentMiddleware);
-                if (currentMiddleware is ITypeHunter)
-                    typeHunterList.Add((ITypeHunter)currentMiddleware);
                 currentMiddleware = nextProperty.GetValue(currentMiddleware, null) as OwinMiddleware;
             }
-
-            //扫描配置
-            propertyHunterList.ForEach(hunter =>
-            {
-                var prefix = hunter.GetType().FullName + ".";
-                foreach (String key in server.properties.Keys.Where(t => t.StartsWith(prefix)))
-                    hunter.Hunt(key.Substring(prefix.Length), server.properties[key]);
-            });
-            //扫描程序集和类
-            foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies().Where(t => !t.IsDynamic && !t.GlobalAssemblyCache))
-            {
-                assemblyHunterList.ForEach(t => t.Hunt(assembly));
-                foreach (Type type in assembly.GetTypes())
-                {
-                    typeHunterList.ForEach(t => t.Hunt(assembly, type));
-                }
-            }
+            HunterUtils.TryHunt(server.middlewareInstanceList, server.properties);
         }
 
         public override Task Invoke(IOwinContext context)

@@ -12,8 +12,6 @@ namespace SvnManage.Controller.Svn
     [Route("svn.modify_password")]
     public class ModifyPasswordController : IViewController
     {
-        public void Init(IDictionary<string, string> properties) { }
-
         public string Service(IOwinContext context, IDictionary<string, object> data)
         {
             return "svn/modify_password";

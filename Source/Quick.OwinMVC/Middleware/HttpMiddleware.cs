@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Quick.OwinMVC.Controller;
+using Quick.OwinMVC.Hunter;
 using Quick.OwinMVC.Routing;
 using System;
 using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace Quick.OwinMVC.Middleware
             routes.Add(RouteBuilder.RouteToRegex(path), httpController);
         }
 
-        public void Hunt(Assembly assembly, Type type)
+        public void Hunt(Type type)
         {
             foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
             {

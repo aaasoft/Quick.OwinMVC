@@ -7,6 +7,7 @@ using Microsoft.Owin;
 using System.Threading.Tasks;
 using System.Reflection;
 using Quick.OwinMVC.Routing;
+using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Middleware
 {
@@ -19,21 +20,20 @@ namespace Quick.OwinMVC.Middleware
         internal void RegisterController(string plugin, string path, T controller)
         {
             controllerDict[$"{plugin}:{path}"] = controller;
+            HunterUtils.TryHunt(controller, Server.Instance.properties);
         }
 
         public AbstractControllerMiddleware(OwinMiddleware next) : base(next) { }
 
 
-        public void Hunt(Assembly assembly, Type type)
+        public void Hunt(Type type)
         {
-            String pluginName = assembly.GetName().Name;
+            String pluginName = type.Assembly.GetName().Name;
             foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
             {
                 if (typeof(T).IsAssignableFrom(type))
                 {
-
                     T controller = (T)Activator.CreateInstance(type);
-                    controller.Init(Server.Instance.properties);
                     RegisterController(pluginName, attr.Path, controller);
                 }
             }

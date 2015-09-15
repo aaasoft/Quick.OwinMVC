@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Quick.OwinMVC.Controller;
 using System.IO;
 using System.IO.Compression;
+using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Middleware
 {

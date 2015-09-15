@@ -16,12 +16,7 @@ namespace SvnManage.Controller
     public class LoginController : IViewController
     {
         private const String VIEW_NAME = "login";
-
-        public void Init(IDictionary<string, string> properties)
-        {
-
-        }
-
+        
         public string Service(IOwinContext context, IDictionary<string, object> data)
         {
             var req = context.Request;

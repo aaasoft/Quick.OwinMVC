@@ -9,17 +9,23 @@ using Quick.OwinMVC.Routing;
 using System.Diagnostics;
 using SvnManage.Utils;
 using Quick.OwinMVC.Utils;
+using Quick.OwinMVC.Hunter;
 
 namespace SvnManage.Controller
 {
     [Route("index")]
-    public class IndexController : IViewController, IApiController
+    public class IndexController : IViewController, IApiController, IPropertyHunter
     {
         private String refreshInterval;
 
-        public void Init(IDictionary<string, string> properties)
+        void IPropertyHunter.Hunt(string key, string value)
         {
-            refreshInterval = properties["SvnManage.Controller.IndexController.refreshInterval"];
+            switch (key)
+            {
+                case nameof(refreshInterval):
+                    refreshInterval = value;
+                    break;
+            }
         }
 
         string IViewController.Service(IOwinContext context, IDictionary<String, Object> data)

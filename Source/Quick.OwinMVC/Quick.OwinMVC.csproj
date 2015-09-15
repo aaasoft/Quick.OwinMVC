@@ -46,6 +46,8 @@
     <Compile Include="Controller\IViewController.cs" />
     <Compile Include="Controller\IOwinContextExtension.cs" />
     <Compile Include="Controller\IPluginController.cs" />
+    <Compile Include="Hunter\HunterUtils.cs" />
+    <Compile Include="Hunter\IHungryPropertyHunter.cs" />
     <Compile Include="Middleware\AbstractControllerMiddleware.cs" />
     <Compile Include="Middleware\AbstractPluginPathMiddleware.cs" />
     <Compile Include="Middleware\ApiMiddleware.cs" />
@@ -53,9 +55,9 @@
     <Compile Include="Middleware\MiddlewareContext.cs" />
     <Compile Include="Middleware\Error500Middleware.cs" />
     <Compile Include="Middleware\HttpMiddleware.cs" />
-    <Compile Include="Middleware\IAssemblyHunter.cs" />
-    <Compile Include="Middleware\IPropertyHunter.cs" />
-    <Compile Include="Middleware\ITypeHunter.cs" />
+    <Compile Include="Hunter\IAssemblyHunter.cs" />
+    <Compile Include="Hunter\IPropertyHunter.cs" />
+    <Compile Include="Hunter\ITypeHunter.cs" />
     <Compile Include="Middleware\Error404Middleware.cs" />
     <Compile Include="Middleware\RedirectMiddleware.cs" />
     <Compile Include="Middleware\ResourceMiddleware.cs" />

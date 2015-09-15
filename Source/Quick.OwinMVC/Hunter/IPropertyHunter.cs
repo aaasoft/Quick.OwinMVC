@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Quick.OwinMVC.Middleware
+namespace Quick.OwinMVC.Hunter
 {
     public interface IPropertyHunter
     {

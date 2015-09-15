@@ -10,10 +10,6 @@ namespace Quick.OwinMVC.Controller
     [Route("error")]
     public class ErrorController : IViewController
     {
-        public void Init(IDictionary<string, string> properties)
-        {
-        }
-
         public string Service(IOwinContext context, IDictionary<string, object> data)
         {
             throw new NotImplementedException();
