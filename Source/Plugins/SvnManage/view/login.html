@@ -77,32 +77,35 @@
 <script src="../resource/js/base64.js"></script>
     *#
 <script type="text/javascript">
-        function show_box(id) {
-            jQuery('.widget-box.visible').removeClass('visible');
-            jQuery('#' + id).addClass('visible');
-        }
+    function show_box(id) {
+        jQuery('.widget-box.visible').removeClass('visible');
+        jQuery('#' + id).addClass('visible');
+    }
 
-        $(document).ready(function(){
-            $('input').keypress(function(e){
-                if(e.keyCode==13)
-                    login();
-            });
+    $(document).ready(function () {
+        $('input').keypress(function (e) {
+            if (e.keyCode == 13)
+                login();
         });
+    });
 
-        function login() {
-            var account = jQuery('#account').val();
-            var password = jQuery('#password').val();
-            var hash = Base64.encode(account + ':' + password);
+    function login() {
+        var account = jQuery('#account').val();
+        var password = jQuery('#password').val();
+        var hash = Base64.encode(account + ':' + password);
 
-            var form = jQuery('<form />', { method: "post", style: "display:none;" }).appendTo('body');
-            form.append('<input type="hidden" name="password" value="' + hash + '" />');
-            form.submit();
-        }
+        var form = jQuery('<form />', { method: "post", style: "display:none;" }).appendTo('body');
+        form.append('<input type="hidden" name="password" value="' + hash + '" />');
+        form.submit();
+    }
 
-#if($account)
+    //#if($account)
+
     jQuery('#account').val('$account');
-#end
-#if($password)
+    //#end
+    //#if($password)
+
     jQuery('#password').val('$password');
-#end
+    //#end
+
 </script>

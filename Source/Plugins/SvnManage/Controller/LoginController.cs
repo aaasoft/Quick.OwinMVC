@@ -25,6 +25,10 @@ namespace SvnManage.Controller
             switch (req.Method)
             {
                 case "GET":
+#if DEBUG
+                    data["account"] = "test";
+                    data["password"] = "test";
+#endif
                     preperaData(context, data, null);
                     return VIEW_NAME;
                 case "POST":
