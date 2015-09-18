@@ -38,6 +38,11 @@ namespace SvnManage.Controller.Svn
             }
         }
 
+        public ApiController()
+        {
+            ApiController.Instance = this;
+        }
+
         public object Service(IOwinContext context)
         {
             var method = context.Request.Method;

@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>#if($title)$title -#end 服务器管理系统</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="${ContextPath}/base/resource/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="${ContextPath}/base/resource/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace.min.css" />
+    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace-rtl.min.css" />
+    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace-skins.min.css" />
+</head>
+<body>
+    <div class="navbar navbar-default" id="navbar">
+        <div class="navbar-container" id="navbar-container">
+            <div class="navbar-header pull-left">
+                <a href="${ContextPath}/" class="navbar-brand" style=" margin-top:-10px; ">
+                    <small style="margin-left:-65px; ">
+                        <img src="${ContextPath}/base/resource/logo.png" width="220" height="45" />
+                    </small>
+                </a><!-- /.brand -->
+            </div><!-- /.navbar-header -->
+
+            <div class="navbar-header pull-right" role="navigation">
+                <ul class="nav ace-nav">
+                    <li class="light-blue">
+                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <img class="nav-user-photo" src="${ContextPath}/base/resource/avatars/user.png" alt="${SVN_USER}'的照片" />
+                            <span class="user-info">
+                                <small style="padding-top:8px">${SVN_USER}</small>
+                            </span>
+
+                            <i class="icon-caret-down"></i>
+                        </a>
+
+                        <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                            <li>
+                                <a href="${ContextPath}/logout">
+                                    <i class="icon-off"></i>
+                                    退出
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul><!-- /.ace-nav -->
+            </div><!-- /.navbar-header -->
+        </div><!-- /.container -->
+    </div>
+    <div class="main-container" id="main-container">
+        <div class="main-container-inner">
+            <a class="menu-toggler" id="menu-toggler" href="#">
+                <span class="menu-text"></span>
+            </a>
+            <!--左侧菜单-->
+            <div class="sidebar" id="sidebar">
+                <ul class="nav nav-list">
+                    <li class="active">
+                        <a href="${ContextPath}/">
+                            <i class="icon-dashboard"></i>
+                            <span class="menu-text"> 首页 </span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-desktop"></i>
+                            <span class="menu-text"> SVN管理 </span>
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="${ContextPath}/base/view/svn.modify_password">
+                                    <i class="icon-double-angle-right"></i>
+                                    密码修改
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-random"></i>
+                            <span class="menu-text"> 测试 </span>
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="${ContextPath}/path/not/exists/">
+                                    <i class="icon-double-angle-right"></i>
+                                    404页面
+                                </a>
+                            </li>
+                            <li>
+                                <a href="${ContextPath}/base/view/error">
+                                    <i class="icon-double-angle-right"></i>
+                                    500页面
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul><!-- /.nav-list -->
+
+                <div class="sidebar-collapse" id="sidebar-collapse">
+                    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+                </div>
+            </div>
+            <div class="main-content">
+                <!--面包屑导航-->
+                <div class="breadcrumbs" id="breadcrumbs">
+                    <ul class="breadcrumb">
+                        <li class="active">
+                            <i class="icon-home home-icon"></i>
+                            首页
+                        </li>
+                    </ul><!-- .breadcrumb -->
+                </div>
+                <div class="page-content">
+                    #RenderBody()
+                </div><!-- /.page-content -->
+            </div><!-- /.main-content -->
+        </div><!-- /#ace-settings-container -->
+    </div><!-- /.main-container-inner -->
+    <!-- /.main-container -->
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="icon-double-angle-up icon-only bigger-110"></i>
+    </a>
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='${ContextPath}/base/resource/js/jquery-2.0.3.min.js'>" + "<" + "script>");
+    </script>
+    <script type="text/javascript">
+    if ("ontouchend" in document) document.write("<script src='${ContextPath}/base/resource/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
+    </script>
+    <script src="${ContextPath}/base/resource/js/bootstrap.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/bootbox.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/typeahead-bs2.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/jquery.slimscroll.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/jquery.easy-pie-chart.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/jquery.sparkline.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/flot/jquery.flot.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/flot/jquery.flot.pie.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/flot/jquery.flot.resize.min.js"></script>
+    <!-- ace scripts -->
+    <script src="${ContextPath}/base/resource/js/ace-extra.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/ace-elements.min.js"></script>
+    <script src="${ContextPath}/base/resource/js/ace.min.js"></script>
+
+    <!-- inline scripts related to this page -->
+</body>
+</html>

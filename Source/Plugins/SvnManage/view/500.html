@@ -1,97 +1,94 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title>500 内部错误 - 服务器管理系统</title>
-    #parse("base:part_head")
-</head>
-<body>
-    <div class="main-container" id="main-container">
-        <div class="main-container-inner">
-            <div>
-                <div class="page-content">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <!-- PAGE CONTENT BEGINS -->
-                            <div class="error-container">
-                                <div class="well">
-                                    <h1 class="grey lighter smaller">
-                                        <span class="blue bigger-125">
-                                            <i class="icon-random"></i>
-                                            500
-                                        </span>
-                                        内部错误
-                                    </h1>
+﻿#parse("base:shared._Error")
+#macro(RenderBody)
+<div class="well">
+    <h1 class="grey lighter smaller">
+        <span class="blue bigger-125">
+            <i class="icon-random"></i>
+            500
+        </span>
+        内部错误
+    </h1>
 
-                                    <hr>
-                                    <h3 class="lighter smaller">非常抱歉，出现内部错误...</h3>
-                                    <hr>
-                                    <div class="space"></div>
-                                    <h4 class="pink">
-                                        <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
-                                        <a href="#exception-detail" role="button" class="green" data-toggle="modal"> 查看错误详情 </a>
-                                    </h4>
-                                    <div id="exception-detail" class="modal fade in" tabindex="-1" aria-hidden="false" style="display: none;">
-                                        <div class="modal-backdrop fade in"></div>
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header no-padding">
-                                                    <div class="table-header">
-                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                                                            <span class="white">×</span>
-                                                        </button>
-                                                        错误详情
-                                                    </div>
-                                                </div>
+    <hr>
+    <h3 class="lighter smaller">非常抱歉，出现内部错误...</h3>
+    <hr>
+    <div class="space"></div>
+    <h4 class="pink">
+        <i class="icon-hand-right icon-animated-hand-pointer blue"></i>
+        <a href="#exception-detail" role="button" class="green" data-toggle="modal"> 查看错误详情 </a>
+    </h4>
+    <div id="exception-detail" class="modal fade in" tabindex="-1" aria-hidden="false" style="display: none;">
+        <div class="modal-backdrop fade in"></div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header no-padding">
+                    <div class="table-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            <span class="white">×</span>
+                        </button>
+                        错误详情
+                    </div>
+                </div>
 
-                                                <div class="modal-body no-padding">
-                                                    <pre id="exception" class="prettyprint linenums">${Exception.ToString()}</pre>
-                                                </div>
+                <div class="modal-body no-padding">
+                    <pre id="exception" class="prettyprint linenums">${Exception.ToString()}</pre>
+                </div>
 
-                                                <div class="modal-footer no-margin-top">
-                                                    <button class="btn btn-sm btn-primary pull-left" onclick="copyToClipboard('textForCopy')">
-                                                        <i class="icon-copy"></i>
-                                                        复制到剪贴板
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
-                                                        <i class="icon-remove"></i>
-                                                        关闭
-                                                    </button>
-                                                    <textarea id="textForCopy" style="display:none">${Exception.ToString()}</textarea>
-                                                </div>
-                                            </div><!-- /.modal-content -->
-                                        </div><!-- /.modal-dialog -->
-                                    </div>
-                                    <div class="center">
-                                        <a href="javascript:void();" class="btn btn-grey" onclick="history.go(-1);">
-                                            <i class="icon-arrow-left"></i>
-                                            返回上页
-                                        </a>
-                                        <a href="${ContextPath}/" class="btn btn-primary">
-                                            <i class="icon-home"></i>
-                                            返回主页
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- PAGE CONTENT ENDS -->
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.page-content -->
-            </div><!-- /.main-content -->
-        </div><!-- /#ace-settings-container -->
-    </div><!-- /.main-container-inner -->
-    <!-- /.main-container -->
-    #parse("base:part_footer")
-    <!-- inline scripts related to this page -->
-    <script>
-        var copyToClipboard = function (elementId) {
-            var element = document.getElementById(elementId);
-            element.removeAttribute("style");
-            element.focus();
-            element.select();
-            document.execCommand("copy");
-            element.setAttribute("style", "display:none");
-        }
-    </script>
-</body>
-</html>
+                <div class="modal-footer no-margin-top">
+                    <button class="btn btn-sm btn-primary pull-left" onclick="copyToClipboard('textForCopy')">
+                        <i class="icon-copy"></i>
+                        复制到剪贴板
+                    </button>
+                    <button class="btn btn-sm btn-danger pull-left" data-dismiss="modal">
+                        <i class="icon-remove"></i>
+                        关闭
+                    </button>
+                    <textarea id="textForCopy" style="display:none">${Exception.ToString()}</textarea>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <div class="center">
+        <a href="javascript:void();" class="btn btn-grey" onclick="history.go(-1);">
+            <i class="icon-arrow-left"></i>
+            返回上页
+        </a>
+        <a href="${ContextPath}/" class="btn btn-primary">
+            <i class="icon-home"></i>
+            返回主页
+        </a>
+    </div>
+</div>
+#end
+<script type="text/javascript">
+        window.jQuery || document.write("<script src='${ContextPath}/base/resource/js/jquery-2.0.3.min.js'>" + "<" + "script>");
+</script>
+<script type="text/javascript">
+    if ("ontouchend" in document) document.write("<script src='${ContextPath}/base/resource/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
+</script>
+<script src="${ContextPath}/base/resource/js/bootstrap.min.js"></script>
+<script src="${ContextPath}/base/resource/js/bootbox.min.js"></script>
+<script src="${ContextPath}/base/resource/js/typeahead-bs2.min.js"></script>
+<script src="${ContextPath}/base/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
+<script src="${ContextPath}/base/resource/js/jquery.ui.touch-punch.min.js"></script>
+<script src="${ContextPath}/base/resource/js/jquery.slimscroll.min.js"></script>
+<script src="${ContextPath}/base/resource/js/jquery.easy-pie-chart.min.js"></script>
+<script src="${ContextPath}/base/resource/js/jquery.sparkline.min.js"></script>
+<script src="${ContextPath}/base/resource/js/flot/jquery.flot.min.js"></script>
+<script src="${ContextPath}/base/resource/js/flot/jquery.flot.pie.min.js"></script>
+<script src="${ContextPath}/base/resource/js/flot/jquery.flot.resize.min.js"></script>
+<!-- ace scripts -->
+<script src="${ContextPath}/base/resource/js/ace-extra.min.js"></script>
+<script src="${ContextPath}/base/resource/js/ace-elements.min.js"></script>
+<script src="${ContextPath}/base/resource/js/ace.min.js"></script>
+
+<script>
+    var copyToClipboard = function (elementId) {
+        var element = document.getElementById(elementId);
+        element.removeAttribute("style");
+        element.focus();
+        element.select();
+        document.execCommand("copy");
+        element.setAttribute("style", "display:none");
+    }
+</script>

@@ -235,9 +235,6 @@
     <EmbeddedResource Include="view\svn\modify_password.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="view\vm_global_library.html" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Quick.OwinMVC\Quick.OwinMVC.csproj">
       <Project>{17f47358-c8e5-49b2-bcac-0b315f93e114}</Project>
       <Name>Quick.OwinMVC</Name>
@@ -247,13 +244,11 @@
   <ItemGroup>
     <EmbeddedResource Include="view\index.html" />
     <EmbeddedResource Include="view\login.html" />
-    <EmbeddedResource Include="view\part_breadcrumbs.html" />
-    <EmbeddedResource Include="view\part_footer.html" />
-    <EmbeddedResource Include="view\part_head.html" />
-    <EmbeddedResource Include="view\part_navbar.html" />
-    <EmbeddedResource Include="view\part_sidebar.html" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="view\shared\_Error.html" />
+    <EmbeddedResource Include="view\shared\_Single.html" />
+    <EmbeddedResource Include="view\shared\_Layout.html" />
     <EmbeddedResource Include="view\500.html" />
     <EmbeddedResource Include="view\404.html" />
     <EmbeddedResource Include="resource\js\base64.js" />
