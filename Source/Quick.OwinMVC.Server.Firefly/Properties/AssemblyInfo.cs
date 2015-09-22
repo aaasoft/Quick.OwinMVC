@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Quick.OwinMVC")]
+[assembly: AssemblyTitle("Quick.OwinMVC.Server.Firefly")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("scbeta")]
-[assembly: AssemblyProduct("Quick.OwinMVC")]
-[assembly: AssemblyCopyright("Copyright © scbeta 2015")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("Quick.OwinMVC.Server.Firefly")]
+[assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("17f47358-c8e5-49b2-bcac-0b315f93e114")]
+[assembly: Guid("f7612f2b-9b35-4c5c-a435-83617165a5b4")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

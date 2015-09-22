@@ -47,8 +47,8 @@ namespace Quick.OwinMVC.Utils
 
         public static Object CreateObject(String typeInfo, params Object[] args)
         {
-            Type idCardReaderClass = GetType(typeInfo);
-            return Activator.CreateInstance(idCardReaderClass, args);
+            Type type = GetType(typeInfo);
+            return Activator.CreateInstance(type, args);
         }
     }
 }

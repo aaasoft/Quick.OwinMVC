@@ -8,6 +8,8 @@ using Quick.OwinMVC.Middleware;
 using Microsoft.Owin.Builder;
 using Quick.OwinMVC.Utils;
 using System.Security.Cryptography.X509Certificates;
+using Quick.OwinMVC.WebServer;
+using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC
 {
@@ -20,8 +22,9 @@ namespace Quick.OwinMVC
 
         private IPEndPoint endpoint;
         private String url;
-        private IDisposable webApp;
-
+        private IWebServer server;
+        //WEB服务器转接器
+        private String Wrapper;
         //中间件队列
         private List<Action<IAppBuilder>> middlewareRegisterActionList = new List<Action<IAppBuilder>>();
 
@@ -82,8 +85,13 @@ namespace Quick.OwinMVC
                         value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                             .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));
                         break;
+                    case nameof(Wrapper):
+                        Wrapper = properties[key];
+                        break;
                 }
             }
+            server = (IWebServer)AssemblyUtils.CreateObject(Wrapper);
+            HunterUtils.TryHunt(server, properties);
         }
 
         /// <summary>
@@ -109,7 +117,7 @@ namespace Quick.OwinMVC
 
         public IEnumerable<T> GetMiddlewares<T>()
         {
-            if (webApp == null)
+            if (!server.IsRuning)
                 throw new ApplicationException("Can't invoke this method before Server.Start() method invoded.");
             return middlewareInstanceList.Where(m => m is T).Cast<T>();
         }
@@ -140,12 +148,12 @@ namespace Quick.OwinMVC
             foreach (var register in middlewareRegisterActionList)
                 register.Invoke(app);
 
-            webApp = new Firefly.Http.ServerFactory().Create(app.Build(), endpoint);
+            server.Start(app.Build(), endpoint);
         }
 
         public void Stop()
         {
-            webApp.Dispose();
+            server.Dispose();
         }
     }
 }
