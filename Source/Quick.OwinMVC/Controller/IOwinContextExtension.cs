@@ -20,6 +20,8 @@ namespace Quick.OwinMVC.Controller
 {
     public static class IOwinContextExtension
     {
+        private static readonly String FORMDATA_KEY = $"{typeof(IOwinContextExtension).FullName}.{nameof(FORMDATA_KEY)}";
+
         /// <summary>
         /// 得到Session信息
         /// </summary>
@@ -37,6 +39,10 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static IFormCollection GetFormData(this IOwinContext context)
         {
+            IFormCollection formCollection = context.Get<IFormCollection>(FORMDATA_KEY);
+            if (formCollection != null)
+                return formCollection;
+
             StreamReader reader = new StreamReader(context.Request.Body);
             var formData = reader.ReadToEnd();
             IDictionary<String, IList<String>> dict = new Dictionary<String, IList<String>>();
@@ -52,18 +58,51 @@ namespace Quick.OwinMVC.Controller
                     dict.Add(key, new List<String>());
                 dict[key].Add(value);
             }
-            return new FormCollection(dict.ToDictionary(t => t.Key, t => t.Value.ToArray()));
+            formCollection = new FormCollection(dict.ToDictionary(t => t.Key, t => t.Value.ToArray()));
+            context.Set(FORMDATA_KEY, formCollection);
+            return formCollection;
         }
 
-        private static String getJsonString(IEnumerable<KeyValuePair<string, string[]>> data)
+        private static String getJsonString(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject)
         {
             JObject jObj = new JObject();
             foreach (var pair in data)
             {
                 if (pair.Value.Length > 1)
+                {
                     jObj.Add(pair.Key, JToken.FromObject(pair.Value));
+                }
                 else
-                    jObj.Add(pair.Key, JToken.FromObject(pair.Value[0]));
+                {
+                    var text = pair.Value[0];
+                    //如果要将字符串转换为JSON对象或数组
+                    if (valueToObject)
+                    {
+                        //如果文本是一个JSON对象
+                        if (text.StartsWith("{") && text.EndsWith("}"))
+                        {
+                            try
+                            {
+                                JObject subObj = JObject.Parse(text);
+                                jObj.Add(pair.Key, subObj);
+                                continue;
+                            }
+                            catch { }
+                        }
+                        //如果文本是一个JSON数组
+                        if (text.StartsWith("[") && text.EndsWith("]"))
+                        {
+                            try
+                            {
+                                JArray subObj = JArray.Parse(text);
+                                jObj.Add(pair.Key, subObj);
+                                continue;
+                            }
+                            catch { }
+                        }
+                    }
+                    jObj.Add(pair.Key, JToken.FromObject(text));
+                }
             }
             return jObj.ToString();
         }
@@ -77,7 +116,20 @@ namespace Quick.OwinMVC.Controller
         public static T GetFormData<T>(this IOwinContext context)
             where T : class
         {
-            return JsonConvert.DeserializeObject<T>(getJsonString(context.GetFormData()));
+            return context.GetFormData<T>(true);
+        }
+
+        /// <summary>
+        /// 获取POST提交的表单数据到对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <param name="valueToObject">是否将值转换为对象</param>
+        /// <returns></returns>
+        public static T GetFormData<T>(this IOwinContext context, bool valueToObject)
+            where T : class
+        {
+            return JsonConvert.DeserializeObject<T>(getJsonString(context.GetFormData(), valueToObject));
         }
 
         /// <summary>
@@ -89,7 +141,20 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static T GetFormData<T>(this IOwinContext context, T obj)
         {
-            var jsonString = getJsonString(context.GetFormData());
+            return context.GetFormData<T>(obj, true);
+        }
+
+        /// <summary>
+        /// 获取POST提交的表单数据到对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <param name="obj"></param>
+        /// <param name="valueToObject">是否将值转换为对象</param>
+        /// <returns></returns>
+        public static T GetFormData<T>(this IOwinContext context, T obj, bool valueToObject)
+        {
+            var jsonString = getJsonString(context.GetFormData(), valueToObject);
             Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
             if (hasCompilerGeneratedAttribute)
                 return JsonConvert.DeserializeAnonymousType(jsonString, obj);
@@ -106,7 +171,20 @@ namespace Quick.OwinMVC.Controller
         public static T GetQueryData<T>(this IOwinContext context)
             where T : class
         {
-            return JsonConvert.DeserializeObject<T>(getJsonString(context.Request.Query));
+            return context.GetQueryData<T>(true);
+        }
+
+        /// <summary>
+        /// 获取URL参数数据到对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <param name="valueToObject">是否将值转换为对象</param>
+        /// <returns></returns>
+        public static T GetQueryData<T>(this IOwinContext context, bool valueToObject)
+            where T : class
+        {
+            return JsonConvert.DeserializeObject<T>(getJsonString(context.Request.Query, valueToObject));
         }
 
         /// <summary>
@@ -117,8 +195,23 @@ namespace Quick.OwinMVC.Controller
         /// <param name="obj"></param>
         /// <returns></returns>
         public static T GetQueryData<T>(this IOwinContext context, T obj)
+            where T : class
         {
-            var jsonString = getJsonString(context.Request.Query);
+            return context.GetQueryData<T>(obj, true);
+        }
+
+        /// <summary>
+        /// 获取URL参数数据到对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <param name="obj"></param>
+        /// <param name="valueToObject">是否将值转换为对象</param>
+        /// <returns></returns>
+        public static T GetQueryData<T>(this IOwinContext context, T obj, bool valueToObject)
+            where T : class
+        {
+            var jsonString = getJsonString(context.Request.Query, valueToObject);
             Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
             if (hasCompilerGeneratedAttribute)
                 return JsonConvert.DeserializeAnonymousType(jsonString, obj);
