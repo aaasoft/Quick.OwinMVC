@@ -63,7 +63,7 @@ namespace Quick.OwinMVC.Controller
             return formCollection;
         }
 
-        private static String getJsonString(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject)
+        private static JObject getJObject(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject)
         {
             JObject jObj = new JObject();
             foreach (var pair in data)
@@ -104,7 +104,7 @@ namespace Quick.OwinMVC.Controller
                     jObj.Add(pair.Key, JToken.FromObject(text));
                 }
             }
-            return jObj.ToString();
+            return jObj;
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace Quick.OwinMVC.Controller
         public static T GetFormData<T>(this IOwinContext context, bool valueToObject)
             where T : class
         {
-            return JsonConvert.DeserializeObject<T>(getJsonString(context.GetFormData(), valueToObject));
+            return getJObject(context.GetFormData(), valueToObject).ToObject<T>();
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static T GetFormData<T>(this IOwinContext context, T obj, bool valueToObject)
         {
-            var jsonString = getJsonString(context.GetFormData(), valueToObject);
+            var jsonString = getJObject(context.GetFormData(), valueToObject).ToString();
             Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
             if (hasCompilerGeneratedAttribute)
                 return JsonConvert.DeserializeAnonymousType(jsonString, obj);
@@ -184,7 +184,7 @@ namespace Quick.OwinMVC.Controller
         public static T GetQueryData<T>(this IOwinContext context, bool valueToObject)
             where T : class
         {
-            return JsonConvert.DeserializeObject<T>(getJsonString(context.Request.Query, valueToObject));
+            return getJObject(context.Request.Query, valueToObject).ToObject<T>();
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Quick.OwinMVC.Controller
         public static T GetQueryData<T>(this IOwinContext context, T obj, bool valueToObject)
             where T : class
         {
-            var jsonString = getJsonString(context.Request.Query, valueToObject);
+            var jsonString = getJObject(context.Request.Query, valueToObject).ToString();
             Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
             if (hasCompilerGeneratedAttribute)
                 return JsonConvert.DeserializeAnonymousType(jsonString, obj);
