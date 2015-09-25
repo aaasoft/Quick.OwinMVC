@@ -240,5 +240,14 @@ namespace Quick.OwinMVC.Controller
         {
             return type.GetCustomAttributes(typeof(T), inherit).Cast<T>();
         }
+
+        public static void Add(this IDictionary<string, object> dict, Object obj)
+        {
+            Type type = obj.GetType();
+            foreach (var propertyInfo in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                dict[propertyInfo.Name] = propertyInfo.GetValue(obj, null);
+            }
+        }
     }
 }

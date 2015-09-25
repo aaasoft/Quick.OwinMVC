@@ -30,8 +30,12 @@ namespace SvnManage.Controller
 
         string IViewController.Service(IOwinContext context, IDictionary<String, Object> data)
         {
-            data["serverTime"] = TimeUtils.GetTime(DateTime.Now);
-            data["refreshInterval"] = refreshInterval;
+            var viewData = new
+            {
+                serverTime = TimeUtils.GetTime(DateTime.Now),
+                refreshInterval = refreshInterval
+            };
+            data.Add(viewData);
             return "index";
         }
 
