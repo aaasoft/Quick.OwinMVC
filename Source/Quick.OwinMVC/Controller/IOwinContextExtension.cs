@@ -12,6 +12,9 @@ using Quick.OwinMVC.Middleware;
 using System.Reflection;
 using System.IO;
 using System.Web;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Quick.OwinMVC.Controller
 {
@@ -50,6 +53,77 @@ namespace Quick.OwinMVC.Controller
                 dict[key].Add(value);
             }
             return new FormCollection(dict.ToDictionary(t => t.Key, t => t.Value.ToArray()));
+        }
+
+        private static String getJsonString(IEnumerable<KeyValuePair<string, string[]>> data)
+        {
+            JObject jObj = new JObject();
+            foreach (var pair in data)
+            {
+                if (pair.Value.Length > 1)
+                    jObj.Add(pair.Key, JToken.FromObject(pair.Value));
+                else
+                    jObj.Add(pair.Key, JToken.FromObject(pair.Value[0]));
+            }
+            return jObj.ToString();
+        }
+
+        /// <summary>
+        /// 获取POST提交的表单数据到对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static T GetFormData<T>(this IOwinContext context)
+            where T : class
+        {
+            return JsonConvert.DeserializeObject<T>(getJsonString(context.GetFormData()));
+        }
+
+        /// <summary>
+        /// 获取POST提交的表单数据到对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T GetFormData<T>(this IOwinContext context, T obj)
+        {
+            var jsonString = getJsonString(context.GetFormData());
+            Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
+            if (hasCompilerGeneratedAttribute)
+                return JsonConvert.DeserializeAnonymousType(jsonString, obj);
+            JsonConvert.PopulateObject(jsonString, obj);
+            return obj;
+        }
+
+        /// <summary>
+        /// 获取URL参数数据到对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static T GetQueryData<T>(this IOwinContext context)
+            where T : class
+        {
+            return JsonConvert.DeserializeObject<T>(getJsonString(context.Request.Query));
+        }
+
+        /// <summary>
+        /// 获取URL参数数据到对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static T GetQueryData<T>(this IOwinContext context, T obj)
+        {
+            var jsonString = getJsonString(context.Request.Query);
+            Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
+            if (hasCompilerGeneratedAttribute)
+                return JsonConvert.DeserializeAnonymousType(jsonString, obj);
+            JsonConvert.PopulateObject(jsonString, obj);
+            return obj;
         }
 
         public static IEnumerable<T> GetCustomAttributes<T>(this Assembly assembly)
