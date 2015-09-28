@@ -13,7 +13,7 @@ using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC
 {
-    public class Server
+    public class Server : IPropertyHunter
     {
         internal static Server Instance { get; private set; }
 
@@ -71,27 +71,23 @@ namespace Quick.OwinMVC
             middlewareInstanceList = new List<OwinMiddleware>();
 
             Server.Instance = this;
-
-            var prefix = this.GetType().FullName + ".";
-            foreach (var key in properties.Keys.Where(t => t.StartsWith(prefix)))
-            {
-                var serverKey = key.Substring(prefix.Length);
-
-                switch (serverKey)
-                {
-                    //如果是中间件定义
-                    case "Middlewares":
-                        var value = properties[key];
-                        value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                            .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));
-                        break;
-                    case nameof(Wrapper):
-                        Wrapper = properties[key];
-                        break;
-                }
-            }
+            HunterUtils.TryHunt(this, properties);
             server = (IWebServer)AssemblyUtils.CreateObject(Wrapper);
             HunterUtils.TryHunt(server, properties);
+        }
+
+        void IPropertyHunter.Hunt(string key, string value)
+        {
+            switch (key)
+            {
+                case "Middlewares":
+                    value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                        .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));
+                    break;
+                case nameof(Wrapper):
+                    Wrapper = value;
+                    break;
+            }
         }
 
         /// <summary>
