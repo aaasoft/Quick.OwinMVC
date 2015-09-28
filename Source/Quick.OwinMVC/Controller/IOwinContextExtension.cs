@@ -15,6 +15,8 @@ using System.Web;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.CompilerServices;
+using System.Globalization;
+using Quick.OwinMVC.Localization;
 
 namespace Quick.OwinMVC.Controller
 {
@@ -30,6 +32,36 @@ namespace Quick.OwinMVC.Controller
         public static IDictionary<String, Object> GetSession(this IOwinContext context)
         {
             return context.Get<IDictionary<String, Object>>(SessionMiddleware.QUICK_OWINMVC_SESSION_KEY);
+        }
+
+        public static String GetLanguage(this IOwinContext context)
+        {
+            var req = context.Request;
+            String language = String.Empty;
+            //先尝试从Cookie中读取语言地区
+            language = context.Request.Cookies["Accept-Language"];
+            if (!String.IsNullOrEmpty(language))
+                return language;
+            //然后尝试从Header中读取语言地区
+            var acceptLanguage = req.Headers.Get("Accept-Language");
+            if (!String.IsNullOrEmpty(acceptLanguage))
+                language = acceptLanguage.Split(new Char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+            if (String.IsNullOrEmpty(language))
+                language = "zh-CN";
+            return language;
+        }
+
+        /// <summary>
+        /// 得到当前语言文字
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static String GetText(this IOwinContext context, Enum key)
+        {
+            String language = context.GetLanguage();
+            var textManager = TextManager.GetInstance(language);
+            return textManager.GetText(key);
         }
 
         /// <summary>

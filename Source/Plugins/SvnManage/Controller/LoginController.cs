@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
 using SvnManage.Middleware;
+using Quick.OwinMVC.Localization;
 
 namespace SvnManage.Controller
 {
@@ -15,8 +16,15 @@ namespace SvnManage.Controller
     [Route("login")]
     public class LoginController : IViewController
     {
+        [TextResource]
+        public enum Texts
+        {
+            [Text("用户名密码验证失败!")]
+            ERROR_USER_PASSWORD_INCORRECT
+        }
+
         private const String VIEW_NAME = "login";
-        
+
         public string Service(IOwinContext context, IDictionary<string, object> data)
         {
             var req = context.Request;
@@ -54,7 +62,7 @@ namespace SvnManage.Controller
                         rep.Redirect(returnUrl);
                     }
 
-                    preperaData(context, data, "账号或密码不匹配！");
+                    preperaData(context, data, context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT));
                     return VIEW_NAME;
             }
             return null;
