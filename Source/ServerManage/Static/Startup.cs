@@ -24,7 +24,7 @@ namespace ServerManage.Static
             Server server = new Server(properties, new Uri(httpUrl));
             //启动服务
             server.Start();
-            Console.WriteLine(String.Format(TextManager.Instance.GetTextWithTag(Texts.WEBSERVER_STARTED), server.GetUrl()));
+            Console.WriteLine(String.Format(TextManager.DefaultInstance.GetTextWithTail(Texts.WEBSERVER_STARTED), server.GetUrl()));
         }
     }
 }
