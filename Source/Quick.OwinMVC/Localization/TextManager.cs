@@ -83,9 +83,12 @@ namespace Quick.OwinMVC.Localization
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public String GetText(Enum key)
+        public String GetText(Enum key, params Object[] args)
         {
-            return GetText(key.ToString(), key.GetType());
+            var text = GetText(key.ToString(), key.GetType());
+            if (args == null || args.Length == 0)
+                return text;
+            return String.Format(text, args);
         }
 
         /// <summary>
@@ -93,9 +96,9 @@ namespace Quick.OwinMVC.Localization
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public String GetTextWithTail(Enum key)
+        public String GetTextWithTail(Enum key, params Object[] args)
         {
-            return $"{GetText(key)}(LanguageKey: {key.GetType().FullName}.{key.ToString()})";
+            return $"{GetText(key, args)}(LanguageKey: {key.GetType().FullName}.{key.ToString()})";
         }
 
         public String GetText(String key, Type type)
