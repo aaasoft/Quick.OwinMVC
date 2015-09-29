@@ -14,7 +14,7 @@ namespace Quick.OwinMVC.Resource
     public class ResourceUtils
     {
         //搜索文件
-        private static String findFilePath(String baseFolder, String fileName)
+        internal static String findFilePath(String baseFolder, String fileName)
         {
             String fullFileName = Path.Combine(baseFolder, fileName);
             if (File.Exists(fullFileName))

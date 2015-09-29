@@ -41,13 +41,15 @@ namespace Quick.OwinMVC.Middleware
 
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
-            //先替换别名
-            if (plugin != null && pluginAliasDict.ContainsKey(plugin))
-                plugin = pluginAliasDict[plugin];
+            //构造key
+            var key = plugin;
+            if (key != null && pluginAliasDict.ContainsKey(key))
+                key = pluginAliasDict[plugin];
+            key = $"{key}:{path}";
             //然后查找控制器
-            if (!controllerDict.ContainsKey($"{plugin}:{path}"))
+            if (!controllerDict.ContainsKey(key))
                 return Next.Invoke(context);
-            T controller = controllerDict[$"{plugin}:{path}"];
+            T controller = controllerDict[key];
             return Task.Factory.StartNew(() => ExecuteController(controller, context, plugin, path));
         }
 

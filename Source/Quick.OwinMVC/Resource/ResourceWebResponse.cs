@@ -23,20 +23,34 @@ namespace Quick.OwinMVC.Resource
         public ResourceWebResponse(Uri uri, IDictionary<String, Assembly> assemblyMap, IDictionary<string, string> pluginAliasMap, String staticFileFolder)
         {
             this.uri = uri;
+            //得到插件名
             var pluginName = uri.Host;
             if (pluginName == "0")
                 pluginName = ".";
-
-            if (pluginAliasMap != null && pluginAliasMap.ContainsKey(pluginName))
-                pluginName = pluginAliasMap[pluginName];
-            pluginName = pluginName.ToLower();
-
+            //得到资源名
             resourceName = uri.LocalPath;
             while (resourceName.StartsWith("/"))
                 resourceName = resourceName.Substring(1);
-
-            String fullFilePath = Path.Combine(staticFileFolder, pluginName, resourceName);
-            if (File.Exists(fullFilePath))
+            resourceName = resourceName.Replace("/", ".");
+            
+            //设置资源搜索目录
+            List<String> searchFolderList = new List<string>();
+            searchFolderList.Add(Path.Combine(staticFileFolder, pluginName));
+            if (pluginAliasMap != null && pluginAliasMap.ContainsKey(pluginName))
+            {
+                pluginName = pluginAliasMap[pluginName];
+                searchFolderList.Add(Path.Combine(staticFileFolder, pluginName));
+            }
+            pluginName = pluginName.ToLower();
+            //开始在文件系统上搜索资源
+            String fullFilePath = null;
+            foreach (var searchFolder in searchFolderList)
+            {
+                fullFilePath = ResourceUtils.findFilePath(searchFolder, resourceName);
+                if (fullFilePath != null)
+                    break;
+            }
+            if (fullFilePath != null)
                 fileInfo = new FileInfo(fullFilePath);
             else if (pluginName == ".") { }
             else
@@ -45,8 +59,6 @@ namespace Quick.OwinMVC.Resource
                     return;
                 assembly = assemblyMap[pluginName];
                 String assemblyName = assembly.GetName().Name;
-
-                resourceName = resourceName.Replace("/", ".");
                 resourceName = $"{assemblyName}.{resourceName}";
                 resourceInfo = assembly.GetManifestResourceInfo(resourceName);
             }

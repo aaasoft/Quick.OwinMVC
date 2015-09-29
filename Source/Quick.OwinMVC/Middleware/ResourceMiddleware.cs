@@ -83,8 +83,9 @@ namespace Quick.OwinMVC.Middleware
 
         private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse)
         {
-            return Task.Factory.StartNew(() =>
+            return Task.Factory.StartNew(state =>
             {
+                var stream2 = (Stream)state;
                 var req = context.Request;
                 var rep = context.Response;
                 //验证缓存有效
@@ -109,7 +110,7 @@ namespace Quick.OwinMVC.Middleware
                     //ETag设置判断部分
                     String serverETag = null;
                     if (useMd5ETag)
-                        serverETag = HashUtils.ComputeETagByMd5(stream);
+                        serverETag = HashUtils.ComputeETagByMd5(stream2);
                     else
                         serverETag = resourceResponse.LastModified.Ticks.ToString();
                     var clientETag = req.Headers.Get("If-None-Match");
@@ -120,7 +121,7 @@ namespace Quick.OwinMVC.Middleware
                         return;
                     }
                     rep.ETag = serverETag;
-                    stream.Position = 0;
+                    stream2.Position = 0;
                 }
                 //设置MIME类型
                 var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
@@ -129,8 +130,8 @@ namespace Quick.OwinMVC.Middleware
                 rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(resourceExpires));
                 rep.Headers["Cache-Control"] = $"max-age={resourceExpires}";
                 rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-                Output(context, stream);
-            });
+                Output(context, stream2);
+            }, stream);
         }
 
 
