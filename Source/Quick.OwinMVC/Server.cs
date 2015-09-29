@@ -23,6 +23,10 @@ namespace Quick.OwinMVC
         private IPEndPoint endpoint;
         private String url;
         private IWebServer server;
+        /// <summary>
+        /// 默认语言
+        /// </summary>
+        public String Language;
         //WEB服务器转接器
         private String Wrapper;
         //中间件队列
@@ -86,6 +90,9 @@ namespace Quick.OwinMVC
                     break;
                 case nameof(Wrapper):
                     Wrapper = value;
+                    break;
+                case nameof(Language):
+                    Language = value;
                     break;
             }
         }

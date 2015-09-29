@@ -23,6 +23,7 @@ namespace Quick.OwinMVC.Controller
     public static class IOwinContextExtension
     {
         private static readonly String FORMDATA_KEY = $"{typeof(IOwinContextExtension).FullName}.{nameof(FORMDATA_KEY)}";
+        public static readonly String ACCEPT_LANGUAGE_KEY = "Accept-Language";
 
         /// <summary>
         /// 得到Session信息
@@ -34,21 +35,37 @@ namespace Quick.OwinMVC.Controller
             return context.Get<IDictionary<String, Object>>(SessionMiddleware.QUICK_OWINMVC_SESSION_KEY);
         }
 
+        /// <summary>
+        /// 获取语言
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public static String GetLanguage(this IOwinContext context)
         {
             var req = context.Request;
             String language = String.Empty;
             //先尝试从Cookie中读取语言地区
-            language = context.Request.Cookies["Accept-Language"];
+            language = context.Request.Cookies[ACCEPT_LANGUAGE_KEY];
             if (!String.IsNullOrEmpty(language))
                 return language;
             //然后尝试从Header中读取语言地区
-            var acceptLanguage = req.Headers.Get("Accept-Language");
+            var acceptLanguage = req.Headers.Get(ACCEPT_LANGUAGE_KEY);
             if (!String.IsNullOrEmpty(acceptLanguage))
                 language = acceptLanguage.Split(new Char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
             if (String.IsNullOrEmpty(language))
                 language = "zh-CN";
             return language;
+        }
+
+        /// <summary>
+        /// 设置语言
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="language"></param>
+        public static void SetLanguage(this IOwinContext context, String language)
+        {
+            var rep = context.Response;
+            rep.Cookies.Append(ACCEPT_LANGUAGE_KEY, language);
         }
 
         /// <summary>

@@ -16,6 +16,16 @@ namespace Quick.OwinMVC.Localization
         public static String LanguagePathInAssembly { get; set; } = "Language";
 
         private static Dictionary<String, TextManager> textManagerDict = new Dictionary<string, TextManager>();
+
+        /// <summary>
+        /// 获取默认的文本管理器实例(语言为配置项Quick.OwinMVC.Server.Language的值)
+        /// </summary>
+        /// <returns></returns>
+        public static TextManager GetInstance()
+        {
+            return GetInstance(Server.Instance.Language);
+        }
+
         /// <summary>
         /// 获取文本管理器实例
         /// </summary>
