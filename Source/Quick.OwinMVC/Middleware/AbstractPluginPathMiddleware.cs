@@ -73,24 +73,31 @@ namespace Quick.OwinMVC.Middleware
         public void Output(IOwinContext context, Stream stream)
         {
             IOwinResponse rep = context.Response;
-            
 
-            //如果启用压缩
-            if (allowCompress(context.Request))
+            try
             {
-                rep.Headers["Content-Encoding"] = "gzip";
-                var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
-                stream.CopyTo(gzStream);
-                gzStream.Close();
-                gzStream.Dispose();
+                //如果启用压缩
+                if (allowCompress(context.Request))
+                {
+                    rep.Headers["Content-Encoding"] = "gzip";
+                    var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
+                    stream.CopyTo(gzStream);
+                    gzStream.Close();
+                    gzStream.Dispose();
+                }
+                else
+                {
+                    rep.ContentLength = stream.Length;
+                    stream.CopyTo(rep.Body);
+                }
             }
-            else
+            catch { }
+            finally
             {
-                rep.ContentLength = stream.Length;
-                stream.CopyTo(rep.Body);
+                stream.Close();
+                stream.Dispose();
+                stream = null;
             }
-            stream.Close();
-            stream.Dispose();
         }
 
         public void Output(IOwinContext context, Byte[] content)
