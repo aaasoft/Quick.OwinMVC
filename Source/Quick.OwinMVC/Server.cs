@@ -10,6 +10,7 @@ using Quick.OwinMVC.Utils;
 using System.Security.Cryptography.X509Certificates;
 using Quick.OwinMVC.WebServer;
 using Quick.OwinMVC.Hunter;
+using Quick.OwinMVC.Resource;
 
 namespace Quick.OwinMVC
 {
@@ -42,6 +43,12 @@ namespace Quick.OwinMVC
             if (endpoint.Port != defaultPort)
                 url += $":{endpoint.Port}";
             return url;
+        }
+
+        static Server()
+        {
+            //注册resource:前缀URI处理程序
+            WebRequest.RegisterPrefix("embed:", new EmbedWebRequestFactory());
         }
 
         public Server(IDictionary<String, String> properties, Uri url) : this(properties, url.Port, url.Host) { }

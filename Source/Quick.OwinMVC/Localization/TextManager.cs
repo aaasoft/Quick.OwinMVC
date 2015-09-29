@@ -20,11 +20,7 @@ namespace Quick.OwinMVC.Localization
         /// <summary>
         /// 获取默认的文本管理器实例(语言为配置项Quick.OwinMVC.Server.Language的值)
         /// </summary>
-        /// <returns></returns>
-        public static TextManager GetInstance()
-        {
-            return GetInstance(Server.Instance.Language);
-        }
+        public static TextManager Instance { get { return GetInstance(Server.Instance.Language); } }
 
         /// <summary>
         /// 获取文本管理器实例
@@ -90,6 +86,16 @@ namespace Quick.OwinMVC.Localization
         public String GetText(Enum key)
         {
             return GetText(key.ToString(), key.GetType());
+        }
+
+        /// <summary>
+        /// 获取语言文字(带标记)
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public String GetTextWithTag(Enum key)
+        {
+            return $"{GetText(key)}(LanguageKey: {key.GetType().FullName}.{key.ToString()})";
         }
 
         public String GetText(String key, Type type)

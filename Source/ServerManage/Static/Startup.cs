@@ -1,4 +1,5 @@
 ﻿using Quick.OwinMVC;
+using Quick.OwinMVC.Localization;
 using Quick.OwinMVC.Utils;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,13 @@ namespace ServerManage.Static
 {
     public class Startup
     {
+        [TextResource]
+        public enum Texts
+        {
+            [Text("服务器管理器的WEB服务已经开启，地址：{0}")]
+            WEBSERVER_STARTED
+        }
+
         public static void Start()
         {
             IDictionary<String, String> properties = PropertyUtils.LoadFile("Quick.OwinMVC.properties");
@@ -16,7 +24,7 @@ namespace ServerManage.Static
             Server server = new Server(properties, new Uri(httpUrl));
             //启动服务
             server.Start();
-            Console.WriteLine($"ServerManage WebServer is started on {server.GetUrl()}");
+            Console.WriteLine(String.Format(TextManager.Instance.GetTextWithTag(Texts.WEBSERVER_STARTED), server.GetUrl()));
         }
     }
 }
