@@ -12,7 +12,7 @@ namespace Quick.OwinMVC.Localization
     public class TextManager
     {
         public static String LanguageFileExtension { get; set; } = ".txt";
-        public static String LanguageFolder { get; set; } = Path.Combine(Path.GetDirectoryName(typeof(TextManager).Assembly.Location), "Language");
+        public static String LanguageFolder { get; set; } = "Language";
         public static String LanguagePathInAssembly { get; set; } = "Language";
 
         private static Dictionary<String, TextManager> textManagerDict = new Dictionary<string, TextManager>();
@@ -106,7 +106,16 @@ namespace Quick.OwinMVC.Localization
             Dictionary<String, String> languageResourceDict = getLanguageResourceDict(type);
             if (languageResourceDict == null
                 || !languageResourceDict.ContainsKey(key))
-                return String.Format("Language Resource[Type:{0}, Key:{1}] not found!", type.FullName, key);
+                return $"Language Resource[Type:{type.FullName}, Key:{key}] not found!";
+            return languageResourceDict[key];
+        }
+
+        public String GetText(String key, Assembly assembly, String resourcePath)
+        {
+            var languageResourceDict = getLanguageResourceDict(assembly, resourcePath);
+            if (languageResourceDict == null
+                || !languageResourceDict.ContainsKey(key))
+                return null;
             return languageResourceDict[key];
         }
 
@@ -142,14 +151,14 @@ namespace Quick.OwinMVC.Localization
             }
         }
 
-        private Dictionary<String, String> getLanguageResourceDict(Assembly assembly, String resourcePath, params TextAttribute[] textAttributes)
+        private Dictionary<String, String> getLanguageResourceDict(Assembly assembly, String resourcePath)
         {
             String key = String.Format("{0};{1}", assembly.GetName().Name, resourcePath);
             lock (typeLanguageResourceDict)
             {
                 if (typeLanguageResourceDict.ContainsKey(key))
                     return typeLanguageResourceDict[key];
-                Dictionary<String, String> languageResourceDict = new Dictionary<String, string>();
+                Dictionary<String, String> languageResourceDict = new Dictionary<String, String>();
                 typeLanguageResourceDict.Add(key, languageResourceDict);
                 fillLanguageResourceDict(assembly, resourcePath, languageResourceDict);
                 return languageResourceDict;

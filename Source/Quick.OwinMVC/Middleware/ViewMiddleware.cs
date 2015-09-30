@@ -37,7 +37,16 @@ namespace Quick.OwinMVC.Middleware
             String viewName = controller.Service(context, context.Environment);
             if (viewName == null)
                 return;
-            viewName = $"{plugin}:{viewName}";
+            var language = context.GetLanguage();
+            switch (viewName.Split(':').Count())
+            {
+                case 1:
+                    viewName = $"{plugin}:{viewName}:{language}";
+                    break;
+                case 2:
+                    viewName = $"{viewName}:{language}";
+                    break;
+            }            
             //根据视图名称与数据，渲染输出页面
             var outputText = viewRender.Render(viewName, context.Environment);
             var content = encoding.GetBytes(outputText);

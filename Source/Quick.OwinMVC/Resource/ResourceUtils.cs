@@ -16,9 +16,15 @@ namespace Quick.OwinMVC.Resource
         //搜索文件
         internal static String findFilePath(String baseFolder, String fileName)
         {
+            while (fileName.StartsWith("/"))
+                fileName = fileName.Substring(1);
+            fileName = fileName.Replace("/", ".");
+
             String fullFileName = Path.Combine(baseFolder, fileName);
             if (File.Exists(fullFileName))
-                return fullFileName;
+            {
+                return new FileInfo(fullFileName).FullName;
+            }   
 
             String[] nameArray = fileName.Split(new Char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 1; i < nameArray.Length; i++)

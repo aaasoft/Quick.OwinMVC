@@ -13,7 +13,7 @@ namespace Quick.OwinMVC.Resource
         private FileInfo fileInfo;
         private ManifestResourceInfo resourceInfo;
         private String resourceName;
-        private Assembly assembly;
+        public Assembly Assembly { get; private set; }
 
         /// <summary>
         /// 关联的Uri对象
@@ -29,10 +29,7 @@ namespace Quick.OwinMVC.Resource
                 pluginName = ".";
             //得到资源名
             resourceName = uri.LocalPath;
-            while (resourceName.StartsWith("/"))
-                resourceName = resourceName.Substring(1);
-            resourceName = resourceName.Replace("/", ".");
-            
+
             //设置资源搜索目录
             List<String> searchFolderList = new List<string>();
             searchFolderList.Add(Path.Combine(staticFileFolder, pluginName));
@@ -42,6 +39,10 @@ namespace Quick.OwinMVC.Resource
                 searchFolderList.Add(Path.Combine(staticFileFolder, pluginName));
             }
             pluginName = pluginName.ToLower();
+            //获取到程序集
+            if (assemblyMap.ContainsKey(pluginName))
+                Assembly = assemblyMap[pluginName];
+
             //开始在文件系统上搜索资源
             String fullFilePath = null;
             foreach (var searchFolder in searchFolderList)
@@ -55,12 +56,14 @@ namespace Quick.OwinMVC.Resource
             else if (pluginName == ".") { }
             else
             {
-                if (!assemblyMap.ContainsKey(pluginName))
+                if (Assembly == null)
                     return;
-                assembly = assemblyMap[pluginName];
-                String assemblyName = assembly.GetName().Name;
+                String assemblyName = Assembly.GetName().Name;
+                while (resourceName.StartsWith("/"))
+                    resourceName = resourceName.Substring(1);
+                resourceName = resourceName.Replace("/", ".");
                 resourceName = $"{assemblyName}.{resourceName}";
-                resourceInfo = assembly.GetManifestResourceInfo(resourceName);
+                resourceInfo = Assembly.GetManifestResourceInfo(resourceName);
             }
         }
 
@@ -69,7 +72,7 @@ namespace Quick.OwinMVC.Resource
             if (fileInfo != null)
                 return fileInfo.OpenRead();
             if (resourceInfo != null)
-                return assembly.GetManifestResourceStream(resourceName);
+                return Assembly.GetManifestResourceStream(resourceName);
             return null;
         }
 
@@ -115,7 +118,7 @@ namespace Quick.OwinMVC.Resource
                 if (fileInfo != null)
                     return fileInfo.LastWriteTimeUtc;
                 if (resourceInfo != null)
-                    return File.GetLastWriteTimeUtc(assembly.Location);
+                    return File.GetLastWriteTimeUtc(Assembly.Location);
                 return DateTime.MinValue;
             }
         }

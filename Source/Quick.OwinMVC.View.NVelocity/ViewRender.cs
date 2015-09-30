@@ -28,7 +28,7 @@ namespace Quick.OwinMVC.View.NVelocity
         public string Render(string viewName, IDictionary<string, object> viewData)
         {
             //得到模板                
-            Template template = engine.GetTemplate(viewName);
+            Template template = engine.GetTemplate(viewName, "utf-8");
             String content = null;
             using (StringWriter writer = new StringWriter())
             {

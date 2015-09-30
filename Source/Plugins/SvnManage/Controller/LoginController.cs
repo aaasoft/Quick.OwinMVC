@@ -34,8 +34,8 @@ namespace SvnManage.Controller
             {
                 case "GET":
 #if DEBUG
-                    data["account"] = "test";
-                    data["password"] = "test";
+                    //data["account"] = "test";
+                    //data["password"] = "test";
 #endif
                     preperaData(context, data, null);
                     return VIEW_NAME;
