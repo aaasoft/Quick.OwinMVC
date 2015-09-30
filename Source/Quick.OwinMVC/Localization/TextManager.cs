@@ -1,6 +1,7 @@
 ﻿using Quick.OwinMVC.Resource;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -67,6 +68,45 @@ namespace Quick.OwinMVC.Localization
                 languageDict.Add(key, value);
             }
             return languageDict;
+        }
+
+        /// <summary>
+        /// 获取所有可用的语言资源
+        /// </summary>
+        /// <returns></returns>
+        public static string[] GetLanguages()
+        {
+            Collection<String> collection = new Collection<string>();
+
+            //搜索语言目录
+            DirectoryInfo languageFolderDi = new DirectoryInfo(LanguageFolder);
+            if (languageFolderDi.Exists)
+            {
+                foreach (String languageName in languageFolderDi.GetDirectories().Select(t => t.Name))
+                {
+                    if (!collection.Contains(languageName))
+                        collection.Add(languageName);
+                }
+            }
+            ////搜索主题目录
+            //DirectoryInfo viewDi = new DirectoryInfo(Path.Combine(this.Config.ThemeFolder, this.CurrentTheme));
+            //if (viewDi.Exists)
+            //{
+            //    foreach (var assemblyDi in viewDi.GetDirectories())
+            //    {
+            //        System.IO.DirectoryInfo languageDi = new DirectoryInfo(Path.Combine(assemblyDi.FullName, this.Config.LanguagePathInAssembly));
+            //        if (!languageDi.Exists)
+            //            continue;
+            //        foreach (String languageName in languageDi.GetDirectories().Select(t => t.Name))
+            //        {
+            //            if (!collection.Contains(languageName))
+            //                collection.Add(languageName);
+            //        }
+            //    }
+            //}
+            if (!collection.Contains(Server.Instance.Language))
+                collection.Insert(0, Server.Instance.Language);
+            return collection.ToArray();
         }
 
         //类的语言资源字典

@@ -11,6 +11,7 @@ namespace SvnManage.Middleware
     public class LoginMiddleware : OwinMiddleware
     {
         private const String loginPath = "/login";
+        private readonly String[] allowPaths = { loginPath, "/base/api/language" };
         internal const String LOGINED_USER_KEY = "SVN_USER";
         internal const String RETURN_URL_KEY = "returnUrl";
 
@@ -31,7 +32,7 @@ namespace SvnManage.Middleware
             if (sourceRequestPath == null)
                 sourceRequestPath = req.Get<String>("owin.RequestPath");
             //如果是登录页面，则允许访问
-            if (new PathString(sourceRequestPath).Equals(new PathString(loginPath)))
+            if (allowPaths.Contains(sourceRequestPath))
                 return Next.Invoke(context);
             else
             //否则，跳转到登录页面

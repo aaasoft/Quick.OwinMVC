@@ -19,11 +19,13 @@
                 <div id="login-box" class="login-box visible widget-box no-border">
                     <div class="widget-body">
                         <div class="widget-main">
-                            <h4 class="header blue lighter bigger">
-                                <i class="icon-coffee green"></i>
-                                请输入您的信息
-                            </h4>
-
+                            <div class="header blue lighter bigger">
+                                <div>
+                                    <select id="selectLanguage" class="form-control">
+                                        <option value="sys">系统语言</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="space-6"></div>
 
                             <form>
@@ -51,7 +53,7 @@
                                         </button>
                                     </div>
                                     <div class="space-4"></div>
-#if(${login_message})
+                                    #if(${login_message})
                                     <div class="alert alert-danger">
                                         <button type="button" class="close" data-dismiss="alert">
                                             <i class="icon-remove"></i>
@@ -59,7 +61,7 @@
                                         <i class="icon-remove red"></i>
                                         ${login_message}
                                     </div>
-#end
+                                    #end
                                 </fieldset>
                             </form>
                         </div><!-- /widget-main -->
@@ -77,6 +79,45 @@
 <script src="../resource/js/base64.js"></script>
     *#
 <script type="text/javascript">
+    String.prototype.format = function () {
+        var result = this;
+        if (arguments.length == 0)
+            return null;
+        for (var i = 0; i < arguments.length; i++) {
+            var re = new RegExp('\\{' + (i) + '\\}', 'gm');
+            result = result.replace(re, arguments[i]);
+        }
+        return result;
+    };
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=")
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1
+                c_end = document.cookie.indexOf(";", c_start)
+                if (c_end == -1) c_end = document.cookie.length
+                return unescape(document.cookie.substring(c_start, c_end))
+            }
+        }
+        return ""
+    }
+
+    function setCookie(c_name, value, expiredays) {
+        var exdate = new Date()
+        exdate.setDate(exdate.getDate() + expiredays)
+        document.cookie = c_name + "=" + escape(value) +
+        ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
+    }
+
+    function delCookie(name)
+    {
+        var exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        var cval = getCookie(name);
+        if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+    }
+
     function show_box(id) {
         jQuery('.widget-box.visible').removeClass('visible');
         jQuery('#' + id).addClass('visible');
@@ -86,6 +127,28 @@
         $('input').keypress(function (e) {
             if (e.keyCode == 13)
                 login();
+        });
+
+        jQuery.get("${ContextPath}/base/api/language", function (json) {
+            var selectElement = $("#selectLanguage");
+            for (i in json) {
+                var data = json[i];
+                selectElement.append('<option value="{0}">{1}</option>'.format(data.key, data.value));
+            }
+            selectElement.change(function () {
+                var newLanguage = selectElement.val();
+                if (newLanguage == "sys")
+                    delCookie("Accept-Language");
+                else
+                    setCookie("Accept-Language", newLanguage, 365 * 1000);
+                location.reload();
+            });
+            var language = getCookie("Accept-Language");
+            if (language == "")
+                return;
+            //选中的值
+            //$("#selectLanguage").val()
+            selectElement.val(language)
         });
     });
 

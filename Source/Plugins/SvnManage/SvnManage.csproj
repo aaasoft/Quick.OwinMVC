@@ -39,6 +39,7 @@
     <Compile Include="Controller\Error404Controller.cs" />
     <Compile Include="Controller\ErrorController.cs" />
     <Compile Include="Controller\IndexController.cs" />
+    <Compile Include="Controller\LanguageControler.cs" />
     <Compile Include="Controller\LoginController.cs" />
     <Compile Include="Controller\LogoutController.cs" />
     <Compile Include="Controller\Svn\ApiController.cs" />
