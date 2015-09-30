@@ -11,8 +11,14 @@ namespace LanguageResourceMaker.Core.FileHandlers
 {
     public class HtmlFileHandler : AbstractFileHandler
     {
-        //["|>]\s*(?'value'[^>|^"]*?[\u4E00-\u9FA5]+[^>|^"]*?)\s*[<|"]
-        private Regex regex = new Regex("[\"|>]\\s*(?'value'[^>|^\"]*?[\\u4E00-\\u9FA5]+[^>|^\"]*?)\\s*[<|\"]");
+        /*
+        第一段："\s*(?'value'[^>|^<|^\n|^\r|^"]*?[\u4E00-\u9FA5]+?[^>|^<|^\n|^\r|^"]*?)"
+        第二段：'\s*(?'value'[^>|^<|^\n|^\r|^']*?[\u4E00-\u9FA5]+?[^>|^<|^\n|^\r|^']*?)'
+        第三段：>[^\u4E00-\u9FA5]*(?'value'[^>|^<|^\n|^\r]*?[\u4E00-\u9FA5]+?[^>|^<|^\n|^\r]*?)<
+        第四段：^[\s|^#]*(?'value'[^>|^<|^\n|^\r|^#|^"|^'|^/]*?[\u4E00-\u9FA5]+?.*?)$
+        */
+        private Regex regex = new Regex(
+            @"""\s*(?'value'[^>|^<|^\n|^\r|^""]*?[\u4E00-\u9FA5]+?[^>|^<|^\n|^\r|^""]*?)""|'\s*(?'value'[^>|^<|^\n|^\r|^']*?[\u4E00-\u9FA5]+?[^>|^<|^\n|^\r|^']*?)'|>[^\u4E00-\u9FA5]*(?'value'[^>|^<|^\n|^\r]*?[\u4E00-\u9FA5]+?[^>|^<|^\n|^\r]*?)<|^[\s|^#]*(?'value'[^>|^<|^\n|^\r|^#|^""|^'|^/]*?[\u4E00-\u9FA5]+?.*?)$");
         private MainEngineConfig config;
 
         public HtmlFileHandler(MainEngineConfig config)
