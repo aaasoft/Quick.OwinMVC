@@ -56,7 +56,7 @@ namespace SvnManage.Controller
                         },
                         cpu = new
                         {
-                            used = SystemInfoUtils.GetCpuUsage().ToString("N2")
+                            used = SystemInfoUtils.GetCpuUsage()
                         },
                         memory = new
                         {
