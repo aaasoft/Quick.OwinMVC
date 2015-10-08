@@ -109,7 +109,8 @@
     Highcharts.setOptions({
         global: {
             useUTC: false
-        }
+        },
+        colors: ['#FFCC00', '#28AB17', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
     });
 
     var cpuSerialCharts_MaxDataCount = 100;
@@ -144,9 +145,8 @@
         },
         tooltip: {
             formatter: function () {
-                return '<b>' + this.series.name + '</b><br/>' +
-                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
-                    Highcharts.numberFormat(this.y, 2);
+                return this.series.name + ' ' + '<b>' + Highcharts.numberFormat(this.y, 2) + ' %' + '</b>' + '<br/>' +
+                    Highcharts.dateFormat('%H:%M:%S', this.x);
             }
         },
         legend: {
@@ -182,7 +182,7 @@
             text: ''
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.y}</b>'
+            pointFormat: '<b>{point.y} M</b>'
         },
         plotOptions: {
             pie: {
@@ -195,7 +195,7 @@
             }
         },
         series: [{
-            name: "内存(M)",
+            name: "内存",
             colorByPoint: true,
             data: [{
                 name: "已使用",
