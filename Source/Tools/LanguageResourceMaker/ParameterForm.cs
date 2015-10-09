@@ -70,7 +70,6 @@ namespace LanguageResourceMaker
             {
                 InputFolder = txtInputFolder.Text.Trim(),
                 OutputFolder = txtOutputFolder.Text.Trim(),
-                ExtractLanguageResource= cbExtractLanguageResource.Checked,
                 AutoTranslate = cbAutoTranslate.Checked,
                 Translator = translator,
                 PushLogAction = pushLog,

@@ -16,10 +16,6 @@ namespace LanguageResourceMaker.Core
         public Boolean AutoTranslate { get; set; }
         public String[] TranslateTarget { get; set; }
         /// <summary>
-        /// 提取语言资源
-        /// </summary>
-        public Boolean ExtractLanguageResource { get; set; }
-        /// <summary>
         /// 翻译器
         /// </summary>
         public ITranslator Translator { get; set; }

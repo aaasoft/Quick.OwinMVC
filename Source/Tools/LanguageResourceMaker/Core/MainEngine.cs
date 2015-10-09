@@ -70,17 +70,14 @@ namespace LanguageResourceMaker.Core
                 var projectFile = projectFiles[i];
                 DirectoryInfo projectFolder = projectFile.Directory;
                 config.UpdateLogAction(String.Format("正在处理第[{0}/{1}]个项目[{2}]", i + 1, projectFiles.Length, projectFolder.Name));
-                if (config.ExtractLanguageResource)
+                foreach (String searchPattern in fileHandlerDict.Keys)
                 {
-                    foreach (String searchPattern in fileHandlerDict.Keys)
-                    {
-                        IFileHandler fileHandler = fileHandlerDict[searchPattern];
-                        DirectoryInfo fileFolder = new DirectoryInfo(Path.Combine(projectFolder.FullName, fileHandler.GetFolderPath()));
-                        if (!fileFolder.Exists)
-                            continue;
-                        foreach (var viewFile in fileFolder.GetFiles(searchPattern, SearchOption.AllDirectories))
-                            fileHandler.Handle(viewFile, projectFolder);
-                    }
+                    IFileHandler fileHandler = fileHandlerDict[searchPattern];
+                    DirectoryInfo fileFolder = new DirectoryInfo(Path.Combine(projectFolder.FullName, fileHandler.GetFolderPath()));
+                    if (!fileFolder.Exists)
+                        continue;
+                    foreach (var viewFile in fileFolder.GetFiles(searchPattern, SearchOption.AllDirectories))
+                        fileHandler.Handle(viewFile, projectFolder);
                 }
             }
 
@@ -99,7 +96,7 @@ namespace LanguageResourceMaker.Core
                         String languageFileContent = File.ReadAllText(languageFile);
                         Dictionary<Int32, String> languageDict = ResourceUtils.GetLanguageResourceDictionary(languageFileContent);
                         String projectName = new DirectoryInfo(Path.GetDirectoryName(languageFile)).Name;
-                        String newFullFileName = String.Format(abstractLanguageFileName, language);                        
+                        String newFullFileName = String.Format(abstractLanguageFileName, language);
                         Dictionary<String, String> textDict = new Dictionary<string, string>();
                         foreach (Int32 index in languageDict.Keys)
                         {
