@@ -1,5 +1,6 @@
 ﻿using LanguageResourceMaker.Core;
 using LanguageResourceMaker.Translator;
+using LanguageResourceMaker.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,13 +12,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace LanguageResourceMaker
+namespace LanguageResourceMaker.Feature
 {
-    public partial class ParameterForm : Form
+    public partial class ExtractLanguageResourceForm : Form
     {
         private ITranslator translator = null;
 
-        public ParameterForm()
+        public ExtractLanguageResourceForm()
         {
             InitializeComponent();
             translator = new BaiduTranslator();
@@ -33,15 +34,14 @@ namespace LanguageResourceMaker
                 lvi.Tag = language;
             }
 #if DEBUG
-            txtInputFolder.Text = @"E:\GitHub\Quick.OwinMVC\Source";
-            txtOutputFolder.Text = @"D:\Test\LanguageText";
+            txtInputFolder.Text = DebugUtils.GetSourceCodeFolder();
 #endif
-            //MessageBox.Show(translator.Translate("zh-CN", "ja-JP", "你好"));
         }
 
         private void btnSelectInput_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.ShowNewFolderButton = false;
             fbd.Description = "选择输入目录...";
             var ret = fbd.ShowDialog();
             if (ret == System.Windows.Forms.DialogResult.Cancel)
@@ -69,12 +69,23 @@ namespace LanguageResourceMaker
             MainEngineConfig config = new MainEngineConfig()
             {
                 InputFolder = txtInputFolder.Text.Trim(),
-                OutputFolder = txtOutputFolder.Text.Trim(),
                 AutoTranslate = cbAutoTranslate.Checked,
                 Translator = translator,
                 PushLogAction = pushLog,
                 UpdateLogAction = updateLog
             };
+            switch (cbOutputMode.SelectedIndex)
+            {
+                case 0:
+                    config.OutputFolder = config.InputFolder;
+                    break;
+                case 1:
+                    config.OutputFolder = null;
+                    break;
+                case 2:
+                    config.OutputFolder = txtOutputFolder.Text.Trim();
+                    break;
+            }
             if (config.AutoTranslate)
             {
                 List<String> list = new List<string>();
@@ -109,9 +120,14 @@ namespace LanguageResourceMaker
             }));
         }
 
-        private void ParameterForm_FormClosed(object sender, FormClosedEventArgs e)
+        private void cbOutputMode_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Environment.Exit(0);
+            pnlOutputFolder.Visible = cbOutputMode.SelectedIndex == 2;
+        }
+
+        private void ExtractLanguageResourceForm_Load(object sender, EventArgs e)
+        {
+            cbOutputMode.SelectedIndex = 0;
         }
     }
 }

@@ -76,9 +76,6 @@ namespace Quick.MVVM.Utils
                 String value = valueGroup.Value;
                 if (value.EndsWith("\r"))
                     value = value.Substring(0, value.Length - 1);
-                //替换需要转义的字符
-                if (value.Contains("{") && !value.StartsWith("{}"))
-                    value = "{}" + value;
                 if (languageDict.ContainsKey(key))
                     languageDict.Remove(key);
                 languageDict.Add(key, value);

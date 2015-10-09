@@ -1,6 +1,6 @@
-﻿namespace LanguageResourceMaker
+﻿namespace LanguageResourceMaker.Feature
 {
-    partial class ParameterForm
+    partial class ExtractLanguageResourceForm
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -40,10 +40,13 @@
             this.chLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.pnlOutputFolder = new System.Windows.Forms.Panel();
+            this.cbOutputMode = new System.Windows.Forms.ComboBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.pnlOutputFolder.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,23 +84,23 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(6, 42);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(227, 12);
+            this.label2.Size = new System.Drawing.Size(59, 12);
             this.label2.TabIndex = 0;
-            this.label2.Text = "输出目录(如果为空，则输出到项目目录):";
+            this.label2.Text = "输出目录:";
             // 
             // txtOutputFolder
             // 
             this.txtOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOutputFolder.Location = new System.Drawing.Point(6, 57);
+            this.txtOutputFolder.Location = new System.Drawing.Point(3, 2);
             this.txtOutputFolder.Name = "txtOutputFolder";
-            this.txtOutputFolder.Size = new System.Drawing.Size(387, 21);
+            this.txtOutputFolder.Size = new System.Drawing.Size(181, 21);
             this.txtOutputFolder.TabIndex = 3;
             // 
             // btnSelectOutput
             // 
             this.btnSelectOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectOutput.Location = new System.Drawing.Point(399, 55);
+            this.btnSelectOutput.Location = new System.Drawing.Point(190, 0);
             this.btnSelectOutput.Name = "btnSelectOutput";
             this.btnSelectOutput.Size = new System.Drawing.Size(41, 23);
             this.btnSelectOutput.TabIndex = 4;
@@ -161,14 +164,14 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.pnlOutputFolder);
+            this.tabPage1.Controls.Add(this.cbOutputMode);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.lvLanguages);
             this.tabPage1.Controls.Add(this.txtInputFolder);
             this.tabPage1.Controls.Add(this.btnStart);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.cbAutoTranslate);
-            this.tabPage1.Controls.Add(this.txtOutputFolder);
-            this.tabPage1.Controls.Add(this.btnSelectOutput);
             this.tabPage1.Controls.Add(this.btnSelectInput);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -177,6 +180,32 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "配置";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // pnlOutputFolder
+            // 
+            this.pnlOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlOutputFolder.Controls.Add(this.txtOutputFolder);
+            this.pnlOutputFolder.Controls.Add(this.btnSelectOutput);
+            this.pnlOutputFolder.Location = new System.Drawing.Point(209, 56);
+            this.pnlOutputFolder.Name = "pnlOutputFolder";
+            this.pnlOutputFolder.Size = new System.Drawing.Size(231, 24);
+            this.pnlOutputFolder.TabIndex = 1002;
+            this.pnlOutputFolder.Visible = false;
+            // 
+            // cbOutputMode
+            // 
+            this.cbOutputMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbOutputMode.FormattingEnabled = true;
+            this.cbOutputMode.Items.AddRange(new object[] {
+            "输入目录",
+            "项目目录",
+            "自定义"});
+            this.cbOutputMode.Location = new System.Drawing.Point(8, 58);
+            this.cbOutputMode.Name = "cbOutputMode";
+            this.cbOutputMode.Size = new System.Drawing.Size(195, 20);
+            this.cbOutputMode.TabIndex = 1001;
+            this.cbOutputMode.SelectedIndexChanged += new System.EventHandler(this.cbOutputMode_SelectedIndexChanged);
             // 
             // tabPage2
             // 
@@ -200,19 +229,21 @@
             this.txtLog.Size = new System.Drawing.Size(440, 362);
             this.txtLog.TabIndex = 0;
             // 
-            // ParameterForm
+            // ExtractLanguageResourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(454, 394);
             this.Controls.Add(this.tabControl1);
-            this.Name = "ParameterForm";
+            this.Name = "ExtractLanguageResourceForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "语言资源生成器";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ParameterForm_FormClosed);
+            this.Text = "提取语言资源";
+            this.Load += new System.EventHandler(this.ExtractLanguageResourceForm_Load);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.pnlOutputFolder.ResumeLayout(false);
+            this.pnlOutputFolder.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
@@ -235,6 +266,8 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.ComboBox cbOutputMode;
+        private System.Windows.Forms.Panel pnlOutputFolder;
     }
 }
 

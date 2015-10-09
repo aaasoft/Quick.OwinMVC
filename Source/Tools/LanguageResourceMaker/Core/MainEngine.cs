@@ -36,7 +36,6 @@ namespace LanguageResourceMaker.Core
         private void outputLanguageFile(String outputFilePath, DirectoryInfo projectFolder, Dictionary<String, String> textDict, String language)
         {
             //输出到语言文件
-
             String abstractOutputFolder = null;
             if (String.IsNullOrEmpty(config.OutputFolder))
             {

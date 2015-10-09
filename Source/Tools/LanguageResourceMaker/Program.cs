@@ -15,7 +15,7 @@ namespace LanguageResourceMaker
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ParameterForm());
+            Application.Run(new MainForm());
         }
     }
 }
