@@ -126,6 +126,7 @@ namespace LanguageResourceMaker.Core
                 }
             }
             config.PushLogAction("处理完成");
+            config.OnFinishAction();
         }
     }
 }

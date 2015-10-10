@@ -68,7 +68,7 @@
             this.btnAutoTranslateLanguageDict.Name = "btnAutoTranslateLanguageDict";
             this.btnAutoTranslateLanguageDict.Size = new System.Drawing.Size(130, 23);
             this.btnAutoTranslateLanguageDict.TabIndex = 102;
-            this.btnAutoTranslateLanguageDict.Text = "机翻语言字典";
+            this.btnAutoTranslateLanguageDict.Text = "机翻语言字典..";
             this.btnAutoTranslateLanguageDict.UseVisualStyleBackColor = true;
             this.btnAutoTranslateLanguageDict.Click += new System.EventHandler(this.btnAutoTranslateLanguageDict_Click);
             // 

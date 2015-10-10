@@ -28,46 +28,51 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnStart = new System.Windows.Forms.Button();
             this.lblLog = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // btnStart
-            // 
-            this.btnStart.Location = new System.Drawing.Point(12, 5);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 23);
-            this.btnStart.TabIndex = 1000;
-            this.btnStart.Text = "开始";
-            this.btnStart.UseVisualStyleBackColor = true;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // lblLog
             // 
-            this.lblLog.Location = new System.Drawing.Point(93, 5);
+            this.lblLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblLog.Location = new System.Drawing.Point(0, 0);
             this.lblLog.Name = "lblLog";
-            this.lblLog.Size = new System.Drawing.Size(221, 23);
+            this.lblLog.Size = new System.Drawing.Size(324, 88);
             this.lblLog.TabIndex = 1001;
             this.lblLog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.lblLog);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(326, 90);
+            this.panel1.TabIndex = 1003;
             // 
             // ExtractLanguageResourceForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(326, 35);
-            this.Controls.Add(this.lblLog);
-            this.Controls.Add(this.btnStart);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.ClientSize = new System.Drawing.Size(326, 90);
+            this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ExtractLanguageResourceForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "提取语言资源";
+            this.TopMost = true;
+            this.Load += new System.EventHandler(this.ExtractLanguageResourceForm_Load);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Label lblLog;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

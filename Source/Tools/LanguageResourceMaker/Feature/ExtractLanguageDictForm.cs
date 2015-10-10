@@ -20,11 +20,8 @@ namespace LanguageResourceMaker.Feature
             InitializeComponent();
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
+        private void ExtractLanguageDictForm_Load(object sender, EventArgs e)
         {
-            this.Enabled = false;
-            Application.DoEvents();
-
             var languageDi = new DirectoryInfo(inputFolder);
             var dirs = languageDi.GetDirectories();
             for (var i = 0; i < dirs.Length; i++)
@@ -55,8 +52,9 @@ namespace LanguageResourceMaker.Feature
                     continue;
                 File.WriteAllLines(Path.Combine(languageDi.FullName, subLanguageDi.Name + ".dict.txt"), array);
             }
-            MessageBox.Show("提取完成");
-            this.Enabled = true;
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }

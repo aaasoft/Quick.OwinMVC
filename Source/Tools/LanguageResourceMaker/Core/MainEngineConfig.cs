@@ -27,5 +27,9 @@ namespace LanguageResourceMaker.Core
         /// 更新最后一条日志的Action
         /// </summary>
         public Action<String> UpdateLogAction { get; set; }
+        /// <summary>
+        /// 完成后的Action
+        /// </summary>
+        public Action OnFinishAction { get; set; }
     }
 }

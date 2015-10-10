@@ -90,19 +90,25 @@ namespace LanguageResourceMaker
         #region 功能按钮区
         private void btnExtractLanguageResource_Click(object sender, EventArgs e)
         {
-            new ExtractLanguageResourceForm(InputFolder).ShowDialog();
+            var dr = new ExtractLanguageResourceForm(InputFolder).ShowDialog();
+            if (dr == DialogResult.OK)
+                MessageBox.Show("提取语言资源完成！", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             onInputFolderChanged();
         }
 
         private void btnExtractLanguageDict_Click(object sender, EventArgs e)
         {
-            new ExtractLanguageDictForm(LanguageFolder).ShowDialog();
+            var dr = new ExtractLanguageDictForm(LanguageFolder).ShowDialog();
+            if (dr == DialogResult.OK)
+                MessageBox.Show("提取语言字典完成！", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             onInputFolderChanged();
         }
 
         private void btnAutoTranslateLanguageDict_Click(object sender, EventArgs e)
         {
-            new AutoTranslateLanguageDictForm(LanguageFolder).ShowDialog();
+            var dr = new AutoTranslateLanguageDictForm(LanguageFolder).ShowDialog();
+            if (dr == DialogResult.OK)
+                MessageBox.Show("机器翻译完成！", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             onInputFolderChanged();
         }
 

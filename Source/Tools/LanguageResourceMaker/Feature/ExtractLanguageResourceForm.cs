@@ -24,20 +24,6 @@ namespace LanguageResourceMaker.Feature
             InitializeComponent();
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            MainEngineConfig config = new MainEngineConfig()
-            {
-                InputFolder = inputFolder,
-                OutputFolder = inputFolder,
-                AutoTranslate = false,
-                PushLogAction = pushLog,
-                UpdateLogAction = updateLog
-            };
-            MainEngine engine = new MainEngine(config);
-            engine.Start();
-        }
-
         private void pushLog(String msg)
         {
             this.BeginInvoke(new Action(() =>
@@ -52,6 +38,30 @@ namespace LanguageResourceMaker.Feature
             {
                 lblLog.Text = msg;
             }));
+        }
+
+        private void onMainEngineFinish()
+        {
+            this.BeginInvoke(new Action(() =>
+            {
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }));
+        }
+
+        private void ExtractLanguageResourceForm_Load(object sender, EventArgs e)
+        {
+            MainEngineConfig config = new MainEngineConfig()
+            {
+                InputFolder = inputFolder,
+                OutputFolder = inputFolder,
+                AutoTranslate = false,
+                PushLogAction = pushLog,
+                UpdateLogAction = updateLog,
+                OnFinishAction = onMainEngineFinish
+            };
+            MainEngine engine = new MainEngine(config);
+            engine.Start();
         }
     }
 }

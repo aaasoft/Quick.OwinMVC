@@ -36,7 +36,7 @@ namespace LanguageResourceMaker.Feature
             }
             cbTranslator.SelectedIndex = 0;
         }
-        
+
         private void cbTranslator_SelectedIndexChanged(object sender, EventArgs e)
         {
             translator = (ITranslator)cbTranslator.SelectedItem;
@@ -110,8 +110,9 @@ namespace LanguageResourceMaker.Feature
                 }
                 File.WriteAllLines(String.Format(languageDictFileFormat, toLangauge), desWords);
             }
-            MessageBox.Show("翻译完成！");
             this.Enabled = true;
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
     }
 }
