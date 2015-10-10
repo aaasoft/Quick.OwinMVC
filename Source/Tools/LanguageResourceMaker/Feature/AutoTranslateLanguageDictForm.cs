@@ -85,7 +85,9 @@ namespace LanguageResourceMaker.Feature
                     }
                     if (desWord == null)
                     {
-                        MessageBox.Show("重试3次，仍然翻译失败！");
+                        pbLevel1.Value = 0;
+                        pbLevel2.Value = 0;
+                        MessageBox.Show("重试3次，仍然翻译失败！请确保网络连接正常后再试。");
                         this.Enabled = true;
                         return;
                     }
@@ -95,7 +97,7 @@ namespace LanguageResourceMaker.Feature
                 }
                 File.WriteAllLines(String.Format(languageDictFileFormat, toLangauge), desWords);
             }
-            MessageBox.Show("完成！");
+            MessageBox.Show("翻译完成！");
             this.Enabled = true;
         }
     }

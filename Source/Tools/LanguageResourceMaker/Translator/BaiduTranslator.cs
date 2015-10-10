@@ -85,13 +85,17 @@ it-IT => it
 
         public string Translate(string from, string to, string source)
         {
-            String currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], source);
-            WebClient webClient = new WebClient();
-            String ret = webClient.DownloadString(currentUrl);
-            RootClass obj = Newtonsoft.Json.JsonConvert.DeserializeObject<RootClass>(ret);
-            if (obj == null || obj.trans_result == null || obj.trans_result.data == null)
-                return null;
-            return obj.trans_result.data[0].dst;
+            try
+            {
+                String currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], source);
+                WebClient webClient = new WebClient();
+                String ret = webClient.DownloadString(currentUrl);
+                RootClass obj = Newtonsoft.Json.JsonConvert.DeserializeObject<RootClass>(ret);
+                if (obj == null || obj.trans_result == null || obj.trans_result.data == null)
+                    return null;
+                return obj.trans_result.data[0].dst;
+            }
+            catch { return null; }
         }
     }
 }

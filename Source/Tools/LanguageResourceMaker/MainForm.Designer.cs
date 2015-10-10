@@ -38,6 +38,7 @@
             this.lblShowInputFolder = new System.Windows.Forms.Label();
             this.lblShowLanguageFolder = new System.Windows.Forms.Label();
             this.lblShowLanguageDict = new System.Windows.Forms.Label();
+            this.btnDeleteLanguageFolder = new System.Windows.Forms.Button();
             this.pnlInputFolder.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +47,7 @@
             this.btnExtractLanguageResource.Location = new System.Drawing.Point(336, 55);
             this.btnExtractLanguageResource.Name = "btnExtractLanguageResource";
             this.btnExtractLanguageResource.Size = new System.Drawing.Size(130, 23);
-            this.btnExtractLanguageResource.TabIndex = 0;
+            this.btnExtractLanguageResource.TabIndex = 100;
             this.btnExtractLanguageResource.Text = "提取语言资源";
             this.btnExtractLanguageResource.UseVisualStyleBackColor = true;
             this.btnExtractLanguageResource.Click += new System.EventHandler(this.btnExtractLanguageResource_Click);
@@ -56,7 +57,7 @@
             this.btnExtractLanguageDict.Location = new System.Drawing.Point(336, 130);
             this.btnExtractLanguageDict.Name = "btnExtractLanguageDict";
             this.btnExtractLanguageDict.Size = new System.Drawing.Size(130, 23);
-            this.btnExtractLanguageDict.TabIndex = 1;
+            this.btnExtractLanguageDict.TabIndex = 101;
             this.btnExtractLanguageDict.Text = "提取语言字典";
             this.btnExtractLanguageDict.UseVisualStyleBackColor = true;
             this.btnExtractLanguageDict.Click += new System.EventHandler(this.btnExtractLanguageDict_Click);
@@ -66,7 +67,7 @@
             this.btnAutoTranslateLanguageDict.Location = new System.Drawing.Point(336, 260);
             this.btnAutoTranslateLanguageDict.Name = "btnAutoTranslateLanguageDict";
             this.btnAutoTranslateLanguageDict.Size = new System.Drawing.Size(130, 23);
-            this.btnAutoTranslateLanguageDict.TabIndex = 2;
+            this.btnAutoTranslateLanguageDict.TabIndex = 102;
             this.btnAutoTranslateLanguageDict.Text = "机翻语言字典";
             this.btnAutoTranslateLanguageDict.UseVisualStyleBackColor = true;
             this.btnAutoTranslateLanguageDict.Click += new System.EventHandler(this.btnAutoTranslateLanguageDict_Click);
@@ -78,7 +79,8 @@
             this.txtInputFolder.Location = new System.Drawing.Point(1, 2);
             this.txtInputFolder.Name = "txtInputFolder";
             this.txtInputFolder.Size = new System.Drawing.Size(266, 21);
-            this.txtInputFolder.TabIndex = 3;
+            this.txtInputFolder.TabIndex = 1;
+            this.txtInputFolder.TextChanged += new System.EventHandler(this.txtInputFolder_TextChanged);
             // 
             // btnSelectInput
             // 
@@ -86,7 +88,7 @@
             this.btnSelectInput.Location = new System.Drawing.Point(273, 0);
             this.btnSelectInput.Name = "btnSelectInput";
             this.btnSelectInput.Size = new System.Drawing.Size(41, 23);
-            this.btnSelectInput.TabIndex = 4;
+            this.btnSelectInput.TabIndex = 2;
             this.btnSelectInput.Text = "...";
             this.btnSelectInput.UseVisualStyleBackColor = true;
             this.btnSelectInput.Click += new System.EventHandler(this.btnSelectInput_Click);
@@ -101,7 +103,7 @@
             this.cbInputMode.Location = new System.Drawing.Point(336, 10);
             this.cbInputMode.Name = "cbInputMode";
             this.cbInputMode.Size = new System.Drawing.Size(130, 20);
-            this.cbInputMode.TabIndex = 1002;
+            this.cbInputMode.TabIndex = 0;
             this.cbInputMode.SelectedIndexChanged += new System.EventHandler(this.cbInputMode_SelectedIndexChanged);
             // 
             // pnlInputFolder
@@ -111,7 +113,7 @@
             this.pnlInputFolder.Location = new System.Drawing.Point(152, 31);
             this.pnlInputFolder.Name = "pnlInputFolder";
             this.pnlInputFolder.Size = new System.Drawing.Size(314, 24);
-            this.pnlInputFolder.TabIndex = 1003;
+            this.pnlInputFolder.TabIndex = 1;
             // 
             // lblShowInputFolder
             // 
@@ -143,6 +145,16 @@
             this.lblShowLanguageDict.TabIndex = 1006;
             this.lblShowLanguageDict.Click += new System.EventHandler(this.lblShowLanguageDict_Click);
             // 
+            // btnDeleteLanguageFolder
+            // 
+            this.btnDeleteLanguageFolder.Location = new System.Drawing.Point(336, 327);
+            this.btnDeleteLanguageFolder.Name = "btnDeleteLanguageFolder";
+            this.btnDeleteLanguageFolder.Size = new System.Drawing.Size(130, 23);
+            this.btnDeleteLanguageFolder.TabIndex = 1007;
+            this.btnDeleteLanguageFolder.Text = "删除语言目录";
+            this.btnDeleteLanguageFolder.UseVisualStyleBackColor = true;
+            this.btnDeleteLanguageFolder.Click += new System.EventHandler(this.btnDeleteLanguageFolder_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -150,6 +162,7 @@
             this.BackgroundImage = global::LanguageResourceMaker.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(484, 454);
+            this.Controls.Add(this.btnDeleteLanguageFolder);
             this.Controls.Add(this.lblShowLanguageDict);
             this.Controls.Add(this.lblShowLanguageFolder);
             this.Controls.Add(this.lblShowInputFolder);
@@ -182,5 +195,6 @@
         private System.Windows.Forms.Label lblShowInputFolder;
         private System.Windows.Forms.Label lblShowLanguageFolder;
         private System.Windows.Forms.Label lblShowLanguageDict;
+        private System.Windows.Forms.Button btnDeleteLanguageFolder;
     }
 }
