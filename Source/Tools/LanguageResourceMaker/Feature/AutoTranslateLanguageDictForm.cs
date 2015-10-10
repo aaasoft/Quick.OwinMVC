@@ -47,14 +47,6 @@ namespace LanguageResourceMaker.Feature
 
             String currentLanguage = LanguageUtils.GetCurrentLanguage();
 
-            /*
-            var languageResourceFolder = Path.Combine(inputFolder, currentLanguage);
-            if (!Directory.Exists(languageResourceFolder))
-            {
-                MessageBox.Show($"语言资源目录[{currentLanguage}]不存在！");
-                return;
-            }
-            */
             var languageDictFileFormat = Path.Combine(inputFolder, "{0}.dict.txt");
 
             var languageDictFile = String.Format(languageDictFileFormat, currentLanguage);
@@ -81,7 +73,8 @@ namespace LanguageResourceMaker.Feature
                 {
                     var srcWord = srcWords[j];
                     var desWord = (String)null;
-                    while (true)
+                    //最多重试三次
+                    for (var retry = 0; retry < 3; retry++)
                     {
                         desWord = translator.Translate(currentLanguage, toLangauge, srcWord);
                         //如果翻译失败，则休息5秒
@@ -89,6 +82,12 @@ namespace LanguageResourceMaker.Feature
                             Thread.Sleep(5 * 1000);
                         else
                             break;
+                    }
+                    if (desWord == null)
+                    {
+                        MessageBox.Show("重试3次，仍然翻译失败！");
+                        this.Enabled = true;
+                        return;
                     }
                     desWords[j] = desWord;
                     pbLevel1.Value = (j + 1) * 100 / srcWords.Length;
