@@ -13,33 +13,30 @@ namespace LanguageResourceMaker.Feature
 {
     public partial class ExtractLanguageDictForm : Form
     {
-        public ExtractLanguageDictForm()
+        private string inputFolder;
+        public ExtractLanguageDictForm(string inputFolder)
         {
+            this.inputFolder = inputFolder;
             InitializeComponent();
-#if DEBUG
-            txtInputFolder.Text = Path.Combine(DebugUtils.GetSourceCodeFolder(), "Language");
-#endif
-        }
-
-        private void btnSelectInput_Click(object sender, EventArgs e)
-        {
-            FolderBrowserDialog fbd = new FolderBrowserDialog();
-            fbd.ShowNewFolderButton = false;
-            fbd.Description = "选择语言目录...";
-            var ret = fbd.ShowDialog();
-            if (ret == System.Windows.Forms.DialogResult.Cancel)
-                return;
-            txtInputFolder.Text = fbd.SelectedPath;
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            var languageDi = new DirectoryInfo(txtInputFolder.Text.Trim());
-            foreach (var subLanguageDi in languageDi.GetDirectories())
+            this.Enabled = false;
+            Application.DoEvents();
+
+            var languageDi = new DirectoryInfo(inputFolder);
+            var dirs = languageDi.GetDirectories();
+            for (var i = 0; i < dirs.Length; i++)
             {
+                pbLevel2.Value = (i + 1) * 100 / dirs.Length;
+
+                var subLanguageDi = dirs[i];
                 HashSet<String> languageHashSet = new HashSet<string>();
-                foreach (var languageFile in subLanguageDi.GetFiles("*.txt", SearchOption.AllDirectories))
+                var files = subLanguageDi.GetFiles("*.txt", SearchOption.AllDirectories);
+                for (var j = 0; j < files.Length; j++)
                 {
+                    var languageFile = files[j];
                     foreach (var line in File.ReadAllLines(languageFile.FullName))
                     {
                         var index = line.IndexOf("=");
@@ -50,13 +47,16 @@ namespace LanguageResourceMaker.Feature
                             continue;
                         languageHashSet.Add(value);
                     }
+                    pbLevel1.Value = (j + 1) * 100 / files.Length;
+                    Application.DoEvents();
                 }
                 var array = languageHashSet.OrderBy(t => t).ToArray();
                 if (array.Length == 0)
                     continue;
-                File.WriteAllLines(Path.Combine(languageDi.FullName, subLanguageDi.Name + ".dict"), array);
+                File.WriteAllLines(Path.Combine(languageDi.FullName, subLanguageDi.Name + ".dict.txt"), array);
             }
             MessageBox.Show("提取完成");
+            this.Enabled = true;
         }
     }
 }

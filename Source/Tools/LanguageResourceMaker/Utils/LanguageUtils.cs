@@ -7,6 +7,11 @@ namespace LanguageResourceMaker.Utils
 {
     public class LanguageUtils
     {
+        public static String GetCurrentLanguage()
+        {
+            return System.Threading.Thread.CurrentThread.CurrentCulture.Name;
+        }
+
         public static String GetToWriteLanguageText(Dictionary<String, String> textDict)
         {
             StringBuilder sb = new StringBuilder();
