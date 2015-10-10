@@ -23,11 +23,24 @@ namespace LanguageResourceMaker.Feature
         {
             this.inputFolder = inputFolder;
             InitializeComponent();
-            translator = new BaiduTranslator();
-        }
 
-        private void AutoTranslateLanguageDictForm_Load(object sender, EventArgs e)
+            var translatorTypes = this.GetType().Assembly.GetTypes().Where(
+                t => t.IsPublic
+                && t.IsClass
+                && typeof(ITranslator).IsAssignableFrom(t));
+
+            cbTranslator.DisplayMember = nameof(ITranslator.Name);
+            foreach (var translatorType in translatorTypes)
+            {
+                cbTranslator.Items.Add(Activator.CreateInstance(translatorType));
+            }
+            cbTranslator.SelectedIndex = 0;
+        }
+        
+        private void cbTranslator_SelectedIndexChanged(object sender, EventArgs e)
         {
+            translator = (ITranslator)cbTranslator.SelectedItem;
+            lvLanguages.Items.Clear();
             String currentLanguage = LanguageUtils.GetCurrentLanguage();
             foreach (String language in translator.GetSupportLanguages())
             {

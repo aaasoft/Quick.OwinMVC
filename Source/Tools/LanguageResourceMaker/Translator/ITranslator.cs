@@ -7,6 +7,7 @@ namespace LanguageResourceMaker.Translator
 {
     public interface ITranslator
     {
+        String Name { get; }
         /// <summary>
         /// 获取支持的语言列表
         /// </summary>

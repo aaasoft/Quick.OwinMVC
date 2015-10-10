@@ -9,6 +9,8 @@ namespace LanguageResourceMaker.Translator
 {
     public class BaiduTranslator : ITranslator
     {
+        public string Name { get { return "百度翻译"; } }
+
         private const String TRANSLATE_URL = "http://fanyi.baidu.com/v2transapi?from={0}&to={1}&transtype=trans&query={2}";
         /*
             'auto' => '自动检测',
@@ -46,6 +48,8 @@ el-GR => el
 it-IT => it
             ";
         private Dictionary<String, String> languageMapDict = new Dictionary<string, string>();
+        
+
         public BaiduTranslator()
         {
             //(?'key'.+?)\s*=>\s*(?'value'.+)

@@ -33,6 +33,8 @@
             this.btnStart = new System.Windows.Forms.Button();
             this.pbLevel1 = new System.Windows.Forms.ProgressBar();
             this.pbLevel2 = new System.Windows.Forms.ProgressBar();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cbTranslator = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // lvLanguages
@@ -43,9 +45,9 @@
             this.lvLanguages.CheckBoxes = true;
             this.lvLanguages.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chLanguage});
-            this.lvLanguages.Location = new System.Drawing.Point(12, 12);
+            this.lvLanguages.Location = new System.Drawing.Point(12, 32);
             this.lvLanguages.Name = "lvLanguages";
-            this.lvLanguages.Size = new System.Drawing.Size(431, 364);
+            this.lvLanguages.Size = new System.Drawing.Size(431, 344);
             this.lvLanguages.TabIndex = 8;
             this.lvLanguages.UseCompatibleStateImageBehavior = false;
             this.lvLanguages.View = System.Windows.Forms.View.Details;
@@ -79,11 +81,32 @@
             this.pbLevel2.Size = new System.Drawing.Size(153, 23);
             this.pbLevel2.TabIndex = 10;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(53, 12);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "翻译器：";
+            // 
+            // cbTranslator
+            // 
+            this.cbTranslator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTranslator.FormattingEnabled = true;
+            this.cbTranslator.Location = new System.Drawing.Point(71, 6);
+            this.cbTranslator.Name = "cbTranslator";
+            this.cbTranslator.Size = new System.Drawing.Size(372, 20);
+            this.cbTranslator.TabIndex = 12;
+            this.cbTranslator.SelectedIndexChanged += new System.EventHandler(this.cbTranslator_SelectedIndexChanged);
+            // 
             // AutoTranslateLanguageDictForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(455, 417);
+            this.Controls.Add(this.cbTranslator);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.pbLevel2);
             this.Controls.Add(this.pbLevel1);
             this.Controls.Add(this.btnStart);
@@ -92,8 +115,8 @@
             this.Name = "AutoTranslateLanguageDictForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "机翻语言字典";
-            this.Load += new System.EventHandler(this.AutoTranslateLanguageDictForm_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -104,5 +127,7 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.ProgressBar pbLevel1;
         private System.Windows.Forms.ProgressBar pbLevel2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox cbTranslator;
     }
 }

@@ -108,6 +108,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Translator\BaiduTranslator.cs" />
+    <Compile Include="Translator\BingTranslator.cs" />
     <Compile Include="Translator\ITranslator.cs" />
     <Compile Include="Utils\DebugUtils.cs" />
     <Compile Include="Utils\LanguageUtils.cs" />

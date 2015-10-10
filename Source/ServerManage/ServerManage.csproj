@@ -59,8 +59,5 @@
       <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Language\en-US\Static.Startup+Texts.txt" />
-  </ItemGroup>
   <Import Project="$(SolutionDir)Setting\Main.setting" />
 </Project>
