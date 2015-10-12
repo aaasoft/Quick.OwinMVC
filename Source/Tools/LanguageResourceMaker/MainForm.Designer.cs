@@ -39,6 +39,9 @@
             this.lblShowLanguageFolder = new System.Windows.Forms.Label();
             this.lblShowLanguageDict = new System.Windows.Forms.Label();
             this.btnDeleteLanguageFolder = new System.Windows.Forms.Button();
+            this.btnImportLanguageDict = new System.Windows.Forms.Button();
+            this.btnGenerateLanguageResource = new System.Windows.Forms.Button();
+            this.lblShowLanguageFolder2 = new System.Windows.Forms.Label();
             this.pnlInputFolder.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,7 +67,7 @@
             // 
             // btnAutoTranslateLanguageDict
             // 
-            this.btnAutoTranslateLanguageDict.Location = new System.Drawing.Point(336, 260);
+            this.btnAutoTranslateLanguageDict.Location = new System.Drawing.Point(336, 250);
             this.btnAutoTranslateLanguageDict.Name = "btnAutoTranslateLanguageDict";
             this.btnAutoTranslateLanguageDict.Size = new System.Drawing.Size(130, 23);
             this.btnAutoTranslateLanguageDict.TabIndex = 102;
@@ -147,13 +150,43 @@
             // 
             // btnDeleteLanguageFolder
             // 
-            this.btnDeleteLanguageFolder.Location = new System.Drawing.Point(336, 327);
+            this.btnDeleteLanguageFolder.Location = new System.Drawing.Point(336, 403);
             this.btnDeleteLanguageFolder.Name = "btnDeleteLanguageFolder";
             this.btnDeleteLanguageFolder.Size = new System.Drawing.Size(130, 23);
             this.btnDeleteLanguageFolder.TabIndex = 1007;
             this.btnDeleteLanguageFolder.Text = "删除语言目录";
             this.btnDeleteLanguageFolder.UseVisualStyleBackColor = true;
             this.btnDeleteLanguageFolder.Click += new System.EventHandler(this.btnDeleteLanguageFolder_Click);
+            // 
+            // btnImportLanguageDict
+            // 
+            this.btnImportLanguageDict.Location = new System.Drawing.Point(336, 279);
+            this.btnImportLanguageDict.Name = "btnImportLanguageDict";
+            this.btnImportLanguageDict.Size = new System.Drawing.Size(130, 23);
+            this.btnImportLanguageDict.TabIndex = 103;
+            this.btnImportLanguageDict.Text = "导入翻译结果..";
+            this.btnImportLanguageDict.UseVisualStyleBackColor = true;
+            this.btnImportLanguageDict.Click += new System.EventHandler(this.btnImportLanguageDict_Click);
+            // 
+            // btnGenerateLanguageResource
+            // 
+            this.btnGenerateLanguageResource.Location = new System.Drawing.Point(336, 356);
+            this.btnGenerateLanguageResource.Name = "btnGenerateLanguageResource";
+            this.btnGenerateLanguageResource.Size = new System.Drawing.Size(130, 23);
+            this.btnGenerateLanguageResource.TabIndex = 104;
+            this.btnGenerateLanguageResource.Text = "生成语言资源";
+            this.btnGenerateLanguageResource.UseVisualStyleBackColor = true;
+            this.btnGenerateLanguageResource.Click += new System.EventHandler(this.btnGenerateLanguageResource_Click);
+            // 
+            // lblShowLanguageFolder2
+            // 
+            this.lblShowLanguageFolder2.BackColor = System.Drawing.Color.Transparent;
+            this.lblShowLanguageFolder2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.lblShowLanguageFolder2.Location = new System.Drawing.Point(2, 387);
+            this.lblShowLanguageFolder2.Name = "lblShowLanguageFolder2";
+            this.lblShowLanguageFolder2.Size = new System.Drawing.Size(177, 35);
+            this.lblShowLanguageFolder2.TabIndex = 1008;
+            this.lblShowLanguageFolder2.Click += new System.EventHandler(this.lblShowLanguageFolder_Click);
             // 
             // MainForm
             // 
@@ -162,6 +195,9 @@
             this.BackgroundImage = global::LanguageResourceMaker.Properties.Resources.background;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.ClientSize = new System.Drawing.Size(484, 454);
+            this.Controls.Add(this.lblShowLanguageFolder2);
+            this.Controls.Add(this.btnGenerateLanguageResource);
+            this.Controls.Add(this.btnImportLanguageDict);
             this.Controls.Add(this.btnDeleteLanguageFolder);
             this.Controls.Add(this.lblShowLanguageDict);
             this.Controls.Add(this.lblShowLanguageFolder);
@@ -196,5 +232,8 @@
         private System.Windows.Forms.Label lblShowLanguageFolder;
         private System.Windows.Forms.Label lblShowLanguageDict;
         private System.Windows.Forms.Button btnDeleteLanguageFolder;
+        private System.Windows.Forms.Button btnImportLanguageDict;
+        private System.Windows.Forms.Button btnGenerateLanguageResource;
+        private System.Windows.Forms.Label lblShowLanguageFolder2;
     }
 }

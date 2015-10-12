@@ -93,6 +93,12 @@
     <Compile Include="Feature\ExtractLanguageDictForm.Designer.cs">
       <DependentUpon>ExtractLanguageDictForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\ImportLanguageDictForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\ImportLanguageDictForm.Designer.cs">
+      <DependentUpon>ImportLanguageDictForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +124,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\ExtractLanguageDictForm.resx">
       <DependentUpon>ExtractLanguageDictForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\ImportLanguageDictForm.resx">
+      <DependentUpon>ImportLanguageDictForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

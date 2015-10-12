@@ -59,7 +59,9 @@ namespace LanguageResourceMaker
             btnExtractLanguageResource.Enabled = false;
             btnExtractLanguageDict.Enabled = false;
             btnAutoTranslateLanguageDict.Enabled = false;
+            btnImportLanguageDict.Enabled = false;
             btnDeleteLanguageFolder.Enabled = false;
+            btnGenerateLanguageResource.Enabled = false;
 
             if (!Directory.Exists(InputFolder))
                 return;
@@ -73,6 +75,8 @@ namespace LanguageResourceMaker
             if (!File.Exists(LanguageDictFile))
                 return;
             btnAutoTranslateLanguageDict.Enabled = true;
+            btnImportLanguageDict.Enabled = true;
+            btnGenerateLanguageResource.Enabled = true;
         }
 
         public String InputFolder
@@ -110,6 +114,19 @@ namespace LanguageResourceMaker
             if (dr == DialogResult.OK)
                 MessageBox.Show("机器翻译完成！", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
             onInputFolderChanged();
+        }
+
+        private void btnImportLanguageDict_Click(object sender, EventArgs e)
+        {
+            var dr = new ImportLanguageDictForm(this).ShowDialog();
+            if (dr == DialogResult.OK)
+                MessageBox.Show("导入翻译结果完成！", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            onInputFolderChanged();
+        }
+
+        private void btnGenerateLanguageResource_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("To be continue.");
         }
 
         private void btnDeleteLanguageFolder_Click(object sender, EventArgs e)

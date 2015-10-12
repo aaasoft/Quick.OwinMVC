@@ -111,7 +111,9 @@
             this.Controls.Add(this.pbLevel1);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.lvLanguages);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "AutoTranslateLanguageDictForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "机翻语言字典";

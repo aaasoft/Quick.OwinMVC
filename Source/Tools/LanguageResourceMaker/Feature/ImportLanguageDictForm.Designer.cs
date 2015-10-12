@@ -1,16 +1,16 @@
 ﻿namespace LanguageResourceMaker.Feature
 {
-    partial class ExtractLanguageResourceForm
+    partial class ImportLanguageDictForm
     {
         /// <summary>
-        /// 必需的设计器变量。
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        /// 清理所有正在使用的资源。
+        /// Clean up any resources being used.
         /// </summary>
-        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,59 +20,57 @@
             base.Dispose(disposing);
         }
 
-        #region Windows 窗体设计器生成的代码
+        #region Windows Form Designer generated code
 
         /// <summary>
-        /// 设计器支持所需的方法 - 不要
-        /// 使用代码编辑器修改此方法的内容。
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            this.lblLog = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pbLevel1 = new System.Windows.Forms.ProgressBar();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lblLog
-            // 
-            this.lblLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblLog.Location = new System.Drawing.Point(0, 0);
-            this.lblLog.Name = "lblLog";
-            this.lblLog.Size = new System.Drawing.Size(280, 55);
-            this.lblLog.TabIndex = 1001;
-            this.lblLog.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.lblLog);
+            this.panel1.Controls.Add(this.pbLevel1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(282, 57);
-            this.panel1.TabIndex = 1003;
+            this.panel1.Size = new System.Drawing.Size(184, 51);
+            this.panel1.TabIndex = 14;
             // 
-            // ExtractLanguageResourceForm
+            // pbLevel1
+            // 
+            this.pbLevel1.Location = new System.Drawing.Point(12, 12);
+            this.pbLevel1.Name = "pbLevel1";
+            this.pbLevel1.Size = new System.Drawing.Size(153, 23);
+            this.pbLevel1.TabIndex = 12;
+            // 
+            // ImportLanguageDictForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 57);
+            this.ClientSize = new System.Drawing.Size(184, 51);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "ExtractLanguageResourceForm";
+            this.Name = "ImportLanguageDictForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "提取语言资源";
+            this.Text = "ImportLanguageDictForm";
             this.TopMost = true;
-            this.Load += new System.EventHandler(this.ExtractLanguageResourceForm_Load);
+            this.Load += new System.EventHandler(this.ImportLanguageDictForm_Load);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private System.Windows.Forms.Label lblLog;
+
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ProgressBar pbLevel1;
     }
 }
-

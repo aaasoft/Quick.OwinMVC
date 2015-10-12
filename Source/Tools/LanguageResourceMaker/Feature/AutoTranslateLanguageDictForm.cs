@@ -36,6 +36,15 @@ namespace LanguageResourceMaker.Feature
             }
             cbTranslator.SelectedIndex = 0;
         }
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                this.Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
 
         private void cbTranslator_SelectedIndexChanged(object sender, EventArgs e)
         {
