@@ -11,7 +11,10 @@ namespace LanguageResourceMaker.Translator
     {
         public string Name { get { return "Bing翻译"; } }
 
-        private const String TRANSLATE_URL = "http://api.microsofttranslator.com/V2/Ajax.svc/TranslateArray?from={0}&to={1}&appId=T0yi1jHo-IzX9jgQX4GoNcIORb9AUoPRxsGygHj7uU8g*&texts=%5B\"{2}\"%5D";
+        private String appId = null;
+        private const String GET_BING_APPID_URL = "http://capi.dict.cn/fanyi.php";
+        private const String TRANSLATE_URL = "http://api.microsofttranslator.com/V2/Ajax.svc/TranslateArray?from={0}&to={1}&appId={3}&texts=%5B\"{2}\"%5D";
+
         private String languageMap = @"
 zh-CN => zh-CHS
 en-US => en
@@ -59,9 +62,16 @@ vi => vi
 
         public string Translate(string from, string to, string source)
         {
-            String currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], source);
+            if(appId==null)
+            {
+                WebClient webClient = new WebClient();
+                String ret = webClient.DownloadString(GET_BING_APPID_URL);
+                appId = ret.Substring(1, ret.Length - 2);
+            }
+
+            String currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], source, appId);
             try
-            {                
+            {
                 WebClient webClient = new WebClient();
                 String ret = webClient.DownloadString(currentUrl);
                 TranslateResult[] results = Newtonsoft.Json.JsonConvert.DeserializeObject<TranslateResult[]>(ret);
@@ -69,7 +79,11 @@ vi => vi
                     return null;
                 return results[0].TranslatedText;
             }
-            catch(Exception ex) { return null; }
+            catch (Exception ex)
+            {
+                appId = null;
+                return null;
+            }
         }
     }
 }
