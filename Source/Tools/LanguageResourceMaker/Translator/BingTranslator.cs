@@ -62,17 +62,16 @@ vi => vi
 
         public string Translate(string from, string to, string source)
         {
-            if(appId==null)
-            {
-                WebClient webClient = new WebClient();
-                String ret = webClient.DownloadString(GET_BING_APPID_URL);
-                appId = ret.Substring(1, ret.Length - 2);
-            }
-
-            String currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], source, appId);
+            String currentUrl = null;
             try
             {
                 WebClient webClient = new WebClient();
+                //获取AppID
+                if (appId == null)
+                    appId = webClient.DownloadString(GET_BING_APPID_URL);
+                //得到URL
+                currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], source, appId);
+                //调用API
                 String ret = webClient.DownloadString(currentUrl);
                 TranslateResult[] results = Newtonsoft.Json.JsonConvert.DeserializeObject<TranslateResult[]>(ret);
                 if (results == null || results.Length == 0)
