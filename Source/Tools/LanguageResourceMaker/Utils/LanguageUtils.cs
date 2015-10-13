@@ -23,7 +23,7 @@ namespace LanguageResourceMaker.Utils
             Dictionary<String, String> languageDict = new Dictionary<String, string>();
 
             //(?'key'.+)\s*=(?'value'.+)
-            Regex regex = new Regex(@"(?'key'.+)\s*=(?'value'.+)");
+            Regex regex = new Regex(@"(?'key'.+?)\s*=(?'value'.+)");
             MatchCollection languageMatchCollection = regex.Matches(languageContent);
             foreach (Match match in languageMatchCollection)
             {

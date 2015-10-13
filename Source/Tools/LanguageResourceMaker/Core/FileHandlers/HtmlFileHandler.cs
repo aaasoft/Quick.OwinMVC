@@ -46,6 +46,8 @@ namespace LanguageResourceMaker.Core.FileHandlers
                 if (!valueGroup.Success)
                     return match.Value;
                 String value = valueGroup.Value;
+                if (value.Contains("\r"))
+                    value = value.Replace("\r", "");
                 textDict.Add(index.ToString(), value);
                 index++;
                 return value;

@@ -26,6 +26,7 @@ namespace LanguageResourceMaker
 #if DEBUG
             cbInputMode.SelectedIndex = 1;
             txtInputFolder.Text = DebugUtils.GetSourceCodeFolder();
+            txtInputFolder.Text = @"E:\工作项目\loncomip\DCIM_3.0\Source Codes";
 #endif
         }
 
