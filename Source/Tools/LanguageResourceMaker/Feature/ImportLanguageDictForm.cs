@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace LanguageResourceMaker.Feature
 {
-    public partial class ImportLanguageDictForm : Form
+    public partial class ImportLanguageDictForm : Level2ProgressForm
     {
         private MainForm mainForm;
 
@@ -44,10 +44,14 @@ namespace LanguageResourceMaker.Feature
             ofd.Dispose();
             ofd = null;
 
+            base.Level2Count = fileNames.Length;
+            Application.DoEvents();
+
             for (int i = 0; i < fileNames.Length; i++)
             {
-                pbLevel1.Value = (i + 1) * 100 / fileNames.Length;
+                base.Level2Index = i;
                 Application.DoEvents();
+
                 var fileName = fileNames[i];
                 var currentDictLinesCount = getLangaugeDictLinesCount(fileName);
                 if (currentDictLinesCount != srcDictLinesCount)
@@ -57,6 +61,9 @@ namespace LanguageResourceMaker.Feature
                 }
                 FileInfo fileInfo = new FileInfo(fileName);
                 fileInfo.CopyTo(Path.Combine(mainForm.LanguageFolder, fileInfo.Name), true);
+                base.Level1Count = currentDictLinesCount;
+                base.Level1Index = currentDictLinesCount - 1;
+                Application.DoEvents();
             }
             this.DialogResult = DialogResult.OK;
             this.Close();

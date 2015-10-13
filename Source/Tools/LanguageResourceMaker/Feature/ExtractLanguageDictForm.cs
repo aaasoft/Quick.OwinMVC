@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace LanguageResourceMaker.Feature
 {
-    public partial class ExtractLanguageDictForm : Form
+    public partial class ExtractLanguageDictForm : Level2ProgressForm
     {
         private string inputFolder;
         public ExtractLanguageDictForm(string inputFolder)
@@ -24,13 +24,20 @@ namespace LanguageResourceMaker.Feature
         {
             var languageDi = new DirectoryInfo(inputFolder);
             var dirs = languageDi.GetDirectories();
+            base.Level2Count = dirs.Length;
+            Application.DoEvents();
             for (var i = 0; i < dirs.Length; i++)
             {
-                pbLevel2.Value = (i + 1) * 100 / dirs.Length;
+                base.Level2Index = i;
 
                 var subLanguageDi = dirs[i];
                 HashSet<String> languageHashSet = new HashSet<string>();
                 var files = subLanguageDi.GetFiles("*.txt", SearchOption.AllDirectories);
+
+                base.Level1Index = 0;
+                base.Level1Count = files.Length;
+                Application.DoEvents();
+
                 for (var j = 0; j < files.Length; j++)
                 {
                     var languageFile = files[j];
@@ -44,7 +51,7 @@ namespace LanguageResourceMaker.Feature
                             continue;
                         languageHashSet.Add(value);
                     }
-                    pbLevel1.Value = (j + 1) * 100 / files.Length;
+                    base.Level1Index = j;
                     Application.DoEvents();
                 }
                 var array = languageHashSet.OrderBy(t => t).ToArray();

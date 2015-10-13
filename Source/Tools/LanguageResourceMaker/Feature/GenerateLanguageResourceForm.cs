@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace LanguageResourceMaker.Feature
 {
-    public partial class GenerateLanguageResourceForm : Form
+    public partial class GenerateLanguageResourceForm : Level2ProgressForm
     {
         private String inputFolder;
         public GenerateLanguageResourceForm(String inputFolder)
@@ -33,9 +33,10 @@ namespace LanguageResourceMaker.Feature
 
             //开始生成
             var dictFiles = languageFolder.GetFiles("*.dict.txt").Where(t => !t.Name.StartsWith(currentLanguage + ".")).ToArray();
+            base.Level2Count = dictFiles.Length;
             for (var i = 0; i < dictFiles.Length; i++)
             {
-                pbLevel2.Value = (i + 1) * 100 / dictFiles.Length;
+                base.Level2Index = i;
                 var dictFile = dictFiles[i];
                 var desLanguage = dictFile.Name.Replace(".dict.txt", "");
                 var desLanguageDictLines = File.ReadAllLines(dictFile.FullName);
@@ -46,6 +47,7 @@ namespace LanguageResourceMaker.Feature
                     languageDict[srcLanguageDictLines[x]] = desLanguageDictLines[x];
                 }
                 //生成语言资源文件
+                base.Level1Count = srcLanguageResourceFiles.Length;
                 for (var j = 0; j < srcLanguageResourceFiles.Length; j++)
                 {
                     var srcLanguageResourceFile = srcLanguageResourceFiles[j];
@@ -67,7 +69,7 @@ namespace LanguageResourceMaker.Feature
                     //保存文件
                     File.WriteAllText(desLanguageResourceFile, desContent);
                     //更新进度条
-                    pbLevel1.Value = (j + 1) * 100 / srcLanguageResourceFiles.Length;
+                    base.Level1Index = j;
                     Application.DoEvents();
                 }
             }

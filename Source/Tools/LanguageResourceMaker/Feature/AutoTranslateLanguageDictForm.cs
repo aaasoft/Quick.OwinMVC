@@ -91,6 +91,7 @@ namespace LanguageResourceMaker.Feature
             progressForm.Level1Title = "词条";
             progressForm.Level2Title = "文件";
             progressForm.Show();
+            Application.DoEvents();
             this.Hide();
 
             progressForm.Level2Count = translateTarget.Length;
@@ -102,6 +103,8 @@ namespace LanguageResourceMaker.Feature
 
                 progressForm.Level1Index = 0;
                 progressForm.Level1Count = srcWords.Length;
+                Application.DoEvents();
+
                 for (int j = 0; j < srcWords.Length; j++)
                 {
                     var srcWord = srcWords[j];
