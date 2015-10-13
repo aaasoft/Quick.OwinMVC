@@ -106,6 +106,12 @@
     <Compile Include="Feature\ImportLanguageDictForm.Designer.cs">
       <DependentUpon>ImportLanguageDictForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\Level2ProgressForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\Level2ProgressForm.Designer.cs">
+      <DependentUpon>Level2ProgressForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,6 +142,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\ImportLanguageDictForm.resx">
       <DependentUpon>ImportLanguageDictForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\Level2ProgressForm.resx">
+      <DependentUpon>Level2ProgressForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

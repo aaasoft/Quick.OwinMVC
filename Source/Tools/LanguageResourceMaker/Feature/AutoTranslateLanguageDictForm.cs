@@ -86,11 +86,22 @@ namespace LanguageResourceMaker.Feature
             }
             var translateTarget = list.ToArray();
 
+            Level2ProgressForm progressForm = new Level2ProgressForm();
+            progressForm.Title = $"正在使用[{translator.Name}]翻译语言字典...";
+            progressForm.Level1Title = "词条";
+            progressForm.Level2Title = "文件";
+            progressForm.Show();
+            this.Hide();
+
+            progressForm.Level2Count = translateTarget.Length;
             for (int i = 0; i < translateTarget.Length; i++)
             {
                 var toLangauge = translateTarget[i];
                 var desWords = new String[srcWords.Length];
-                pbLevel2.Value = (i + 1) * 100 / translateTarget.Length;
+                progressForm.Level2Index = i;
+
+                progressForm.Level1Index = 0;
+                progressForm.Level1Count = srcWords.Length;
                 for (int j = 0; j < srcWords.Length; j++)
                 {
                     var srcWord = srcWords[j];
@@ -107,18 +118,19 @@ namespace LanguageResourceMaker.Feature
                     }
                     if (desWord == null)
                     {
-                        pbLevel1.Value = 0;
-                        pbLevel2.Value = 0;
                         MessageBox.Show("重试3次，仍然翻译失败！请确保网络连接正常后再试。");
+                        progressForm.Close();
                         this.Enabled = true;
+                        this.Show();
                         return;
                     }
                     desWords[j] = desWord;
-                    pbLevel1.Value = (j + 1) * 100 / srcWords.Length;
+                    progressForm.Level1Index = j;
                     Application.DoEvents();
                 }
                 File.WriteAllLines(String.Format(languageDictFileFormat, toLangauge), desWords);
             }
+            progressForm.Close();
             this.Enabled = true;
             this.DialogResult = DialogResult.OK;
             this.Close();

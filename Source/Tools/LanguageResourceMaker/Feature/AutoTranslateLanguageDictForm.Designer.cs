@@ -31,8 +31,6 @@
             this.lvLanguages = new System.Windows.Forms.ListView();
             this.chLanguage = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnStart = new System.Windows.Forms.Button();
-            this.pbLevel1 = new System.Windows.Forms.ProgressBar();
-            this.pbLevel2 = new System.Windows.Forms.ProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.cbTranslator = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
@@ -67,20 +65,6 @@
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
-            // pbLevel1
-            // 
-            this.pbLevel1.Location = new System.Drawing.Point(93, 382);
-            this.pbLevel1.Name = "pbLevel1";
-            this.pbLevel1.Size = new System.Drawing.Size(153, 23);
-            this.pbLevel1.TabIndex = 10;
-            // 
-            // pbLevel2
-            // 
-            this.pbLevel2.Location = new System.Drawing.Point(252, 382);
-            this.pbLevel2.Name = "pbLevel2";
-            this.pbLevel2.Size = new System.Drawing.Size(153, 23);
-            this.pbLevel2.TabIndex = 10;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -107,8 +91,6 @@
             this.ClientSize = new System.Drawing.Size(455, 417);
             this.Controls.Add(this.cbTranslator);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.pbLevel2);
-            this.Controls.Add(this.pbLevel1);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.lvLanguages);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -127,8 +109,6 @@
         private System.Windows.Forms.ListView lvLanguages;
         private System.Windows.Forms.ColumnHeader chLanguage;
         private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.ProgressBar pbLevel1;
-        private System.Windows.Forms.ProgressBar pbLevel2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox cbTranslator;
     }
