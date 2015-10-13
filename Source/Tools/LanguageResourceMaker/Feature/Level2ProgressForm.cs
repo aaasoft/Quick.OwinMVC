@@ -33,6 +33,7 @@ namespace LanguageResourceMaker.Feature
             {
                 _Level1Count = value;
                 pbLevel1.Maximum = value;
+                onLevel1Changed();
             }
         }
         public string Level1Title
@@ -58,6 +59,7 @@ namespace LanguageResourceMaker.Feature
             {
                 _Level2Count = value;
                 pbLevel2.Maximum = value;
+                onLevel2Changed();
             }
         }
         public string Level2Title
