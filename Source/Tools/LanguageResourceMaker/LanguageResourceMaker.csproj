@@ -93,6 +93,12 @@
     <Compile Include="Feature\ExtractLanguageDictForm.Designer.cs">
       <DependentUpon>ExtractLanguageDictForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Feature\GenerateLanguageResourceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Feature\GenerateLanguageResourceForm.Designer.cs">
+      <DependentUpon>GenerateLanguageResourceForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Feature\ImportLanguageDictForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,12 +124,14 @@
     <Compile Include="Translator\ITranslator.cs" />
     <Compile Include="Utils\DebugUtils.cs" />
     <Compile Include="Utils\LanguageUtils.cs" />
-    <Compile Include="Utils\ResourceUtils.cs" />
     <EmbeddedResource Include="Feature\AutoTranslateLanguageDictForm.resx">
       <DependentUpon>AutoTranslateLanguageDictForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\ExtractLanguageDictForm.resx">
       <DependentUpon>ExtractLanguageDictForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Feature\GenerateLanguageResourceForm.resx">
+      <DependentUpon>GenerateLanguageResourceForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Feature\ImportLanguageDictForm.resx">
       <DependentUpon>ImportLanguageDictForm.cs</DependentUpon>

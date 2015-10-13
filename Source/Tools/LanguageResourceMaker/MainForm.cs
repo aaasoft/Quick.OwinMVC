@@ -60,6 +60,7 @@ namespace LanguageResourceMaker
             btnExtractLanguageDict.Enabled = false;
             btnAutoTranslateLanguageDict.Enabled = false;
             btnImportLanguageDict.Enabled = false;
+            btnDeleteLanguageDict.Enabled = false;
             btnDeleteLanguageFolder.Enabled = false;
             btnGenerateLanguageResource.Enabled = false;
 
@@ -74,6 +75,7 @@ namespace LanguageResourceMaker
 
             if (!File.Exists(LanguageDictFile))
                 return;
+            btnDeleteLanguageDict.Enabled = true;
             btnAutoTranslateLanguageDict.Enabled = true;
             btnImportLanguageDict.Enabled = true;
             btnGenerateLanguageResource.Enabled = true;
@@ -126,13 +128,35 @@ namespace LanguageResourceMaker
 
         private void btnGenerateLanguageResource_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("To be continue.");
+            var dr = new GenerateLanguageResourceForm(LanguageFolder).ShowDialog();
+            if (dr == DialogResult.OK)
+                MessageBox.Show("生成语言资源完成！", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            onInputFolderChanged();
+        }
+
+        private void btnDeleteLanguageDict_Click(object sender, EventArgs e)
+        {
+            DirectoryInfo di = new DirectoryInfo(LanguageFolder);
+            if (!di.Exists)
+                return;
+
+            var dr = MessageBox.Show("确定要删除所有的语言字典？", Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dr == DialogResult.Cancel)
+                return;            
+            foreach (var file in di.GetFiles("*.dict.txt"))
+                file.Delete();
+            onInputFolderChanged();
+            MessageBox.Show("删除所有的语言字典完成！", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void btnDeleteLanguageFolder_Click(object sender, EventArgs e)
         {
+            var dr = MessageBox.Show("确定要删除整个语言目录？", Application.ProductName, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (dr == DialogResult.Cancel)
+                return;
             Directory.Delete(LanguageFolder, true);
             onInputFolderChanged();
+            MessageBox.Show("删除整个语言目录完成！", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
         #endregion
 
