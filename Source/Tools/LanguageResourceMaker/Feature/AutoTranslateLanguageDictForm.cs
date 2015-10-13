@@ -89,7 +89,7 @@ namespace LanguageResourceMaker.Feature
             Level2ProgressForm progressForm = new Level2ProgressForm();
             progressForm.Title = $"正在使用[{translator.Name}]翻译语言字典...";
             progressForm.Level1Title = "词条";
-            progressForm.Level2Title = "文件";
+            progressForm.Level2Title = "目标语言";
             progressForm.Show();
             Application.DoEvents();
             this.Hide();
