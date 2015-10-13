@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace LanguageResourceMaker.Translator
 {
@@ -91,7 +92,7 @@ it-IT => it
         {
             try
             {
-                String currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], source);
+                String currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], HttpUtility.UrlEncode(source));
                 WebClient webClient = new WebClient();
                 String ret = webClient.DownloadString(currentUrl);
                 RootClass obj = Newtonsoft.Json.JsonConvert.DeserializeObject<RootClass>(ret);

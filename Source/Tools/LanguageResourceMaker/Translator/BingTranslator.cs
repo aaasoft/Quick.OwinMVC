@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Web;
 
 namespace LanguageResourceMaker.Translator
 {
@@ -70,7 +71,7 @@ vi => vi
                 if (appId == null)
                     appId = webClient.DownloadString(GET_BING_APPID_URL);
                 //得到URL
-                currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], source, appId);
+                currentUrl = String.Format(TRANSLATE_URL, languageMapDict[from], languageMapDict[to], HttpUtility.UrlEncode(source), appId);
                 //调用API
                 String ret = webClient.DownloadString(currentUrl);
                 TranslateResult[] results = Newtonsoft.Json.JsonConvert.DeserializeObject<TranslateResult[]>(ret);
