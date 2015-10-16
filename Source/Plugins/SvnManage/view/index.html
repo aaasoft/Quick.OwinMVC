@@ -255,7 +255,7 @@
                 var diskInfoHtml = '<tbody>';
                 for (i = 0; i < disk.length; i++) {
                     var partion = disk[i];
-                    var percent = (partion.totalSize - partion.totalFreeSpace) * 100 / partion.totalSize;
+                    var percent = partion.totalUsed * 100 / partion.totalSize;
                     percent = percent.toFixed(1);
                     var progress_bar_color = "progress-bar-success";
                     if (percent > 90)
@@ -269,9 +269,9 @@
                     diskInfoHtml += '<div class="progress progress-striped active" style="margin-bottom:0px" data-percent="';
                     diskInfoHtml += percent + '%';
                     diskInfoHtml += '  ';
-                    diskInfoHtml += ((partion.totalSize - partion.totalFreeSpace) / 1024 / 1024 / 1024).toFixed(1) + " GB";
+                    diskInfoHtml += partion.totalUsedString;
                     diskInfoHtml += '/';
-                    diskInfoHtml += (partion.totalSize / 1024 / 1024 / 1024).toFixed(0) + " GB";
+                    diskInfoHtml += partion.totalSizeString;
                     diskInfoHtml += '">';
                     diskInfoHtml += '   <div class="progress-bar ' + progress_bar_color + '" style="width: ' + percent + '%;"></div>'
 

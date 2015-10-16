@@ -17,6 +17,7 @@ namespace SvnManage.Controller
     public class IndexController : IViewController, IApiController, IPropertyHunter
     {
         private String refreshInterval;
+        private UnitStringConverting storageUnitStringConverting = UnitStringConverting.StorageUnitStringConverting;
 
         void IPropertyHunter.Hunt(string key, string value)
         {
@@ -69,7 +70,9 @@ namespace SvnManage.Controller
                     {
                         name = t.Name,
                         totalSize = t.TotalSize,
-                        totalFreeSpace = t.TotalFreeSpace,
+                        totalSizeString = storageUnitStringConverting.GetString(t.TotalSize),
+                        totalUsed = t.TotalSize - t.TotalFreeSpace,
+                        totalUsedString = storageUnitStringConverting.GetString(t.TotalSize - t.TotalFreeSpace),
                         driveFormat = t.DriveFormat
                     });
             }
