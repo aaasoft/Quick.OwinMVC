@@ -131,6 +131,7 @@
     <Compile Include="Translator\ITranslator.cs" />
     <Compile Include="Utils\DebugUtils.cs" />
     <Compile Include="Utils\LanguageUtils.cs" />
+    <Compile Include="Utils\PropertyUtils.cs" />
     <EmbeddedResource Include="Feature\AutoTranslateLanguageDictForm.resx">
       <DependentUpon>AutoTranslateLanguageDictForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,7 +163,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="app.config" />
+    <None Include="main.conf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

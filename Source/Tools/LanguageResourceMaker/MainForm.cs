@@ -15,6 +15,8 @@ namespace LanguageResourceMaker
 {
     public partial class MainForm : Form
     {
+        private String confFile = "main.conf";
+
         public MainForm()
         {
             InitializeComponent();
@@ -23,11 +25,19 @@ namespace LanguageResourceMaker
         private void MainForm_Load(object sender, EventArgs e)
         {
             cbInputMode.SelectedIndex = 0;
-#if DEBUG
-            cbInputMode.SelectedIndex = 1;
-            txtInputFolder.Text = DebugUtils.GetSourceCodeFolder();
-            txtInputFolder.Text = @"E:\工作项目\loncomip\DCIM_3.0\Source Codes";
-#endif
+            if (File.Exists(confFile))
+            {
+                var properties = PropertyUtils.LoadFile(confFile);
+                if (properties.ContainsKey("InputFolder"))
+                {
+                    DirectoryInfo di = new DirectoryInfo(properties["InputFolder"]);
+                    if (di.Exists)
+                    {
+                        cbInputMode.SelectedIndex = 1;
+                        txtInputFolder.Text = di.FullName;
+                    }
+                }
+            }
         }
 
         #region 设置输入目录
