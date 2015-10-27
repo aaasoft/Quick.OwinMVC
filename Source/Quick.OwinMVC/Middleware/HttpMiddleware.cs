@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class HttpMiddleware : OwinMiddleware, ITypeHunter
+    public class HttpMiddleware : OwinMiddleware, ITypeHunter,IHungryPropertyHunter
     {
-        public IDictionary<Regex, IHttpController> routes;
+        private IDictionary<string, string> properties;
+        public IDictionary<Regex, IHttpController> routes;        
 
         public HttpMiddleware(OwinMiddleware next) : base(next)
         {
@@ -47,7 +48,7 @@ namespace Quick.OwinMVC.Middleware
 
         private void RegisterController(string path, IHttpController httpController)
         {
-            httpController.Init(Server.Instance.properties);
+            httpController.Init(properties);
             routes.Add(RouteBuilder.RouteToRegex(path), httpController);
         }
 
@@ -58,6 +59,11 @@ namespace Quick.OwinMVC.Middleware
                 if (typeof(IHttpController).IsAssignableFrom(type))
                     RegisterController(attr.Path, (IHttpController)Activator.CreateInstance(type));
             }
+        }
+
+        public void Hunt(IDictionary<string, string> properties)
+        {
+            this.properties = properties;
         }
     }
 }

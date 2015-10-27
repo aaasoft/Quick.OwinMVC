@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin;
+using Quick.OwinMVC.Hunter;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -9,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class SessionMiddleware : OwinMiddleware
+    public class SessionMiddleware : OwinMiddleware, IPropertyHunter
     {
-        public const String QUICK_OWINMVC_SESSION_EXPIRES_SECONDS_KEY = "Quick.OwinMVC.Session.expiresSeconds";
-        public const String QUICK_OWINMVC_SESSION_CHECK_EXPIRES_PERIOD_KEY = "Quick.OwinMVC.Session.checkExpiresPeriodSecond";
         public const String QUICK_OWINMVC_SESSION_KEY = "Quick.OwinMVC.Session";
-        private const String SESSION_ID_KEY = "sid";
 
-        private IDictionary<String, String> properties;
-        private Int32 expiresSeconds = 10 * 60;
-        private Int32 checkExpiresPeriodSecond = 10;
+        //Session的ID键
+        private String IdKey = "sid";
+        //Session过期时间，单位：秒。默认为10分钟
+        private Int32 Expires = 10 * 60;
+        //检查过期Session间隔，单位：秒。默认为10秒
+        private Int32 CheckExpirePeriods = 10;
 
         private static ConcurrentDictionary<String, SessionInfo> allSessionDict;
         private static Timer checkSessionExpiresTimer;
@@ -38,14 +39,24 @@ namespace Quick.OwinMVC.Middleware
             public DateTime Expires { get; set; }
         }
 
+        public void Hunt(string key, string value)
+        {
+            switch (key)
+            {
+                case nameof(IdKey):
+                    IdKey = value;
+                    break;
+                case nameof(Expires):
+                    Expires = Int32.Parse(value);
+                    break;
+                case nameof(CheckExpirePeriods):
+                    CheckExpirePeriods = Int32.Parse(value);
+                    break;
+            }
+        }
+
         public SessionMiddleware(OwinMiddleware next) : base(next)
         {
-            this.properties = Server.Instance.properties;
-            if (properties.ContainsKey(QUICK_OWINMVC_SESSION_EXPIRES_SECONDS_KEY))
-                expiresSeconds = Int32.Parse(properties[QUICK_OWINMVC_SESSION_EXPIRES_SECONDS_KEY]);
-            if (properties.ContainsKey(QUICK_OWINMVC_SESSION_CHECK_EXPIRES_PERIOD_KEY))
-                checkExpiresPeriodSecond = Int32.Parse(properties[QUICK_OWINMVC_SESSION_CHECK_EXPIRES_PERIOD_KEY]);
-
             allSessionDict = new ConcurrentDictionary<string, SessionInfo>();
             TimerCallback checkSessionExpiresAction = state =>
             {
@@ -62,18 +73,18 @@ namespace Quick.OwinMVC.Middleware
                 }
             };
             checkSessionExpiresTimer = new Timer(checkSessionExpiresAction);
-            checkSessionExpiresTimer.Change(0, checkExpiresPeriodSecond * 1000);
+            checkSessionExpiresTimer.Change(0, CheckExpirePeriods * 1000);
         }
 
         private void resetSessionExpires(SessionInfo session, ResponseCookieCollection cookies)
         {
-            cookies.Append(SESSION_ID_KEY, session.SessionId, new CookieOptions() { Expires = DateTime.Now.ToUniversalTime().AddSeconds(expiresSeconds) });
-            session.Expires = DateTime.Now.AddSeconds(expiresSeconds);
+            cookies.Append(IdKey, session.SessionId, new CookieOptions() { Expires = DateTime.Now.ToUniversalTime().AddSeconds(Expires) });
+            session.Expires = DateTime.Now.AddSeconds(Expires);
         }
 
         public override Task Invoke(IOwinContext context)
         {
-            String sessionId = context.Request.Cookies.Where(t => t.Key == SESSION_ID_KEY).SingleOrDefault().Value;
+            String sessionId = context.Request.Cookies.Where(t => t.Key == IdKey).SingleOrDefault().Value;
             SessionInfo session = null;
             if (sessionId != null)
                 allSessionDict.TryGetValue(sessionId, out session);
