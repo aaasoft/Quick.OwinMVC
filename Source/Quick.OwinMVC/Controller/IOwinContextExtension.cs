@@ -33,7 +33,7 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static IDictionary<String, Object> GetSession(this IOwinContext context)
         {
-            return context.Get<IDictionary<String, Object>>(SessionMiddleware.QUICK_OWINMVC_SESSION_KEY);
+            return SessionMiddleware.GetSession(context);
         }
 
         /// <summary>

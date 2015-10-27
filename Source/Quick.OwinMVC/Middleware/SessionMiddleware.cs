@@ -12,7 +12,7 @@ namespace Quick.OwinMVC.Middleware
 {
     public class SessionMiddleware : OwinMiddleware, IPropertyHunter
     {
-        public const String QUICK_OWINMVC_SESSION_KEY = "Quick.OwinMVC.Session";
+        private static readonly String SESSION_KEY = $"{typeof(SessionMiddleware).FullName}.{nameof(SESSION_KEY)}";
 
         //Session的ID键
         private String IdKey = "sid";
@@ -55,6 +55,11 @@ namespace Quick.OwinMVC.Middleware
             }
         }
 
+        public static IDictionary<String, Object> GetSession(IOwinContext context)
+        {
+            return context.Get<IDictionary<String, Object>>(SESSION_KEY);
+        }
+
         public SessionMiddleware(OwinMiddleware next) : base(next)
         {
             allSessionDict = new ConcurrentDictionary<string, SessionInfo>();
@@ -76,12 +81,6 @@ namespace Quick.OwinMVC.Middleware
             checkSessionExpiresTimer.Change(0, CheckExpirePeriods * 1000);
         }
 
-        private void resetSessionExpires(SessionInfo session, ResponseCookieCollection cookies)
-        {
-            cookies.Append(IdKey, session.SessionId, new CookieOptions() { Expires = DateTime.Now.ToUniversalTime().AddSeconds(Expires) });
-            session.Expires = DateTime.Now.AddSeconds(Expires);
-        }
-
         public override Task Invoke(IOwinContext context)
         {
             String sessionId = context.Request.Cookies.Where(t => t.Key == IdKey).SingleOrDefault().Value;
@@ -96,10 +95,12 @@ namespace Quick.OwinMVC.Middleware
                 sessionId = Guid.NewGuid().ToString().Replace("-", "");
                 session = new SessionInfo(sessionId);
                 allSessionDict.TryAdd(sessionId, session);
+                //设置Cookie
+                context.Response.Cookies.Append(IdKey, session.SessionId);
             }
             //重新设置Session的过期时间
-            resetSessionExpires(session, context.Response.Cookies);
-            context.Set<SessionInfo>(QUICK_OWINMVC_SESSION_KEY, session);
+            session.Expires = DateTime.Now.AddSeconds(Expires);
+            context.Set<SessionInfo>(SESSION_KEY, session);
             return Next.Invoke(context);
         }
     }
