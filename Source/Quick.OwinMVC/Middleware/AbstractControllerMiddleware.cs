@@ -11,20 +11,26 @@ using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public abstract class AbstractControllerMiddleware<T> : AbstractPluginPathMiddleware, ITypeHunter
+    public abstract class AbstractControllerMiddleware<T> : AbstractPluginPathMiddleware, ITypeHunter, IHungryPropertyHunter
         where T : IPluginController
     {
         protected Encoding encoding = new UTF8Encoding(false);
+        private IDictionary<string, string> properties;
         private IDictionary<String, T> controllerDict = new Dictionary<String, T>();
 
         internal void RegisterController(string plugin, string path, T controller)
         {
             controllerDict[$"{plugin}:{path}"] = controller;
-            HunterUtils.TryHunt(controller, Server.Instance.properties);
+            HunterUtils.TryHunt(controller, properties);
         }
 
         public AbstractControllerMiddleware(OwinMiddleware next) : base(next) { }
 
+
+        public virtual void Hunt(IDictionary<string, string> properties)
+        {
+            this.properties = properties;
+        }
 
         public void Hunt(Type type)
         {

@@ -12,7 +12,7 @@ using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class ViewMiddleware : AbstractControllerMiddleware<IViewController>,IHungryPropertyHunter, IPropertyHunter
+    public class ViewMiddleware : AbstractControllerMiddleware<IViewController>, IHungryPropertyHunter, IPropertyHunter
     {
         private IDictionary<String, String> properties;
         private IViewRender ViewRender;
@@ -24,8 +24,9 @@ namespace Quick.OwinMVC.Middleware
             return "view";
         }
 
-        public void Hunt(IDictionary<string, string> properties)
+        public override void Hunt(IDictionary<string, string> properties)
         {
+            base.Hunt(properties);
             this.properties = properties;
         }
 
@@ -57,7 +58,7 @@ namespace Quick.OwinMVC.Middleware
                 case 2:
                     viewName = $"{viewName}:{language}";
                     break;
-            }            
+            }
             //根据视图名称与数据，渲染输出页面
             var outputText = ViewRender.Render(viewName, context.Environment);
             var content = encoding.GetBytes(outputText);
