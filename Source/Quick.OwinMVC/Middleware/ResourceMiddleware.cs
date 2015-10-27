@@ -16,9 +16,11 @@ namespace Quick.OwinMVC.Middleware
 {
     public class ResourceMiddleware : AbstractPluginPathMiddleware, IPropertyHunter, IAssemblyHunter
     {
-        //默认一天
-        private double resourceExpires = 86400;
-        private Boolean useMd5ETag = false;
+        //(资源的缓存过期时间，单位：秒)默认一天
+        private double Expires = 86400;
+        //资源的ETag是否使用MD5值
+        private Boolean UseMd5ETag = false;
+
         private ResourceWebRequestFactory resourceWebRequestFactory;
         private String StaticFileFolder
         {
@@ -27,12 +29,6 @@ namespace Quick.OwinMVC.Middleware
 
         public ResourceMiddleware(OwinMiddleware next) : base(next)
         {
-            var properties = Server.Instance.properties;
-            if (properties.ContainsKey("Quick.OwinMVC.resourceExpires"))
-                resourceExpires = double.Parse(properties["Quick.OwinMVC.useMd5ETag"]);
-            if (properties.ContainsKey("Quick.OwinMVC.resourceExpires"))
-                useMd5ETag = Boolean.Parse(properties["Quick.OwinMVC.useMd5ETag"]);
-
             resourceWebRequestFactory = new ResourceWebRequestFactory();
             resourceWebRequestFactory.PluginAliasMap = base.pluginAliasDict;
             resourceWebRequestFactory.AssemblyMap = new Dictionary<String, Assembly>();
@@ -79,54 +75,56 @@ namespace Quick.OwinMVC.Middleware
         {
             return Task.Factory.StartNew(() =>
             {
-                var req = context.Request;
-                var rep = context.Response;
-                //验证缓存有效
+                using (stream)
                 {
-                    //===================
-                    //先验证最后修改时间
-                    //===================
-                    var resourceLastModified = resourceResponse.LastModified;
-                    //最后修改时间判断部分
-                    var clientLastModified = req.Headers.Get("If-Modified-Since");
-                    if (clientLastModified != null)
+                    var req = context.Request;
+                    var rep = context.Response;
+                    //验证缓存有效
                     {
-                        if (clientLastModified == resourceLastModified.ToString("R"))
+                        //===================
+                        //先验证最后修改时间
+                        //===================
+                        var resourceLastModified = resourceResponse.LastModified;
+                        //最后修改时间判断部分
+                        var clientLastModified = req.Headers.Get("If-Modified-Since");
+                        if (clientLastModified != null)
+                        {
+                            if (clientLastModified == resourceLastModified.ToString("R"))
+                            {
+                                rep.StatusCode = 304;
+                                return;
+                            }
+                        }
+                        //===================
+                        //然后验证ETag
+                        //===================
+                        //ETag设置判断部分
+                        String serverETag = null;
+                        if (UseMd5ETag)
+                            serverETag = HashUtils.ComputeETagByMd5(stream);
+                        else
+                            serverETag = resourceResponse.LastModified.Ticks.ToString();
+                        var clientETag = req.Headers.Get("If-None-Match");
+                        //如果客户端的ETag值与服务端相同，则返回304，表示资源未修改
+                        if (serverETag == clientETag)
                         {
                             rep.StatusCode = 304;
                             return;
                         }
+                        rep.ETag = serverETag;
+                        stream.Position = 0;
                     }
-                    //===================
-                    //然后验证ETag
-                    //===================
-                    //ETag设置判断部分
-                    String serverETag = null;
-                    if (useMd5ETag)
-                        serverETag = HashUtils.ComputeETagByMd5(stream);
-                    else
-                        serverETag = resourceResponse.LastModified.Ticks.ToString();
-                    var clientETag = req.Headers.Get("If-None-Match");
-                    //如果客户端的ETag值与服务端相同，则返回304，表示资源未修改
-                    if (serverETag == clientETag)
-                    {
-                        rep.StatusCode = 304;
-                        return;
-                    }
-                    rep.ETag = serverETag;
-                    stream.Position = 0;
+                    //设置MIME类型
+                    var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
+                    if (mime != null)
+                        rep.ContentType = mime;
+                    rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(Expires));
+                    rep.Headers["Cache-Control"] = $"max-age={Expires}";
+                    rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
+                    Output(context, stream);
                 }
-                //设置MIME类型
-                var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
-                if (mime != null)
-                    rep.ContentType = mime;
-                rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(resourceExpires));
-                rep.Headers["Cache-Control"] = $"max-age={resourceExpires}";
-                rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-                Output(context, stream);
             });
         }
-
 
         public override void Hunt(string key, string value)
         {
@@ -134,6 +132,12 @@ namespace Quick.OwinMVC.Middleware
             {
                 case nameof(StaticFileFolder):
                     resourceWebRequestFactory.StaticFileFolder = value;
+                    break;
+                case nameof(Expires):
+                    Expires = double.Parse(value);
+                    break;
+                case nameof(UseMd5ETag):
+                    UseMd5ETag = Boolean.Parse(value);
                     break;
             }
             base.Hunt(key, value);
