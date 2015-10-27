@@ -8,27 +8,38 @@ using Quick.OwinMVC.Controller;
 using Quick.OwinMVC.View;
 using Quick.OwinMVC.Utils;
 using System.IO;
+using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class ViewMiddleware : AbstractControllerMiddleware<IViewController>
+    public class ViewMiddleware : AbstractControllerMiddleware<IViewController>,IHungryPropertyHunter, IPropertyHunter
     {
-        public static readonly String VIEWRENDER_CLASS = $"{typeof(ViewMiddleware).FullName}.{nameof(VIEWRENDER_CLASS)}";
+        private IDictionary<String, String> properties;
+        private IViewRender ViewRender;
 
-        private IViewRender viewRender;
-
-        public ViewMiddleware(OwinMiddleware next) : base(next)
-        {
-            var properties = Server.Instance.properties;
-            //创建视图渲染器
-            String viewRenderClassName = properties[VIEWRENDER_CLASS];
-            this.viewRender = (IViewRender)AssemblyUtils.CreateObject(viewRenderClassName);
-            this.viewRender.Init(properties);
-        }
+        public ViewMiddleware(OwinMiddleware next) : base(next) { }
 
         public override string GetRouteMiddle()
         {
             return "view";
+        }
+
+        public void Hunt(IDictionary<string, string> properties)
+        {
+            this.properties = properties;
+        }
+
+        public override void Hunt(String key, String value)
+        {
+            base.Hunt(key, value);
+            switch (key)
+            {
+                case nameof(ViewRender):
+                    //创建视图渲染器
+                    this.ViewRender = (IViewRender)AssemblyUtils.CreateObject(value);
+                    this.ViewRender.Init(properties);
+                    break;
+            }
         }
 
         public override void ExecuteController(IViewController controller, IOwinContext context, string plugin, string path)
@@ -48,7 +59,7 @@ namespace Quick.OwinMVC.Middleware
                     break;
             }            
             //根据视图名称与数据，渲染输出页面
-            var outputText = viewRender.Render(viewName, context.Environment);
+            var outputText = ViewRender.Render(viewName, context.Environment);
             var content = encoding.GetBytes(outputText);
 
             //将页面写到响应中
