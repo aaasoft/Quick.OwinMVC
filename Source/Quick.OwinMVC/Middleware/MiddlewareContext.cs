@@ -11,20 +11,25 @@ namespace Quick.OwinMVC.Middleware
 {
     public class MiddlewareContext : OwinMiddleware
     {
-        private Server server;
+        public static MiddlewareContext Instance { get; private set; }
+        /// <summary>
+        /// 所有中间件对象列表
+        /// </summary>
+        public IEnumerable<OwinMiddleware> Middlewares { get; private set; }
 
         public MiddlewareContext(OwinMiddleware next) : base(next)
         {
-            server = Server.Instance;
+            Instance = this;
+            var list = new List<OwinMiddleware>();
 
             var nextProperty = typeof(OwinMiddleware).GetProperty("Next", BindingFlags.Instance | BindingFlags.NonPublic);
             var currentMiddleware = next;
             while (currentMiddleware != null)
             {
-                server.middlewareInstanceList.Add(currentMiddleware);
+                list.Add(currentMiddleware);
                 currentMiddleware = nextProperty.GetValue(currentMiddleware, null) as OwinMiddleware;
             }
-            HunterUtils.TryHunt(server.middlewareInstanceList, server.properties);
+            Middlewares = list;
         }
 
         public override Task Invoke(IOwinContext context)

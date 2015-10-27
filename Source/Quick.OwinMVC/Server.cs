@@ -18,8 +18,9 @@ namespace Quick.OwinMVC
     {
         internal static Server Instance { get; private set; }
 
-        internal IDictionary<String, String> properties;
-        internal IList<OwinMiddleware> middlewareInstanceList;
+        private IDictionary<String, String> properties;
+        //所有的中间件
+        private IEnumerable<OwinMiddleware> Middlewares;
 
         private IPEndPoint endpoint;
         private String url;
@@ -79,7 +80,6 @@ namespace Quick.OwinMVC
         {
             this.properties = properties;
             this.endpoint = endpoint;
-            middlewareInstanceList = new List<OwinMiddleware>();
 
             Server.Instance = this;
             HunterUtils.TryHunt(this, properties);
@@ -91,7 +91,7 @@ namespace Quick.OwinMVC
         {
             switch (key)
             {
-                case "Middlewares":
+                case nameof(Middlewares):
                     value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                         .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));
                     break;
@@ -129,12 +129,12 @@ namespace Quick.OwinMVC
         {
             if (!server.IsRuning)
                 throw new ApplicationException("Can't invoke this method before Server.Start() method invoded.");
-            return middlewareInstanceList.Where(m => m is T).Cast<T>();
+            return Middlewares.Where(m => m is T).Cast<T>();
         }
 
         public OwinMiddleware GetFirstMiddlewareInstance()
         {
-            return middlewareInstanceList.First();
+            return Middlewares.First();
         }
 
         /// <summary>
@@ -150,15 +150,20 @@ namespace Quick.OwinMVC
 
         public void Start()
         {
-            var app = new AppBuilder();
-
+            //APP构造器
+            var appBuilder = new AppBuilder();
             //中间件上下文
-            app.Use<MiddlewareContext>();
-            //加载中部的中间件
+            appBuilder.Use<MiddlewareContext>();
+            //注册所有的中间件
             foreach (var register in middlewareRegisterActionList)
-                register.Invoke(app);
-
-            server.Start(app.Build(), endpoint);
+                register.Invoke(appBuilder);
+            //构造APP
+            var app = appBuilder.Build();
+            //初始化所有的中间件
+            this.Middlewares = MiddlewareContext.Instance.Middlewares;
+            HunterUtils.TryHunt(this.Middlewares, properties);
+            //启动服务器
+            server.Start(app, endpoint);
         }
 
         public void Stop()
