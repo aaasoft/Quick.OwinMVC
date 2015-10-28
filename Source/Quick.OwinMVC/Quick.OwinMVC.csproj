@@ -76,6 +76,7 @@
     <Compile Include="Routing\RouteBuilder.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Utils\MultipartFormDataUtils.cs" />
+    <Compile Include="Utils\PathUtils.cs" />
     <Compile Include="WebServer\IWebServer.cs" />
     <Compile Include="Utils\AssemblyUtils.cs" />
     <Compile Include="Utils\HashUtils.cs" />

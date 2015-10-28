@@ -42,6 +42,9 @@
     <Compile Include="Static\Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ServerManage.properties">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="app.properties">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

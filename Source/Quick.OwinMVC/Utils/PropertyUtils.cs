@@ -10,10 +10,10 @@ namespace Quick.OwinMVC.Utils
 {
     public class PropertyUtils
     {
-        public static IDictionary<String, String> Load(String content, String folderPath)
+        public static IDictionary<String, String> Load(String content, String folderPath, params String[] notAllowFiles)
         {
             IDictionary<String, String> dict = new Dictionary<String, String>();
-            content = parse(content, folderPath);
+            content = parse(content, folderPath, new HashSet<string>(notAllowFiles));
             //参考正则表达式: ^\s*(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*)\s*$
             Regex regex = new Regex(@"^\s*(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*)\s*$", RegexOptions.Multiline);
             foreach (Match match in regex.Matches(content))
@@ -26,7 +26,7 @@ namespace Quick.OwinMVC.Utils
             return dict;
         }
 
-        private static String parse(String content, String folderPath)
+        private static String parse(String content, String folderPath, HashSet<String> notAllowFiles)
         {
             content = content.Replace("\\\r\n", "").Replace("\\\r", "").Replace("\\\n", "").Replace("\r", "");
 
@@ -36,10 +36,22 @@ namespace Quick.OwinMVC.Utils
             content = regex.Replace(content, match =>
              {
                  var fileName = match.Groups["fileName"].Value;
-                 if (!File.Exists(fileName))
+                 List<String> list = new List<string>();
+                 list.AddRange(PathUtils.SearchFile(fileName));
+                 if (list.Count == 0)
+                 {
                      fileName = Path.Combine(folderPath, fileName);
-                 FileInfo file = new FileInfo(fileName);
-                 return parse(File.ReadAllText(file.FullName), file.DirectoryName);
+                     list.AddRange(PathUtils.SearchFile(fileName));
+                 }
+                 StringBuilder sb = new StringBuilder();
+                 foreach (var currentFileName in list)
+                 {
+                     FileInfo file = new FileInfo(currentFileName);
+                     if (notAllowFiles.Contains(file.FullName))
+                         continue;
+                     sb.AppendLine(parse(File.ReadAllText(file.FullName), file.DirectoryName, notAllowFiles));
+                 }
+                 return sb.ToString();
              });
             return content;
         }
@@ -47,7 +59,7 @@ namespace Quick.OwinMVC.Utils
         public static IDictionary<String, String> LoadFile(String fileName)
         {
             FileInfo file = new FileInfo(fileName);
-            return Load(File.ReadAllText(file.FullName), file.DirectoryName);
+            return Load(File.ReadAllText(file.FullName), file.DirectoryName, file.FullName);
         }
     }
 }
