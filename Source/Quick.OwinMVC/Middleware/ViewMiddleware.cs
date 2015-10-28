@@ -16,6 +16,8 @@ namespace Quick.OwinMVC.Middleware
     {
         private IDictionary<String, String> properties;
         private IViewRender ViewRender;
+        //是否启用多语言
+        private Boolean EnableMultiLanguage;
 
         public ViewMiddleware(OwinMiddleware next) : base(next) { }
 
@@ -40,6 +42,9 @@ namespace Quick.OwinMVC.Middleware
                     this.ViewRender = (IViewRender)AssemblyUtils.CreateObject(value);
                     this.ViewRender.Init(properties);
                     break;
+                case nameof(EnableMultiLanguage):
+                    Boolean.TryParse(value, out EnableMultiLanguage);
+                    break;
             }
         }
 
@@ -49,15 +54,28 @@ namespace Quick.OwinMVC.Middleware
             String viewName = controller.Service(context, context.Environment);
             if (viewName == null)
                 return;
-            var language = context.GetLanguage();
-            switch (viewName.Split(':').Count())
+            //如果启用多语言支持
+            if (EnableMultiLanguage)
             {
-                case 1:
-                    viewName = $"{plugin}:{viewName}:{language}";
-                    break;
-                case 2:
-                    viewName = $"{viewName}:{language}";
-                    break;
+                var language = context.GetLanguage();
+                switch (viewName.Split(':').Count())
+                {
+                    case 1:
+                        viewName = $"{plugin}:{viewName}:{language}";
+                        break;
+                    case 2:
+                        viewName = $"{viewName}:{language}";
+                        break;
+                }
+            }
+            else
+            {
+                switch (viewName.Split(':').Count())
+                {
+                    case 1:
+                        viewName = $"{plugin}:{viewName}";
+                        break;
+                }
             }
             //根据视图名称与数据，渲染输出页面
             var outputText = ViewRender.Render(viewName, context.Environment);

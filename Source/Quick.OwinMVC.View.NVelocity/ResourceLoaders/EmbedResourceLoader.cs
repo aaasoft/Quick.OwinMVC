@@ -46,14 +46,16 @@ namespace Quick.OwinMVC.View.NVelocity.ResourceLoaders
                 return null;
 
             String[] tmpArray = name.Split(new String[] { pluginNameAndPathSplitString }, StringSplitOptions.RemoveEmptyEntries);
-            if (tmpArray.Length < 3)
+            if (tmpArray.Length < 2)
             {
                 throw new VelocityException("视图名称[" + name + "]不符合规则：“[插件名]"
                         + pluginNameAndPathSplitString + "[路径]”");
             }
             String pluginName = tmpArray[0];
             String path = tmpArray[1];
-            String language = tmpArray[2];
+            String language = null;
+            if (tmpArray.Length > 2)
+                language = tmpArray[2];
 
             var resourceResponse = WebRequest.Create($"resource://{pluginName}/{viewNamePrefix}{path}{viewNameSuffix}").GetResponse() as ResourceWebResponse;
             if (resourceResponse == null)
@@ -74,10 +76,14 @@ namespace Quick.OwinMVC.View.NVelocity.ResourceLoaders
                         switch (value.Split(':').Length)
                         {
                             case 1:
-                                newValue = $"{pluginName}:{value}:{language}";
+                                newValue = $"{pluginName}:{value}";
+                                if (language != null)
+                                    newValue = $"{newValue}:{language}";
                                 break;
                             case 2:
-                                newValue = $"{value}:{language}";
+                                newValue = value;
+                                if (language != null)
+                                    newValue = $"{newValue}:{language}";
                                 break;
                             case 3:
                                 return srcFullText;
@@ -89,23 +95,26 @@ namespace Quick.OwinMVC.View.NVelocity.ResourceLoaders
                         return sb.ToString();
                     });
                 //替换多语言文本
-                var textManager = TextManager.GetInstance(language);
-                var assembly = resourceResponse.Assembly;
-                int index = 0;
-                content = replaceTextRegex.Replace(content, match =>
-                 {
-                     index++;
-                     var srcFullText = match.Value;
-                     var valueGroup = match.Groups["value"];
-                     var newValue = textManager.GetText(index.ToString(), assembly, $"{path}{viewNameSuffix}");
-                     if (newValue == null)
-                         return srcFullText;
-                     var strIndex = valueGroup.Index - match.Index;
-                     StringBuilder sb = new StringBuilder(srcFullText);
-                     sb.Remove(strIndex, valueGroup.Length);
-                     sb.Insert(strIndex, newValue);
-                     return sb.ToString();
-                 });
+                if (language != null)
+                {
+                    var textManager = TextManager.GetInstance(language);
+                    var assembly = resourceResponse.Assembly;
+                    int index = 0;
+                    content = replaceTextRegex.Replace(content, match =>
+                     {
+                         index++;
+                         var srcFullText = match.Value;
+                         var valueGroup = match.Groups["value"];
+                         var newValue = textManager.GetText(index.ToString(), assembly, $"{path}{viewNameSuffix}");
+                         if (newValue == null)
+                             return srcFullText;
+                         var strIndex = valueGroup.Index - match.Index;
+                         StringBuilder sb = new StringBuilder(srcFullText);
+                         sb.Remove(strIndex, valueGroup.Length);
+                         sb.Insert(strIndex, newValue);
+                         return sb.ToString();
+                     });
+                }
                 stream = new MemoryStream(reader.CurrentEncoding.GetBytes(content));
             }
             return stream;
