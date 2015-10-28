@@ -19,7 +19,7 @@ namespace ServerManage.Static
 
         public static void Start()
         {
-            IDictionary<String, String> properties = PropertyUtils.LoadFile("Quick.OwinMVC.properties");
+            IDictionary<String, String> properties = PropertyUtils.LoadFile("app.properties");
             String httpUrl = properties["http.url"];
             Server server = new Server(properties, new Uri(httpUrl));
             //启动服务
