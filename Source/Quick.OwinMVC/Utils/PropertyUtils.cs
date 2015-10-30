@@ -14,8 +14,8 @@ namespace Quick.OwinMVC.Utils
         {
             IDictionary<String, String> dict = new Dictionary<String, String>();
             content = parse(content, folderPath, new HashSet<string>(notAllowFiles));
-            //参考正则表达式: ^\s*(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*)\s*$
-            Regex regex = new Regex(@"^\s*(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*)\s*$", RegexOptions.Multiline);
+            //参考正则表达式: ^(\s|\r|\n)*?(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*?)(\s|\r|\n)*?$
+            Regex regex = new Regex(@"^(\s|\r|\n)*?(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*?)(\s|\r|\n)*?$", RegexOptions.Multiline);
             foreach (Match match in regex.Matches(content))
             {
                 String key = match.Groups["key"].Value;
@@ -28,11 +28,11 @@ namespace Quick.OwinMVC.Utils
 
         private static String parse(String content, String folderPath, HashSet<String> notAllowFiles)
         {
-            content = content.Replace("\\\r\n", "").Replace("\\\r", "").Replace("\\\n", "").Replace("\r", "");
+            content = content.Replace("\\\r\n", "").Replace("\\\r", "").Replace("\\\n", "");
 
             //解析include指令
-            //正则表达式：^\s*include\s*=\s*(?'fileName'.*?)\s*$
-            Regex regex = new Regex(@"^\s*include\s*=\s*(?'fileName'.*?)\s*$", RegexOptions.Multiline);
+            //正则表达式：^(\s|\r|\n)*?include\s*=\s*(?'fileName'.*?)(\s|\r|\n)*?$
+            Regex regex = new Regex(@"^(\s|\r|\n)*?include\s*=\s*(?'fileName'.*?)(\s|\r|\n)*?$", RegexOptions.Multiline);
             content = regex.Replace(content, match =>
              {
                  var fileName = match.Groups["fileName"].Value;
