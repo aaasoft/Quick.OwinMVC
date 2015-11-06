@@ -166,7 +166,7 @@ namespace Quick.OwinMVC.Controller
         public static T GetFormData<T>(this IOwinContext context)
             where T : class
         {
-            return context.GetFormData<T>(true);
+            return context.GetFormData<T>(false);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static T GetFormData<T>(this IOwinContext context, T obj)
         {
-            return context.GetFormData<T>(obj, true);
+            return context.GetFormData<T>(obj, false);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace Quick.OwinMVC.Controller
         public static T GetQueryData<T>(this IOwinContext context)
             where T : class
         {
-            return context.GetQueryData<T>(true);
+            return context.GetQueryData<T>(false);
         }
 
         /// <summary>
@@ -247,7 +247,7 @@ namespace Quick.OwinMVC.Controller
         public static T GetQueryData<T>(this IOwinContext context, T obj)
             where T : class
         {
-            return context.GetQueryData<T>(obj, true);
+            return context.GetQueryData<T>(obj, false);
         }
 
         /// <summary>
