@@ -14,10 +14,9 @@ using Quick.OwinMVC.Hunter;
 namespace SvnManage.Controller
 {
     [Route("index")]
-    public class IndexController : IViewController, IApiController, IPropertyHunter
+    public class IndexController : ViewController, IPropertyHunter
     {
         private String refreshInterval;
-        private UnitStringConverting storageUnitStringConverting = UnitStringConverting.StorageUnitStringConverting;
 
         void IPropertyHunter.Hunt(string key, string value)
         {
@@ -29,7 +28,7 @@ namespace SvnManage.Controller
             }
         }
 
-        string IViewController.Service(IOwinContext context, IDictionary<String, Object> data)
+        protected override string doGet(IOwinContext context, IDictionary<string, object> data)
         {
             var viewData = new
             {
@@ -37,10 +36,16 @@ namespace SvnManage.Controller
                 refreshInterval = refreshInterval
             };
             data.Add(viewData);
-            return "index";
+            return base.doGet(context, data);
         }
+    }
 
-        object IApiController.Service(IOwinContext context)
+    [Route("index")]
+    public class IndexApiController : ApiController
+    {
+        private UnitStringConverting storageUnitStringConverting = UnitStringConverting.StorageUnitStringConverting;
+
+        protected override object doGet(IOwinContext context)
         {
             switch (context.Request.Query["type"])
             {

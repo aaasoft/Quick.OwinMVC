@@ -9,9 +9,9 @@ using Microsoft.Owin;
 namespace SvnManage.Controller
 {
     [Route("logout")]
-    public class LogoutController : IViewController
+    public class LogoutController : ViewController
     {
-        public string Service(IOwinContext context, IDictionary<string, object> data)
+        public override string Service(IOwinContext context, IDictionary<string, object> data)
         {
             var rep = context.Response;
             context.GetSession().Clear();

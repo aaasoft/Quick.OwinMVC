@@ -11,42 +11,39 @@ using System.IO;
 namespace SvnManage.Controller
 {
     [Route("fileupload")]
-    public class FileuploadController : IViewController
+    public class FileuploadController : ViewController
     {
-        public string Service(IOwinContext context, IDictionary<string, object> data)
+        protected override string doGet(IOwinContext context, IDictionary<string, object> data)
         {
-            var req = context.Request;
-            switch (req.Method)
-            {
-                case "GET":
-                    break;
-                case "POST":
-                    var arg_name = (String)null;
-                    var stream = (Stream)null;
+            return base.doGet(context, data);
+        }
 
-                    MultipartFormDataUtils.HandleMultipartData(context.Request, part =>
-                    {
-                        switch (part.Name)
-                        {
-                            case "name":
-                                arg_name = part.Data;
-                                break;
-                        }
-                    }, (name, fileName, type, disposition, buffer, bytes) =>
-                    {
-                        if (stream == null)
-                        {
-                            if (File.Exists(fileName))
-                                File.Delete(fileName);
-                            stream = new FileStream(fileName, FileMode.OpenOrCreate);
-                        }
-                        stream.Write(buffer, 0, bytes);
-                    });
-                    if (stream != null)
-                        stream.Close();
-                    break;
-            }
-            return "fileupload";
+        protected override string doPost(IOwinContext context, IDictionary<string, object> data)
+        {
+            var arg_name = (String)null;
+            var stream = (Stream)null;
+
+            MultipartFormDataUtils.HandleMultipartData(context.Request, part =>
+            {
+                switch (part.Name)
+                {
+                    case "name":
+                        arg_name = part.Data;
+                        break;
+                }
+            }, (name, fileName, type, disposition, buffer, bytes) =>
+            {
+                if (stream == null)
+                {
+                    if (File.Exists(fileName))
+                        File.Delete(fileName);
+                    stream = new FileStream(fileName, FileMode.OpenOrCreate);
+                }
+                stream.Write(buffer, 0, bytes);
+            });
+            if (stream != null)
+                stream.Close();
+            return base.doPost(context, data);
         }
     }
 }

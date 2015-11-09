@@ -1,51 +1,111 @@
-﻿using System;
+﻿using Microsoft.Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Owin;
 
 namespace Quick.OwinMVC.Controller
 {
-    public abstract class HttpController : IHttpController
+    public abstract class HttpController
     {
         protected IDictionary<string, string> properties;
-        public virtual void Init(IDictionary<string, string> properties)
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        /// <param name="properties"></param>
+        public void Init(IDictionary<String, String> properties)
         {
             this.properties = properties;
         }
 
-        public virtual void DoGet(IOwinContext context)
-        { }
-        public virtual void DoPost(IOwinContext context)
-        { }
-        public virtual void DoHead(IOwinContext context)
-        { }
-        public virtual void DoDelete(IOwinContext context)
-        { }
-        public virtual void DoTrace(IOwinContext context)
-        { }
-
-        public virtual void Service(IOwinContext context)
+        /// <summary>
+        /// 提供服务
+        /// </summary>
+        /// <param name="context"></param>
+        public void Service(IOwinContext context)
         {
             switch (context.Request.Method)
             {
-                case "GET":
-                    DoGet(context);
-                    break;
-                case "POST":
-                    DoPost(context);
-                    break;
                 case "DELETE":
-                    DoDelete(context);
+                    doDelete(context);
+                    break;
+                case "GET":
+                    doGet(context);
                     break;
                 case "HEAD":
-                    DoHead(context);
+                    doHead(context);
+                    break;
+                case "OPTIONS":
+                    doOptions(context);
+                    break;
+                case "POST":
+                    doPost(context);
+                    break;
+                case "PUT":
+                    doPut(context);
                     break;
                 case "TRACE":
-                    DoTrace(context);
+                    doTrace(context);
                     break;
             }
         }
+
+        /// <summary>
+        /// 处理DELETE请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual void doDelete(IOwinContext context) { }
+
+        /// <summary>
+        /// 处理GET请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual void doGet(IOwinContext context) { }
+
+        /// <summary>
+        /// 处理HEAD请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual void doHead(IOwinContext context) { }
+
+        /// <summary>
+        /// 处理OPTIONS请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual void doOptions(IOwinContext context) { }
+
+        /// <summary>
+        /// 处理POST请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual void doPost(IOwinContext context) { }
+
+        /// <summary>
+        /// 处理PUT请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual void doPut(IOwinContext context) { }
+
+        /// <summary>
+        /// 处理TRACE请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        protected virtual void doTrace(IOwinContext context) { }
     }
 }

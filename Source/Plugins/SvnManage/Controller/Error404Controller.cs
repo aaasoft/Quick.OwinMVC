@@ -9,7 +9,7 @@ using Microsoft.Owin;
 namespace SvnManage.Controller
 {
     [Route("404")]
-    public class Error404Controller : IViewController
+    public class Error404Controller : ViewController
     {
         public string Service(IOwinContext context, IDictionary<string, object> data)
         {
@@ -18,7 +18,7 @@ namespace SvnManage.Controller
     }
 
     [Route("500")]
-    public class Error500Controller : IViewController
+    public class Error500Controller : ViewController
     {
         public string Service(IOwinContext context, IDictionary<string, object> data)
         {

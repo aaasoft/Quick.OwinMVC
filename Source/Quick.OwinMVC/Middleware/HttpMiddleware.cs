@@ -15,17 +15,17 @@ namespace Quick.OwinMVC.Middleware
     public class HttpMiddleware : OwinMiddleware, ITypeHunter,IHungryPropertyHunter
     {
         private IDictionary<string, string> properties;
-        public IDictionary<Regex, IHttpController> routes;        
+        public IDictionary<Regex, HttpController> routes;        
 
         public HttpMiddleware(OwinMiddleware next) : base(next)
         {
-            routes = new Dictionary<Regex, IHttpController>();
+            routes = new Dictionary<Regex, HttpController>();
         }
 
         public override Task Invoke(IOwinContext context)
         {
             String path = context.Get<String>("owin.RequestPath");
-            IHttpController controller = null;
+            HttpController controller = null;
             foreach (Regex regex in routes.Keys)
             {
                 if (regex.IsMatch(path))
@@ -46,7 +46,7 @@ namespace Quick.OwinMVC.Middleware
             });
         }
 
-        private void RegisterController(string path, IHttpController httpController)
+        private void RegisterController(string path, HttpController httpController)
         {
             httpController.Init(properties);
             routes.Add(RouteBuilder.RouteToRegex(path), httpController);
@@ -56,8 +56,8 @@ namespace Quick.OwinMVC.Middleware
         {
             foreach (RouteAttribute attr in type.GetCustomAttributes<RouteAttribute>())
             {
-                if (typeof(IHttpController).IsAssignableFrom(type))
-                    RegisterController(attr.Path, (IHttpController)Activator.CreateInstance(type));
+                if (typeof(HttpController).IsAssignableFrom(type))
+                    RegisterController(attr.Path, (HttpController)Activator.CreateInstance(type));
             }
         }
 

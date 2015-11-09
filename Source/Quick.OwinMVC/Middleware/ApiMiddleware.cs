@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class ApiMiddleware : AbstractControllerMiddleware<IApiController>
+    public class ApiMiddleware : AbstractControllerMiddleware<ApiController>
     {
         public ApiMiddleware(OwinMiddleware next) : base(next) { }
 
@@ -20,7 +20,7 @@ namespace Quick.OwinMVC.Middleware
             return "api";
         }
 
-        public override void ExecuteController(IApiController controller, IOwinContext context, string plugin, string path)
+        public override void ExecuteController(ApiController controller, IOwinContext context, string plugin, string path)
         {
             var rep = context.Response;
             Object obj = controller.Service(context);
@@ -32,7 +32,7 @@ namespace Quick.OwinMVC.Middleware
             {
                 var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
                 rep.Expires = new DateTimeOffset(DateTime.Now);
-                rep.ContentType = "text/json";
+                rep.ContentType = "text/json; charset=UTF-8";
                 Output(context, content);
             }
         }

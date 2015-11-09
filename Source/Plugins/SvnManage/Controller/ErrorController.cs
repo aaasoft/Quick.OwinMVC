@@ -8,9 +8,9 @@ using Microsoft.Owin;
 namespace Quick.OwinMVC.Controller
 {
     [Route("error")]
-    public class ErrorController : IViewController
+    public class ErrorController : ViewController
     {
-        public string Service(IOwinContext context, IDictionary<string, object> data)
+        protected override string doGet(IOwinContext context, IDictionary<string, object> data)
         {
             throw new NotImplementedException();
         }

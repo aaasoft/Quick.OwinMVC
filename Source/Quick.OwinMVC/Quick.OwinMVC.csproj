@@ -40,10 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\IApiController.cs" />
+    <Compile Include="Controller\ApiController.cs" />
     <Compile Include="Controller\HttpController.cs" />
-    <Compile Include="Controller\IHttpController.cs" />
-    <Compile Include="Controller\IViewController.cs" />
+    <Compile Include="Controller\ViewController.cs" />
     <Compile Include="Controller\IOwinContextExtension.cs" />
     <Compile Include="Controller\IPluginController.cs" />
     <Compile Include="Hunter\HunterUtils.cs" />

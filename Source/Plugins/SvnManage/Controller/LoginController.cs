@@ -14,7 +14,7 @@ namespace SvnManage.Controller
     /// 登录控制器
     /// </summary>
     [Route("login")]
-    public class LoginController : IViewController
+    public class LoginController : ViewController
     {
         [TextResource]
         public enum Texts
@@ -23,49 +23,44 @@ namespace SvnManage.Controller
             ERROR_USER_PASSWORD_INCORRECT
         }
 
-        private const String VIEW_NAME = "login";
+        protected override string doGet(IOwinContext context, IDictionary<string, object> data)
+        {
+#if DEBUG
+            //data["account"] = "test";
+            //data["password"] = "test";
+#endif
+            preperaData(context, data, null);
+            return base.doGet(context, data);
+        }
 
-        public string Service(IOwinContext context, IDictionary<string, object> data)
+        protected override string doPost(IOwinContext context, IDictionary<string, object> data)
         {
             var req = context.Request;
             var session = context.GetSession();
-
-            switch (req.Method)
+            var formData = context.GetFormData();
+            var arg_password = formData["password"];
+            if (arg_password == null)
             {
-                case "GET":
-#if DEBUG
-                    //data["account"] = "test";
-                    //data["password"] = "test";
-#endif
-                    preperaData(context, data, null);
-                    return VIEW_NAME;
-                case "POST":
-                    var formData = context.GetFormData();
-                    var arg_password = formData["password"];
-                    if (arg_password == null)
-                    {
-                        preperaData(context, data, null);
-                        return VIEW_NAME;
-                    }
-                    String arg_password_str = Encoding.UTF8.GetString(Convert.FromBase64String(arg_password));
-                    String[] args = arg_password_str.Split(':');
-                    var account = args[0].Trim();
-                    var password = args[1];
-
-                    if (Svn.ApiController.Instance.Check(account, password))
-                    {
-                        session[LoginMiddleware.LOGINED_USER_KEY] = account;
-                        var returnUrl = req.Query.Get(LoginMiddleware.RETURN_URL_KEY);
-                        if (String.IsNullOrEmpty(returnUrl))
-                            returnUrl = "/";
-                        var rep = context.Response;
-                        rep.Redirect(returnUrl);
-                    }
-
-                    preperaData(context, data, context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT));
-                    return VIEW_NAME;
+                preperaData(context, data, null);
+                return base.doPost(context, data);
             }
-            return null;
+            String arg_password_str = Encoding.UTF8.GetString(Convert.FromBase64String(arg_password));
+            String[] args = arg_password_str.Split(':');
+            var account = args[0].Trim();
+            var password = args[1];
+
+            if (Svn.ApiController.Instance.Check(account, password))
+            {
+                session[LoginMiddleware.LOGINED_USER_KEY] = account;
+                var returnUrl = req.Query.Get(LoginMiddleware.RETURN_URL_KEY);
+                if (String.IsNullOrEmpty(returnUrl))
+                    returnUrl = "/";
+                var rep = context.Response;
+                rep.Redirect(returnUrl);
+            }
+
+            preperaData(context, data, context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT));
+            return base.doPost(context, data);
         }
 
         private void preperaData(IOwinContext context, IDictionary<string, object> data, String message)

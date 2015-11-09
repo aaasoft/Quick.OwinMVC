@@ -10,7 +10,7 @@ using Quick.OwinMVC.Routing;
 namespace SvnManage.Controller.Svn
 {
     [Route("svn.modify_password")]
-    public class ModifyPasswordController : IViewController
+    public class ModifyPasswordController : ViewController
     {
         public string Service(IOwinContext context, IDictionary<string, object> data)
         {

@@ -14,7 +14,7 @@ using Quick.OwinMVC.Hunter;
 namespace SvnManage.Controller.Svn
 {
     [Route("svn")]
-    public class ApiController : IApiController,IPropertyHunter
+    public class ApiController : Quick.OwinMVC.Controller.ApiController,IPropertyHunter
     {
         public static ApiController Instance;
 

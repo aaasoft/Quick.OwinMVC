@@ -12,7 +12,7 @@ using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public class ViewMiddleware : AbstractControllerMiddleware<IViewController>, IHungryPropertyHunter, IPropertyHunter
+    public class ViewMiddleware : AbstractControllerMiddleware<ViewController>, IHungryPropertyHunter, IPropertyHunter
     {
         private IDictionary<String, String> properties;
         private IViewRender ViewRender;
@@ -48,7 +48,7 @@ namespace Quick.OwinMVC.Middleware
             }
         }
 
-        public override void ExecuteController(IViewController controller, IOwinContext context, string plugin, string path)
+        public override void ExecuteController(ViewController controller, IOwinContext context, string plugin, string path)
         {
             //执行MVC控制器，返回视图名称
             String viewName = controller.Service(context, context.Environment);

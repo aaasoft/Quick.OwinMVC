@@ -11,9 +11,9 @@ using System.Globalization;
 namespace SvnManage.Controller
 {
     [Route("language")]
-    public class LanguageControler : IApiController
+    public class LanguageControler : ApiController
     {
-        public object Service(IOwinContext context)
+        protected override object doGet(IOwinContext context)
         {
             return TextManager.GetLanguages().Select(t => new
             {
