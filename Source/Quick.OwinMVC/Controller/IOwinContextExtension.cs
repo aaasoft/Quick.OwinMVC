@@ -54,7 +54,7 @@ namespace Quick.OwinMVC.Controller
             if (!String.IsNullOrEmpty(acceptLanguage))
                 language = acceptLanguage.Split(new Char[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
             if (String.IsNullOrEmpty(language))
-                language = Server.Instance.Language;
+                language = TextManager.DefaultLanguage;
             return language;
         }
 

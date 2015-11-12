@@ -21,7 +21,11 @@ namespace Quick.OwinMVC.Localization
         /// <summary>
         /// 获取默认的文本管理器实例(语言为配置项Quick.OwinMVC.Server.Language的值)
         /// </summary>
-        public static TextManager DefaultInstance { get { return GetInstance(Server.Instance.Language); } }
+        public static TextManager DefaultInstance { get { return GetInstance(DefaultLanguage); } }
+        /// <summary>
+        /// 默认语言
+        /// </summary>
+        public static String DefaultLanguage { get; set; } = "zh-CN";
 
         /// <summary>
         /// 获取文本管理器实例
@@ -104,8 +108,8 @@ namespace Quick.OwinMVC.Localization
             //        }
             //    }
             //}
-            if (!collection.Contains(Server.Instance.Language))
-                collection.Insert(0, Server.Instance.Language);
+            if (!collection.Contains(DefaultLanguage))
+                collection.Insert(0, DefaultLanguage);
             return collection.ToArray();
         }
 
