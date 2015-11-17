@@ -48,7 +48,7 @@ namespace Quick.OwinMVC.Middleware
 
         private void RegisterController(string path, HttpController httpController)
         {
-            httpController.Init(properties);
+            HunterUtils.TryHunt(httpController, properties);
             routes.Add(RouteBuilder.RouteToRegex(path), httpController);
         }
 

@@ -9,17 +9,6 @@ namespace Quick.OwinMVC.Controller
 {
     public abstract class HttpController
     {
-        protected IDictionary<string, string> properties;
-
-        /// <summary>
-        /// 初始化
-        /// </summary>
-        /// <param name="properties"></param>
-        public void Init(IDictionary<String, String> properties)
-        {
-            this.properties = properties;
-        }
-
         /// <summary>
         /// 提供服务
         /// </summary>
