@@ -149,19 +149,19 @@ namespace Quick.OwinMVC
         public void Start()
         {
             //APP构造器
-            var appBuilder = new AppBuilder();
-            //中间件上下文
-            appBuilder.Use<MiddlewareContext>();
-            //注册所有的中间件
-            foreach (var register in middlewareRegisterActionList)
-                register.Invoke(appBuilder);
-            //构造APP
-            var app = appBuilder.Build();
+            //var appBuilder = new AppBuilder();          
+            //启动服务器
+            server.Start(app =>
+            {
+                //中间件上下文
+                app.Use<MiddlewareContext>();
+                //注册所有的中间件
+                foreach (var register in middlewareRegisterActionList)
+                    register.Invoke(app);
+            }, endpoint);
             //初始化所有的中间件
             this.Middlewares = MiddlewareContext.Instance.Middlewares;
             HunterUtils.TryHunt(this.Middlewares, properties);
-            //启动服务器
-            server.Start(app, endpoint);
         }
 
         public void Stop()

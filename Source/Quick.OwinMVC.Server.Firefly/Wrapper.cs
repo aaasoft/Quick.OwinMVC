@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Owin;
+using Microsoft.Owin.Builder;
 
 namespace Quick.OwinMVC.Server.Firefly
 {
@@ -21,9 +23,11 @@ namespace Quick.OwinMVC.Server.Firefly
             webApp = null;
         }
 
-        public void Start(Func<IDictionary<string, object>, Task> app, IPEndPoint endpoint)
+        public void Start(Action<IAppBuilder> app, IPEndPoint endpoint)
         {
-            webApp = new ServerFactory().Create(app, endpoint);
+            AppBuilder appBuilder = new AppBuilder();
+            app(appBuilder);
+            webApp = new ServerFactory().Create(appBuilder.Build(), endpoint);
         }
 
         public void Stop()

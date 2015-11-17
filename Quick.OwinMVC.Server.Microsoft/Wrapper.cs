@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Net;
-using Nowin;
-using Owin;
+using System.Threading.Tasks;
+using Microsoft.Owin.Hosting;
+using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Builder;
+using Owin;
 
-namespace Quick.OwinMVC.Server.Nowin
+namespace Quick.OwinMVC.Server.Microsoft
 {
     public class Wrapper : IWebServer
     {
@@ -26,11 +27,10 @@ namespace Quick.OwinMVC.Server.Nowin
 
         public void Start(Action<IAppBuilder> app, IPEndPoint endpoint)
         {
-            AppBuilder appBuilder = new AppBuilder();
-            app(appBuilder);
-            var builder = ServerBuilder.New().SetEndPoint(endpoint).SetOwinApp(appBuilder.Build());
-            //builder.SetCertificate(new X509Certificate2("certificate.pfx", "password"));
-            webApp = builder.Start();
+            webApp = WebApp.Start($"http://{endpoint.Address}:{endpoint.Port}", startup =>
+            {
+                app(startup);
+            });
         }
 
         public void Stop()

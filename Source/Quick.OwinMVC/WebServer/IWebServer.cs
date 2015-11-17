@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -16,7 +17,9 @@ namespace Quick.OwinMVC.WebServer
         /// <summary>
         /// 启动
         /// </summary>
-        void Start(Func<IDictionary<string, object>, Task> app, IPEndPoint endpoint);
+        /// <param name="app"></param>
+        /// <param name="endpoint"></param>
+        void Start(Action<IAppBuilder> app, IPEndPoint endpoint);
         /// <summary>
         /// 停止
         /// </summary>
