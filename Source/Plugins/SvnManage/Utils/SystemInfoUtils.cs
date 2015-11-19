@@ -153,7 +153,7 @@ namespace SvnManage.Utils
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get TotalVisibleMemorySize", @"^TotalVisibleMemorySize\s*(?'value'.*?)\s*$")]
-        [ShellCmd(PlatformID.Unix, "bash", "-c \"grep 'MemTotal:' /proc/meminfo| awk '{value=$2} END {print value}'\"", @"^\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "bash", "-c \"free | awk 'NR==2{total= $2}END{print total}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static long GetTotalMemory()
         {
             if (IsRuningOnWindows())
@@ -173,7 +173,7 @@ namespace SvnManage.Utils
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get FreePhysicalMemory", @"^FreePhysicalMemory\s*(?'value'.*?)\s*$")]
-        [ShellCmd(PlatformID.Unix, "bash", "-c \"grep '' /proc/meminfo | awk 'NR==2{memFree= $2}NR==4{cached= $2}{totalFree=memFree + cached}END{print totalFree}'\"", @"^\s*(?'value'.*?)\s*$")]
+        [ShellCmd(PlatformID.Unix, "bash", "-c \"free | awk 'NR==3{free= $4}END{print free}'\"", @"^\s*(?'value'.*?)\s*$")]
         public static long GetFreeMemory()
         {
             if (IsRuningOnWindows())
