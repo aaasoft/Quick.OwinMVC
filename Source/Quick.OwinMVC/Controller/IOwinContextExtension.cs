@@ -113,7 +113,7 @@ namespace Quick.OwinMVC.Controller
             return formCollection;
         }
 
-        private static JObject getJObject(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject)
+        private static JObject getJObject(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, params String[] ignoreProperties)
         {
             JObject jObj = new JObject();
             foreach (var pair in data)
@@ -154,6 +154,16 @@ namespace Quick.OwinMVC.Controller
                     jObj.Add(pair.Key, JToken.FromObject(text));
                 }
             }
+            if (ignoreProperties != null && ignoreProperties.Length > 0)
+            {
+                HashSet<String> ignoreProperyHashSet = new HashSet<string>(ignoreProperties);
+                foreach (var property in jObj.Properties()
+                    .Where(t => ignoreProperyHashSet.Contains(t.Name))
+                    .ToArray())
+                {
+                    jObj.Remove(property.Name);
+                }
+            }
             return jObj;
         }
 
@@ -163,10 +173,10 @@ namespace Quick.OwinMVC.Controller
         /// <typeparam name="T"></typeparam>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static T GetFormData<T>(this IOwinContext context)
+        public static T GetFormData<T>(this IOwinContext context, params String[] ignoreProperties)
             where T : class
         {
-            return context.GetFormData<T>(false);
+            return context.GetFormData<T>(false, ignoreProperties);
         }
 
         /// <summary>
@@ -176,10 +186,10 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="valueToObject">是否将值转换为对象</param>
         /// <returns></returns>
-        public static T GetFormData<T>(this IOwinContext context, bool valueToObject)
+        public static T GetFormData<T>(this IOwinContext context, bool valueToObject, params String[] ignoreProperties)
             where T : class
         {
-            return getJObject(context.GetFormData(), valueToObject).ToObject<T>();
+            return getJObject(context.GetFormData(), valueToObject, ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
@@ -189,9 +199,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static T GetFormData<T>(this IOwinContext context, T obj)
+        public static T GetFormData<T>(this IOwinContext context, T obj, params String[] ignoreProperties)
         {
-            return context.GetFormData<T>(obj, false);
+            return context.GetFormData<T>(obj, false, ignoreProperties);
         }
 
         /// <summary>
@@ -202,9 +212,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="obj"></param>
         /// <param name="valueToObject">是否将值转换为对象</param>
         /// <returns></returns>
-        public static T GetFormData<T>(this IOwinContext context, T obj, bool valueToObject)
+        public static T GetFormData<T>(this IOwinContext context, T obj, bool valueToObject, params String[] ignoreProperties)
         {
-            var jsonString = getJObject(context.GetFormData(), valueToObject).ToString();
+            var jsonString = getJObject(context.GetFormData(), valueToObject, ignoreProperties).ToString();
             Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
             if (hasCompilerGeneratedAttribute)
                 return JsonConvert.DeserializeAnonymousType(jsonString, obj);
@@ -218,10 +228,10 @@ namespace Quick.OwinMVC.Controller
         /// <typeparam name="T"></typeparam>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static T GetQueryData<T>(this IOwinContext context)
+        public static T GetQueryData<T>(this IOwinContext context, params String[] ignoreProperties)
             where T : class
         {
-            return context.GetQueryData<T>(false);
+            return context.GetQueryData<T>(false, ignoreProperties);
         }
 
         /// <summary>
@@ -231,10 +241,10 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="valueToObject">是否将值转换为对象</param>
         /// <returns></returns>
-        public static T GetQueryData<T>(this IOwinContext context, bool valueToObject)
+        public static T GetQueryData<T>(this IOwinContext context, bool valueToObject, params String[] ignoreProperties)
             where T : class
         {
-            return getJObject(context.Request.Query, valueToObject).ToObject<T>();
+            return getJObject(context.Request.Query, valueToObject, ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
