@@ -14,8 +14,8 @@ namespace Quick.OwinMVC.Utils
         {
             IDictionary<String, String> dict = new Dictionary<String, String>();
             content = parse(content, folderPath, new HashSet<string>(notAllowFiles));
-            //参考正则表达式: ^(\s|\r|\n)*?(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*?)(\s|\r|\n)*?$
-            Regex regex = new Regex(@"^(\s|\r|\n)*?(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*?)(\s|\r|\n)*?$", RegexOptions.Multiline);
+            //参考正则表达式: ^(\s|\r|\n)*(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*?)(\s|\r|\n)*$
+            Regex regex = new Regex(@"^(\s|\r|\n)*(?'key'[^#][^\s]*?)\s*=\s*(?'value'.*?)(\s|\r|\n)*$", RegexOptions.Multiline);
             foreach (Match match in regex.Matches(content))
             {
                 String key = match.Groups["key"].Value;

@@ -57,12 +57,23 @@ namespace Quick.OwinMVC.Middleware
 
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
+            return InvokeFinal(context, Route, null, plugin, path, t => InvokeNotMatch(context));
+        }
+
+        public Task InvokeFinal(IOwinContext context, string prefix, string suffix, string plugin, string path, Func<IOwinContext, Task> noMatchHandler)
+        {
+            //加前缀
+            if (!String.IsNullOrEmpty(prefix))
+                path = $"{prefix}/{path}";
+            //加后缀
+            if (!String.IsNullOrEmpty(suffix))
+                path = $"{path}{suffix}";
             Stream stream;
             ResourceWebResponse resourceResponse;
 
-            stream = getUrlStream($"resource://{plugin}/resource/{path}", out resourceResponse);
+            stream = getUrlStream($"resource://{plugin}/{path}", out resourceResponse);
             if (stream == null)
-                return this.InvokeNotMatch(context);
+                return noMatchHandler(context);
             return handleResource(context, stream, resourceResponse);
         }
 
