@@ -52,15 +52,15 @@ namespace Quick.OwinMVC.Middleware
             var stream = getUrlStream($"resource://0{context.Request.Path}", out resourceResponse);
             if (stream == null)
                 return base.InvokeNotMatch(context);
-            return handleResource(context, stream, resourceResponse);
+            return handleResource(context, stream, resourceResponse, Expires);
         }
 
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
-            return InvokeFinal(context, Route, null, plugin, path, t => InvokeNotMatch(context));
+            return InvokeFinal(context, Route, null, plugin, path, t => InvokeNotMatch(context), Expires);
         }
 
-        public Task InvokeFinal(IOwinContext context, string prefix, string suffix, string plugin, string path, Func<IOwinContext, Task> noMatchHandler)
+        public Task InvokeFinal(IOwinContext context, string prefix, string suffix, string plugin, string path, Func<IOwinContext, Task> noMatchHandler, double expires)
         {
             //加前缀
             if (!String.IsNullOrEmpty(prefix))
@@ -74,10 +74,10 @@ namespace Quick.OwinMVC.Middleware
             stream = getUrlStream($"resource://{plugin}/{path}", out resourceResponse);
             if (stream == null)
                 return noMatchHandler(context);
-            return handleResource(context, stream, resourceResponse);
+            return handleResource(context, stream, resourceResponse, expires);
         }
 
-        private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse)
+        private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse,double expires)
         {
             return Task.Factory.StartNew(() =>
             {
@@ -124,8 +124,8 @@ namespace Quick.OwinMVC.Middleware
                     var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
                     if (mime != null)
                         rep.ContentType = mime;
-                    rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(Expires));
-                    rep.Headers["Cache-Control"] = $"max-age={Expires}";
+                    rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
+                    rep.Headers["Cache-Control"] = $"max-age={expires}";
                     rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
                     Output(context, stream);
                 }
