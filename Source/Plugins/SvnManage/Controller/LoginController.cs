@@ -14,7 +14,7 @@ namespace SvnManage.Controller
     /// 登录控制器
     /// </summary>
     [Route("login")]
-    public class LoginController : ViewController
+    public class LoginController : ApiController
     {
         [TextResource]
         public enum Texts
@@ -23,17 +23,7 @@ namespace SvnManage.Controller
             ERROR_USER_PASSWORD_INCORRECT
         }
 
-        protected override string doGet(IOwinContext context, IDictionary<string, object> data)
-        {
-#if DEBUG
-            //data["account"] = "test";
-            //data["password"] = "test";
-#endif
-            preperaData(context, data, null);
-            return base.doGet(context, data);
-        }
-
-        protected override string doPost(IOwinContext context, IDictionary<string, object> data)
+        protected override Object doPost(IOwinContext context)
         {
             var req = context.Request;
             var session = context.GetSession();
@@ -41,8 +31,7 @@ namespace SvnManage.Controller
             var arg_password = formData["password"];
             if (arg_password == null)
             {
-                preperaData(context, data, null);
-                return base.doPost(context, data);
+                return null;
             }
             String arg_password_str = Encoding.UTF8.GetString(Convert.FromBase64String(arg_password));
             String[] args = arg_password_str.Split(':');
@@ -55,22 +44,9 @@ namespace SvnManage.Controller
                 var returnUrl = req.Query.Get(LoginMiddleware.RETURN_URL_KEY);
                 if (String.IsNullOrEmpty(returnUrl))
                     returnUrl = "/";
-                var rep = context.Response;
-                rep.Redirect(returnUrl);
+                return ApiResult.Success(returnUrl);
             }
-
-            preperaData(context, data, context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT));
-            return base.doPost(context, data);
-        }
-
-        private void preperaData(IOwinContext context, IDictionary<string, object> data, String message)
-        {
-            var session = context.GetSession();
-            var salt = Guid.NewGuid().ToString();
-            if (!String.IsNullOrEmpty(message))
-            {
-                data["login_message"] = message;
-            }
+            return ApiResult.Error(context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT));
         }
     }
 }

@@ -11,7 +11,13 @@ namespace SvnManage.Middleware
     public class LoginMiddleware : OwinMiddleware
     {
         private const String loginPath = "/login";
-        private readonly String[] allowPaths = { loginPath, "/base/api/language" };
+        private readonly String[] allowPaths = 
+        {
+            loginPath,
+            "/base/api/language",
+            "/base/api/login",
+            "/base/view/shared._Single"
+        };
         internal const String LOGINED_USER_KEY = "SVN_USER";
         internal const String RETURN_URL_KEY = "returnUrl";
 

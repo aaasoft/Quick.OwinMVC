@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controller\ApiController.cs" />
+    <Compile Include="Controller\ApiResult.cs" />
     <Compile Include="Controller\HttpController.cs" />
     <Compile Include="Controller\ViewController.cs" />
     <Compile Include="Controller\IOwinContextExtension.cs" />

@@ -1,6 +1,8 @@
-﻿#set($title="登录")
-#parse("base:shared._Single")
-#macro(RenderBody)
+﻿<script src="../../base/resource/js/jquery-2.0.3.min.js"></script>
+<script src="../../base/resource/js/commonRender.js"></script>
+<script type="text/javascript">
+    $('html').attr("style", "display:none");
+</script>
 <div class="row">
     <div class="col-sm-10 col-sm-offset-1">
         <div class="login-container">
@@ -47,21 +49,12 @@
                                     <div class="space"></div>
 
                                     <div class="clearfix">
-                                        <button type="button" onclick="login()" class="width-35 pull-right btn btn-sm btn-primary">
+                                        <button type="button" class="width-35 pull-right btn btn-sm btn-primary">
                                             <i class="icon-key"></i>
                                             登录
                                         </button>
                                     </div>
                                     <div class="space-4"></div>
-                                    #if(${login_message})
-                                    <div class="alert alert-danger">
-                                        <button type="button" class="close" data-dismiss="alert">
-                                            <i class="icon-remove"></i>
-                                        </button>
-                                        <i class="icon-remove red"></i>
-                                        ${login_message}
-                                    </div>
-                                    #end
                                 </fieldset>
                             </form>
                         </div><!-- /widget-main -->
@@ -71,104 +64,104 @@
         </div>
     </div><!-- /.col -->
 </div><!-- /.row -->
-#end
-<script src="${ContextPath}/base/resource/js/base64.js"></script>
-    #*
-<!--以#*..*#包括的内容会作为Velocity的注释而不被输出s-->
-<script src="../resource/js/jquery-1.10.2.min.js"></script>
-<script src="../resource/js/base64.js"></script>
-    *#
+
+<script src="../../base/resource/js/base64.js"></script>
+    
 <script type="text/javascript">
-    String.prototype.format = function () {
-        var result = this;
-        if (arguments.length == 0)
-            return null;
-        for (var i = 0; i < arguments.length; i++) {
-            var re = new RegExp('\\{' + (i) + '\\}', 'gm');
-            result = result.replace(re, arguments[i]);
-        }
-        return result;
-    };
-
-    function getCookie(c_name) {
-        if (document.cookie.length > 0) {
-            c_start = document.cookie.indexOf(c_name + "=")
-            if (c_start != -1) {
-                c_start = c_start + c_name.length + 1
-                c_end = document.cookie.indexOf(";", c_start)
-                if (c_end == -1) c_end = document.cookie.length
-                return unescape(document.cookie.substring(c_start, c_end))
-            }
-        }
-        return ""
-    }
-
-    function setCookie(c_name, value, expiredays) {
-        var exdate = new Date()
-        exdate.setDate(exdate.getDate() + expiredays)
-        document.cookie = c_name + "=" + escape(value) +
-        ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
-    }
-
-    function delCookie(name)
-    {
-        var exp = new Date();
-        exp.setTime(exp.getTime() - 1);
-        var cval = getCookie(name);
-        if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
-    }
-
-    function show_box(id) {
-        jQuery('.widget-box.visible').removeClass('visible');
-        jQuery('#' + id).addClass('visible');
-    }
-
-    $(document).ready(function () {
-        $('input').keypress(function (e) {
-            if (e.keyCode == 13)
-                login();
-        });
-
-        jQuery.get("${ContextPath}/base/api/language", function (json) {
-            var selectElement = $("#selectLanguage");
-            for (i in json) {
-                var data = json[i];
-                selectElement.append('<option value="{0}">{1}</option>'.format(data.key, data.value));
-            }
-            selectElement.change(function () {
-                var newLanguage = selectElement.val();
-                if (newLanguage == "sys")
-                    delCookie("Accept-Language");
-                else
-                    setCookie("Accept-Language", newLanguage, 365 * 1000);
-                location.reload();
+    jQuery(function ($) {
+        if (document.title == "") {
+            CommonRender.include({
+                url: "../../base/view/shared._Single",
+                onReady: function () {
+                }
             });
-            var language = getCookie("Accept-Language");
-            if (language == "")
-                return;
-            //选中的值
-            //$("#selectLanguage").val()
-            selectElement.val(language)
+            return;
+        }
+        String.prototype.format = function () {
+            var result = this;
+            if (arguments.length == 0)
+                return null;
+            for (var i = 0; i < arguments.length; i++) {
+                var re = new RegExp('\\{' + (i) + '\\}', 'gm');
+                result = result.replace(re, arguments[i]);
+            }
+            return result;
+        };
+
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=")
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1
+                    c_end = document.cookie.indexOf(";", c_start)
+                    if (c_end == -1) c_end = document.cookie.length
+                    return unescape(document.cookie.substring(c_start, c_end))
+                }
+            }
+            return ""
+        }
+
+        function setCookie(c_name, value, expiredays) {
+            var exdate = new Date()
+            exdate.setDate(exdate.getDate() + expiredays)
+            document.cookie = c_name + "=" + escape(value) +
+            ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
+        }
+
+        function delCookie(name) {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            var cval = getCookie(name);
+            if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+        }
+
+        function show_box(id) {
+            jQuery('.widget-box.visible').removeClass('visible');
+            jQuery('#' + id).addClass('visible');
+        }
+
+        $(document).ready(function () {
+            $('input').keypress(function (e) {
+                if (e.keyCode == 13)
+                    login();
+            });
+
+            jQuery.get("../../base/api/language", function (json) {
+                var selectElement = $("#selectLanguage");
+                for (i in json) {
+                    var data = json[i];
+                    selectElement.append('<option value="{0}">{1}</option>'.format(data.key, data.value));
+                }
+                selectElement.change(function () {
+                    var newLanguage = selectElement.val();
+                    if (newLanguage == "sys")
+                        delCookie("Accept-Language");
+                    else
+                        setCookie("Accept-Language", newLanguage, 365 * 1000);
+                    location.reload();
+                });
+                var language = getCookie("Accept-Language");
+                if (language == "")
+                    return;
+                //选中的值
+                //$("#selectLanguage").val()
+                selectElement.val(language)
+            });
         });
+
+        function login() {
+            var account = jQuery('#account').val();
+            var password = jQuery('#password').val();
+            var hash = Base64.encode(account + ':' + password);
+
+            $.post("../../base/api/login", { password: hash }, function (result) {
+                if (result.code == 0)
+                    window.location.href = result.message;
+                else
+                    alert(result.message);
+            });
+        }
+
+        $(".btn-primary").click(login);
     });
-
-    function login() {
-        var account = jQuery('#account').val();
-        var password = jQuery('#password').val();
-        var hash = Base64.encode(account + ':' + password);
-
-        var form = jQuery('<form />', { method: "post", style: "display:none;" }).appendTo('body');
-        form.append('<input type="hidden" name="password" value="' + hash + '" />');
-        form.submit();
-    }
-
-    //#if($account)
-
-    jQuery('#account').val('$account');
-    //#end
-    //#if($password)
-
-    jQuery('#password').val('$password');
-    //#end
-
 </script>

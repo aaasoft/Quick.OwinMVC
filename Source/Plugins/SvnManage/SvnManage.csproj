@@ -125,6 +125,7 @@
     <EmbeddedResource Include="resource\js\flot\jquery.flot.min.js" />
     <EmbeddedResource Include="resource\js\flot\jquery.flot.pie.min.js" />
     <EmbeddedResource Include="resource\js\flot\jquery.flot.resize.min.js" />
+    <EmbeddedResource Include="resource\js\commonRender.js" />
     <Content Include="resource\js\fuelux\data\fuelux.tree-sampledata.js" />
     <EmbeddedResource Include="resource\js\fuelux\fuelux.spinner.min.js" />
     <EmbeddedResource Include="resource\js\fuelux\fuelux.tree.min.js" />
