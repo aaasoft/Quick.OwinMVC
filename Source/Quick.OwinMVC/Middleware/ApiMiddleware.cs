@@ -15,11 +15,6 @@ namespace Quick.OwinMVC.Middleware
     {
         public ApiMiddleware(OwinMiddleware next) : base(next) { }
 
-        public override string GetRouteMiddle()
-        {
-            return "api";
-        }
-
         public override void ExecuteController(ApiController controller, IOwinContext context, string plugin, string path)
         {
             var rep = context.Response;

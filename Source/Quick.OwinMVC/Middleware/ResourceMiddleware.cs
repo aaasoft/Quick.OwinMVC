@@ -36,11 +36,6 @@ namespace Quick.OwinMVC.Middleware
             WebRequest.RegisterPrefix("resource:", resourceWebRequestFactory);
         }
 
-        public override string GetRouteMiddle()
-        {
-            return "resource";
-        }
-
         private Stream getUrlStream(String url, out ResourceWebResponse response)
         {
             Uri uri = new Uri(url);

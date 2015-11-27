@@ -20,6 +20,10 @@ namespace Quick.OwinMVC.Middleware
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
 
         /// <summary>
+        /// 路由
+        /// </summary>
+        private String Route { get; set; }
+        /// <summary>
         /// 是否启用压缩
         /// </summary>
         private bool EnableCompress { get; set; } = false;
@@ -30,8 +34,6 @@ namespace Quick.OwinMVC.Middleware
         public AbstractPluginPathMiddleware(OwinMiddleware next) : base(next)
         {
             pluginAliasDict = new Dictionary<String, String>();
-            String fullRoute = $"/:{QOMVC_PLUGIN_KEY}/{GetRouteMiddle()}/:{QOMVC_PATH_KEY}";
-            route = RouteBuilder.RouteToRegex(fullRoute);
         }
 
         public virtual Task InvokeNotMatch(IOwinContext context)
@@ -57,7 +59,6 @@ namespace Quick.OwinMVC.Middleware
             return Invoke(context, context.Get<String>(QOMVC_PLUGIN_KEY), context.Get<String>(QOMVC_PATH_KEY));
         }
 
-        public abstract String GetRouteMiddle();
         public abstract Task Invoke(IOwinContext context, String plugin, String path);
 
         private Boolean allowCompress(IOwinRequest req)
@@ -132,6 +133,11 @@ namespace Quick.OwinMVC.Middleware
             {
                 case nameof(EnableCompress):
                     EnableCompress = bool.Parse(value);
+                    break;
+                case nameof(Route):
+                    Route = value;
+                    String fullRoute = $"/:{QOMVC_PLUGIN_KEY}/{Route}/:{QOMVC_PATH_KEY}";
+                    route = RouteBuilder.RouteToRegex(fullRoute);
                     break;
             }
         }

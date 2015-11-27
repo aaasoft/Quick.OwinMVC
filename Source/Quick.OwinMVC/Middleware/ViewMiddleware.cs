@@ -21,11 +21,6 @@ namespace Quick.OwinMVC.Middleware
 
         public ViewMiddleware(OwinMiddleware next) : base(next) { }
 
-        public override string GetRouteMiddle()
-        {
-            return "view";
-        }
-
         public override void Hunt(IDictionary<string, string> properties)
         {
             base.Hunt(properties);
