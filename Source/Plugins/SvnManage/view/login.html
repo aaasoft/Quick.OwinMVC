@@ -43,6 +43,7 @@
                                                 <i class="icon-key"></i>
                                                 登录
                                             </button>
+                                            <i class="icon-spinner icon-spin orange bigger-250 pull-right" style="display:none"></i>
                                         </div>
                                         <div class="space-4"></div>
                                     </fieldset>
@@ -97,17 +98,30 @@
                 selectElement.val(language)
             });
 
+            function onBeforeLogin() {
+                $('.icon-spinner').show();
+                $('button').hide();
+            }
+
+            function onAfterLogin() {
+                $('.icon-spinner').hide();
+                $('button').show();
+            }
+
             //登录函数
             function login() {
                 var account = $('#account').val();
                 var password = $('#password').val();
                 var hash = Base64.encode(account + ':' + password);
 
+                onBeforeLogin();
                 $.post("../../base/api/login", { password: hash }, function (result) {
                     if (result.code == 0)
                         window.location.href = result.message;
                     else
-                        bootbox.alert(result.message);
+                        bootbox.alert(result.message, onAfterLogin);
+                }).error(function () {
+                    bootbox.alert("网络错误!", onAfterLogin);
                 });
             }
 
