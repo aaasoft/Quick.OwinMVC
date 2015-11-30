@@ -57,6 +57,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <EmbeddedResource Include="resource\font\fontawesome-webfont.woff" />
+    <EmbeddedResource Include="resource\font\fontawesome-webfont.eot" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resource\favicon.ico" />
@@ -76,6 +77,7 @@
     <EmbeddedResource Include="view\login.html" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="resource\js\template.js" />
     <EmbeddedResource Include="view\fileupload.html" />
     <EmbeddedResource Include="view\shared\_Error.html" />
     <EmbeddedResource Include="view\shared\_Single.html" />
@@ -126,6 +128,7 @@
     <EmbeddedResource Include="resource\js\flot\jquery.flot.pie.min.js" />
     <EmbeddedResource Include="resource\js\flot\jquery.flot.resize.min.js" />
     <EmbeddedResource Include="resource\js\commonRender.js" />
+    <EmbeddedResource Include="resource\js\cookie.js" />
     <Content Include="resource\js\fuelux\data\fuelux.tree-sampledata.js" />
     <EmbeddedResource Include="resource\js\fuelux\fuelux.spinner.min.js" />
     <EmbeddedResource Include="resource\js\fuelux\fuelux.tree.min.js" />

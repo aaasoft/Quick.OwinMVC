@@ -1,4 +1,17 @@
 ﻿var CommonRender = {
+
+    //加载母版页
+    loadMasterPage: function (config) {
+        $.get(config.url, function (source) {
+            template.config("escape", false);
+
+            var render = template.compile(source);
+            var html = render(config.data);
+            document.all[0].innerHTML = html;
+            config.ready();
+        });
+    },
+
     //包含其他文件
     include : function (config) {
         jQuery(function ($) {

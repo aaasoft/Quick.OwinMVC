@@ -1,136 +1,86 @@
-﻿<script src="../../base/resource/js/jquery-2.0.3.min.js"></script>
-<script src="../../base/resource/js/commonRender.js"></script>
-<script type="text/javascript">
-    $('html').attr("style", "display:none");
-</script>
-<div class="row">
-    <div class="col-sm-10 col-sm-offset-1">
-        <div class="login-container">
-            <div class="center">
-                <h1>
-                    <i class="icon-leaf green"></i>
-                    <span class="white">服务器管理系统</span>
-                    <span class="red">v1.0</span>
-                </h1>
-                <h4 class="blue">&copy; 深圳市龙控智能技术有限公司</h4>
-            </div>
-
-            <div class="space-6"></div>
-
-            <div class="position-relative">
-                <div id="login-box" class="login-box visible widget-box no-border">
-                    <div class="widget-body">
-                        <div class="widget-main">
-                            <div class="header blue lighter bigger">
-                                <div>
-                                    <select id="selectLanguage" class="form-control">
-                                        <option value="sys">系统语言</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="space-6"></div>
-
-                            <form>
-                                <fieldset>
-                                    <label class="block clearfix">
-                                        <span class="block input-icon input-icon-right">
-                                            <input id="account" type="text" class="form-control" placeholder="账号" />
-                                            <i class="icon-user"></i>
-                                        </span>
-                                    </label>
-
-                                    <label class="block clearfix">
-                                        <span class="block input-icon input-icon-right">
-                                            <input id="password" type="password" class="form-control" placeholder="密码" />
-                                            <i class="icon-lock"></i>
-                                        </span>
-                                    </label>
-
-                                    <div class="space"></div>
-
-                                    <div class="clearfix">
-                                        <button type="button" class="width-35 pull-right btn btn-sm btn-primary">
-                                            <i class="icon-key"></i>
-                                            登录
-                                        </button>
+﻿<script type="text/html">
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-1">
+            <div class="login-container">
+                <div class="center">
+                    <h1>
+                        <i class="icon-leaf green"></i>
+                        <span class="white">服务器管理系统</span>
+                        <span class="red">v1.0</span>
+                    </h1>
+                    <h4 class="blue">&copy; 深圳市龙控智能技术有限公司</h4>
+                </div>
+                <div class="space-6"></div>
+                <div class="position-relative">
+                    <div id="login-box" class="login-box visible widget-box no-border">
+                        <div class="widget-body">
+                            <div class="widget-main">
+                                <div class="header blue lighter bigger">
+                                    <div>
+                                        <select id="selectLanguage" class="form-control">
+                                            <option value="sys">系统语言</option>
+                                        </select>
                                     </div>
-                                    <div class="space-4"></div>
-                                </fieldset>
-                            </form>
-                        </div><!-- /widget-main -->
-                    </div><!-- /widget-body -->
-                </div><!-- /login-box -->
-            </div><!-- /position-relative -->
-        </div>
-    </div><!-- /.col -->
-</div><!-- /.row -->
+                                </div>
+                                <div class="space-6"></div>
+                                <form>
+                                    <fieldset>
+                                        <label class="block clearfix">
+                                            <span class="block input-icon input-icon-right">
+                                                <input id="account" type="text" class="form-control" placeholder="账号" />
+                                                <i class="icon-user"></i>
+                                            </span>
+                                        </label>
+                                        <label class="block clearfix">
+                                            <span class="block input-icon input-icon-right">
+                                                <input id="password" type="password" class="form-control" placeholder="密码" />
+                                                <i class="icon-lock"></i>
+                                            </span>
+                                        </label>
+                                        <div class="space"></div>
+                                        <div class="clearfix">
+                                            <button type="button" class="width-35 pull-right btn btn-sm btn-primary">
+                                                <i class="icon-key"></i>
+                                                登录
+                                            </button>
+                                        </div>
+                                        <div class="space-4"></div>
+                                    </fieldset>
+                                </form>
+                            </div><!-- /widget-main -->
+                        </div><!-- /widget-body -->
+                    </div><!-- /login-box -->
+                </div><!-- /position-relative -->
+            </div>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</script>
 
+<script src='../../base/resource/js/jquery-1.10.2.min.js'></script>
+<script src='../../base/resource/js/template.js'></script>
+<script src="../../base/resource/js/commonRender.js"></script>
+
+<script src="../../base/resource/js/bootstrap.min.js"></script>
+<script src="../../base/resource/js/bootbox.min.js"></script>
 <script src="../../base/resource/js/base64.js"></script>
-    
+<script src="../../base/resource/js/cookie.js"></script>
 <script type="text/javascript">
-    jQuery(function ($) {
-        if (document.title == "") {
-            CommonRender.include({
-                url: "../../base/view/shared._Single",
-                onReady: function () {
-                }
-            });
-            return;
-        }
-        String.prototype.format = function () {
-            var result = this;
-            if (arguments.length == 0)
-                return null;
-            for (var i = 0; i < arguments.length; i++) {
-                var re = new RegExp('\\{' + (i) + '\\}', 'gm');
-                result = result.replace(re, arguments[i]);
-            }
-            return result;
-        };
-
-        function getCookie(c_name) {
-            if (document.cookie.length > 0) {
-                c_start = document.cookie.indexOf(c_name + "=")
-                if (c_start != -1) {
-                    c_start = c_start + c_name.length + 1
-                    c_end = document.cookie.indexOf(";", c_start)
-                    if (c_end == -1) c_end = document.cookie.length
-                    return unescape(document.cookie.substring(c_start, c_end))
-                }
-            }
-            return ""
-        }
-
-        function setCookie(c_name, value, expiredays) {
-            var exdate = new Date()
-            exdate.setDate(exdate.getDate() + expiredays)
-            document.cookie = c_name + "=" + escape(value) +
-            ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString())
-        }
-
-        function delCookie(name) {
-            var exp = new Date();
-            exp.setTime(exp.getTime() - 1);
-            var cval = getCookie(name);
-            if (cval != null) document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
-        }
-
-        function show_box(id) {
-            jQuery('.widget-box.visible').removeClass('visible');
-            jQuery('#' + id).addClass('visible');
-        }
-
-        $(document).ready(function () {
-            $('input').keypress(function (e) {
-                if (e.keyCode == 13)
-                    login();
-            });
-
-            jQuery.get("../../base/api/language", function (json) {
+    CommonRender.loadMasterPage({
+        //母版页地址
+        url: '../../base/view/shared._Single',
+        //传递给母版页的数据
+        data: {
+            title: '登录',
+            body: $("script")[0].innerHTML
+        },
+        //页面加载完成后执行的代码
+        ready: function () {
+            //多语言下拉框
+            $.get("../../base/api/language", function (json) {
                 var selectElement = $("#selectLanguage");
                 for (i in json) {
                     var data = json[i];
-                    selectElement.append('<option value="{0}">{1}</option>'.format(data.key, data.value));
+                    selectElement.append('<option value="' + data.key + '">' + data.value + '</option>');
                 }
                 selectElement.change(function () {
                     var newLanguage = selectElement.val();
@@ -144,24 +94,29 @@
                 if (language == "")
                     return;
                 //选中的值
-                //$("#selectLanguage").val()
                 selectElement.val(language)
             });
-        });
 
-        function login() {
-            var account = jQuery('#account').val();
-            var password = jQuery('#password').val();
-            var hash = Base64.encode(account + ':' + password);
+            //登录函数
+            function login() {
+                var account = $('#account').val();
+                var password = $('#password').val();
+                var hash = Base64.encode(account + ':' + password);
 
-            $.post("../../base/api/login", { password: hash }, function (result) {
-                if (result.code == 0)
-                    window.location.href = result.message;
-                else
-                    alert(result.message);
+                $.post("../../base/api/login", { password: hash }, function (result) {
+                    if (result.code == 0)
+                        window.location.href = result.message;
+                    else
+                        bootbox.alert(result.message);
+                });
+            }
+
+            //绑定登录按钮和按键
+            $('input').keypress(function (e) {
+                if (e.keyCode == 13)
+                    login();
             });
+            $('.btn-primary').click(login);
         }
-
-        $(".btn-primary").click(login);
     });
 </script>
