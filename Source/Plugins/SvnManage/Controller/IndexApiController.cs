@@ -10,36 +10,10 @@ using System.Diagnostics;
 using SvnManage.Utils;
 using Quick.OwinMVC.Utils;
 using Quick.OwinMVC.Hunter;
+using SvnManage.Middleware;
 
 namespace SvnManage.Controller
 {
-    [Route("index")]
-    public class IndexController : ViewController, IPropertyHunter
-    {
-        private String refreshInterval;
-
-        void IPropertyHunter.Hunt(string key, string value)
-        {
-            switch (key)
-            {
-                case nameof(refreshInterval):
-                    refreshInterval = value;
-                    break;
-            }
-        }
-
-        protected override string doGet(IOwinContext context, IDictionary<string, object> data)
-        {
-            var viewData = new
-            {
-                serverTime = TimeUtils.GetTime(DateTime.Now),
-                refreshInterval = refreshInterval
-            };
-            data.Add(viewData);
-            return base.doGet(context, data);
-        }
-    }
-
     [Route("index")]
     public class IndexApiController : ApiController
     {
@@ -49,6 +23,11 @@ namespace SvnManage.Controller
         {
             switch (context.Request.Query["type"])
             {
+                case "user":
+                    return new
+                    {
+                        user = context.GetSession()[LoginMiddleware.LOGINED_USER_KEY]
+                    };
                 case "info":
                     return new
                     {
