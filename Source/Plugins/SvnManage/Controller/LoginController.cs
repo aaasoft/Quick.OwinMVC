@@ -41,10 +41,9 @@ namespace SvnManage.Controller
             if (Svn.ApiController.Instance.Check(account, password))
             {
                 session[LoginMiddleware.LOGINED_USER_KEY] = account;
-                var returnUrl = req.Query.Get(LoginMiddleware.RETURN_URL_KEY);
-                if (String.IsNullOrEmpty(returnUrl))
-                    returnUrl = "/";
-                return ApiResult.Success(returnUrl);
+                Object returnUrl = "/";
+                session.TryGetValue(LoginMiddleware.RETURN_URL_KEY, out returnUrl);
+                return ApiResult.Success(returnUrl.ToString());
             }
             return ApiResult.Error(context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT));
         }

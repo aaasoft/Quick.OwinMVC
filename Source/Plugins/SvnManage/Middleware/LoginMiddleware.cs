@@ -50,9 +50,8 @@ namespace SvnManage.Middleware
                     if (sourceRequestPath != null)
                         req.Set("owin.RequestPath", sourceRequestPath);
                     var returnUrl = req.Uri.ToString();
-                    //对URL进行编码
-                    returnUrl = System.Web.HttpUtility.UrlEncode(returnUrl);
-                    var redirectUrl = $"{req.Get<String>("ContextPath")}{loginPath}?{RETURN_URL_KEY}={returnUrl}";
+                    context.GetSession()[RETURN_URL_KEY] = returnUrl;
+                    var redirectUrl = $"{req.Get<String>("ContextPath")}{loginPath}";
                     rep.Redirect(redirectUrl);
                 });
             }
