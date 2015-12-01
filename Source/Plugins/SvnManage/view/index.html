@@ -3,8 +3,8 @@
     <!--标题-->
     <meta name="title" content="主页" />
     <!--母版页-->
-    <meta name="masterPage" content="../../base/resource/shared._Layout.html" />
-    <meta name="scripts" content="../../base/resource/js/highcharts.js" />
+    <meta name="masterPage" content="/base/resource/shared._Layout.html" />
+    <meta name="scripts" content="/base/resource/js/highcharts.js" />
     <script type="text/javascript">
         window.jQuery &&
         $(document).ready(function () {
@@ -116,7 +116,7 @@
                 //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "../../base/api/index?type=info",
+                    url: "/base/api/index?type=info",
                     success: function (json) {
                         var basic = json.basic;
                         var cpu = json.cpu;
@@ -155,7 +155,7 @@
                 //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "../../base/api/index?type=disk",
+                    url: "/base/api/index?type=disk",
                     success: function (json) {
                         //磁盘信息
                         var disk = json;
@@ -297,7 +297,7 @@
         </div><!-- /.col -->
     </div><!-- /.row -->
     <footer>
-        <script src='../../base/resource/js/includeMasterPage.js'></script>
+        <script src='/base/resource/js/includeMasterPage.js'></script>
     </footer>
 </body>
 </html>

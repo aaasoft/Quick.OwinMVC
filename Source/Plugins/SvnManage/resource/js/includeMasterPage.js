@@ -4,8 +4,8 @@
     js.src = url;
     document.body.appendChild(js);
 }
-loadJavascript("../../base/resource/js/jquery-1.10.2.min.js");
-loadJavascript("../../base/resource/js/template.js");
+loadJavascript("/base/resource/js/jquery-1.10.2.min.js");
+loadJavascript("/base/resource/js/template.js");
 
 window.onload = function (e) {
     //移除footer元素

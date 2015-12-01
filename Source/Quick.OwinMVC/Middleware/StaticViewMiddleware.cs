@@ -10,8 +10,8 @@ namespace Quick.OwinMVC.Middleware
 {
     public class StaticViewMiddleware : AbstractPluginPathMiddleware, IPropertyHunter
     {
-        //过期时间(默认10秒)
-        private double Expires { get; set; } = 10;
+        //过期时间(默认1秒)
+        private double Expires { get; set; } = 1;
         //视图文件后缀
         private String ViewFileSuffix { get; set; }
 

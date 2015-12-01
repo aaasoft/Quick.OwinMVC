@@ -1,14 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>#if($title)$title -#end 服务器管理系统</title>
+    <title>{{title}} - 服务器管理系统</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace.min.css" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace-rtl.min.css" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="/base/resource/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/base/resource/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="/base/resource/css/ace.min.css" />
+    <link rel="stylesheet" href="/base/resource/css/ace-rtl.min.css" />
+    <link rel="stylesheet" href="/base/resource/css/ace-skins.min.css" />
 </head>
 <body>
     <div class="main-container" id="main-container">
@@ -19,7 +19,7 @@
                         <div class="col-xs-12">
                             <!-- PAGE CONTENT BEGINS -->
                             <div class="error-container">
-                                #RenderBody()
+                                {{body}}
                             </div>
                             <!-- PAGE CONTENT ENDS -->
                         </div><!-- /.col -->
@@ -32,3 +32,4 @@
     <!-- inline scripts related to this page -->
 </body>
 </html>
+{{script}}
