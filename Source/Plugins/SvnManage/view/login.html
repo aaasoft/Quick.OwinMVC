@@ -9,6 +9,7 @@
     <script type="text/javascript">
         window.jQuery &&
         $(document).ready(function () {
+            $.get("/base/api/login");
             //多语言下拉框
             $.get("/base/api/language", function (json) {
                 var selectElement = $("#selectLanguage");
@@ -63,10 +64,14 @@
 
                 onBeforeLogin();
                 $.post("/base/api/login", { password: hash }, function (result) {
-                    var queryParams = getQueryParams();
-                    if (result.code == 0 && "returnUrl" in queryParams)
-                        window.location.href = queryParams["returnUrl"];
-                    else
+                    
+                    if (result.code == 0 ) {
+                        var queryParams = getQueryParams();
+                        if ("returnUrl" in queryParams)
+                            window.location.href = queryParams["returnUrl"];
+                        else
+                            window.location.href = "/";
+                    } else
                         bootbox.alert(result.message, onAfterLogin);
                 }).error(function () {
                     bootbox.alert("网络错误!", onAfterLogin);

@@ -23,6 +23,13 @@ namespace SvnManage.Controller
             ERROR_USER_PASSWORD_INCORRECT
         }
 
+        protected override object doGet(IOwinContext context)
+        {
+            var rep = context.Response;
+            context.GetSession().Clear();
+            return ApiResult.Success();
+        }
+
         protected override Object doPost(IOwinContext context)
         {
             var req = context.Request;
@@ -41,9 +48,7 @@ namespace SvnManage.Controller
             if (Svn.ApiController.Instance.Check(account, password))
             {
                 session[LoginMiddleware.LOGINED_USER_KEY] = account;
-                Object returnUrl = "/";
-                session.TryGetValue(LoginMiddleware.RETURN_URL_KEY, out returnUrl);
-                return ApiResult.Success(returnUrl.ToString());
+                return ApiResult.Success();
             }
             return ApiResult.Error(context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT));
         }

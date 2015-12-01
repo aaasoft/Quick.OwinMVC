@@ -45,7 +45,6 @@
     <Compile Include="Controller\IndexApiController.cs" />
     <Compile Include="Controller\LanguageControler.cs" />
     <Compile Include="Controller\LoginController.cs" />
-    <Compile Include="Controller\LogoutController.cs" />
     <Compile Include="Controller\FileuploadController.cs" />
     <Compile Include="Controller\Svn\ApiController.cs" />
     <Compile Include="Controller\Svn\ModifyPasswordController.cs" />
