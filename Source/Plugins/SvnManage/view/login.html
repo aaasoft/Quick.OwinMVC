@@ -1,4 +1,73 @@
-﻿<script type="text/html">
+﻿<html>
+<head>
+    <!--标题-->
+    <meta name="title" content="登录" />
+    <!--母版页-->
+    <meta name="masterPage" content="../../base/view/shared._Single" />
+    <script src="../../base/resource/js/base64.js"></script>
+    <script src="../../base/resource/js/cookie.js"></script>
+    <script type="text/javascript">
+        window.jQuery &&
+        $(document).ready(function () {
+            //多语言下拉框
+            $.get("../../base/api/language", function (json) {
+                var selectElement = $("#selectLanguage");
+                for (i in json) {
+                    var data = json[i];
+                    selectElement.append('<option value="' + data.key + '">' + data.value + '</option>');
+                }
+                selectElement.change(function () {
+                    var newLanguage = selectElement.val();
+                    if (newLanguage == "sys")
+                        delCookie("Accept-Language");
+                    else
+                        setCookie("Accept-Language", newLanguage, 365 * 1000);
+                    location.reload();
+                });
+                var language = getCookie("Accept-Language");
+                if (language == "")
+                    return;
+                //选中的值
+                selectElement.val(language)
+            });
+
+            function onBeforeLogin() {
+                $('.icon-spinner').show();
+                $('button').hide();
+            }
+
+            function onAfterLogin() {
+                $('.icon-spinner').hide();
+                $('button').show();
+            }
+
+            //登录函数
+            function login() {
+                var account = $('#account').val();
+                var password = $('#password').val();
+                var hash = Base64.encode(account + ':' + password);
+
+                onBeforeLogin();
+                $.post("../../base/api/login", { password: hash }, function (result) {
+                    if (result.code == 0)
+                        window.location.href = result.message;
+                    else
+                        bootbox.alert(result.message, onAfterLogin);
+                }).error(function () {
+                    bootbox.alert("网络错误!", onAfterLogin);
+                });
+            }
+
+            //绑定登录按钮和按键
+            $('input').keypress(function (e) {
+                if (e.keyCode == 13)
+                    login();
+            });
+            $('.btn-primary').click(login);
+        });
+    </script>
+</head>
+<body style="display:none">
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
             <div class="login-container">
@@ -55,82 +124,8 @@
             </div>
         </div><!-- /.col -->
     </div><!-- /.row -->
-</script>
-
-<script src='../../base/resource/js/jquery-1.10.2.min.js'></script>
-<script src='../../base/resource/js/template.js'></script>
-<script src="../../base/resource/js/commonRender.js"></script>
-
-<script src="../../base/resource/js/bootstrap.min.js"></script>
-<script src="../../base/resource/js/bootbox.min.js"></script>
-<script src="../../base/resource/js/base64.js"></script>
-<script src="../../base/resource/js/cookie.js"></script>
-<script type="text/javascript">
-    CommonRender.loadMasterPage({
-        //母版页地址
-        url: '../../base/view/shared._Single',
-        //传递给母版页的数据
-        data: {
-            title: '登录',
-            body: $("script")[0].innerHTML
-        },
-        //页面加载完成后执行的代码
-        ready: function () {
-            //多语言下拉框
-            $.get("../../base/api/language", function (json) {
-                var selectElement = $("#selectLanguage");
-                for (i in json) {
-                    var data = json[i];
-                    selectElement.append('<option value="' + data.key + '">' + data.value + '</option>');
-                }
-                selectElement.change(function () {
-                    var newLanguage = selectElement.val();
-                    if (newLanguage == "sys")
-                        delCookie("Accept-Language");
-                    else
-                        setCookie("Accept-Language", newLanguage, 365 * 1000);
-                    location.reload();
-                });
-                var language = getCookie("Accept-Language");
-                if (language == "")
-                    return;
-                //选中的值
-                selectElement.val(language)
-            });
-
-            function onBeforeLogin() {
-                $('.icon-spinner').show();
-                $('button').hide();
-            }
-
-            function onAfterLogin() {
-                $('.icon-spinner').hide();
-                $('button').show();
-            }
-
-            //登录函数
-            function login() {
-                var account = $('#account').val();
-                var password = $('#password').val();
-                var hash = Base64.encode(account + ':' + password);
-
-                onBeforeLogin();
-                $.post("../../base/api/login", { password: hash }, function (result) {
-                    if (result.code == 0)
-                        window.location.href = result.message;
-                    else
-                        bootbox.alert(result.message, onAfterLogin);
-                }).error(function () {
-                    bootbox.alert("网络错误!", onAfterLogin);
-                });
-            }
-
-            //绑定登录按钮和按键
-            $('input').keypress(function (e) {
-                if (e.keyCode == 13)
-                    login();
-            });
-            $('.btn-primary').click(login);
-        }
-    });
-</script>
+    <footer>
+        <script src='../../base/resource/js/includeMasterPage.js'></script>
+    </footer>
+</body>
+</html>

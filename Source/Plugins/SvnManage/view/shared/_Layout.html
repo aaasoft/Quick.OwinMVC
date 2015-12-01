@@ -1,22 +1,22 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>#if($title)$title -#end 服务器管理系统</title>
+    <title>{{title}} - 服务器管理系统</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace.min.css" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace-rtl.min.css" />
-    <link rel="stylesheet" href="${ContextPath}/base/resource/css/ace-skins.min.css" />
+    <link rel="stylesheet" href="../../base/resource/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../base/resource/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../../base/resource/css/ace.min.css" />
+    <link rel="stylesheet" href="../../base/resource/css/ace-rtl.min.css" />
+    <link rel="stylesheet" href="../../base/resource/css/ace-skins.min.css" />
 </head>
 <body>
     <div class="navbar navbar-default" id="navbar">
         <div class="navbar-container" id="navbar-container">
             <div class="navbar-header pull-left">
-                <a href="${ContextPath}/" class="navbar-brand" style=" margin-top:-10px; ">
+                <a href="../../" class="navbar-brand" style=" margin-top:-10px; ">
                     <small style="margin-left:-65px; ">
-                        <img src="${ContextPath}/base/resource/logo.png" width="220" height="45" />
+                        <img src="../../base/resource/logo.png" width="220" height="45" />
                     </small>
                 </a><!-- /.brand -->
             </div><!-- /.navbar-header -->
@@ -25,9 +25,9 @@
                 <ul class="nav ace-nav">
                     <li class="light-blue">
                         <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                            <img class="nav-user-photo" src="${ContextPath}/base/resource/avatars/user.png" alt="${SVN_USER}'的照片" />
+                            <img class="nav-user-photo" src="../../base/resource/avatars/user.png" alt="SVN_USER'的照片" />
                             <span class="user-info">
-                                <small style="padding-top:8px">${SVN_USER}</small>
+                                <small style="padding-top:8px">SVN_USER</small>
                             </span>
 
                             <i class="icon-caret-down"></i>
@@ -35,7 +35,7 @@
 
                         <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                             <li>
-                                <a href="${ContextPath}/logout">
+                                <a href="../../logout">
                                     <i class="icon-off"></i>
                                     退出
                                 </a>
@@ -55,7 +55,7 @@
             <div class="sidebar" id="sidebar">
                 <ul class="nav nav-list">
                     <li class="active">
-                        <a href="${ContextPath}/">
+                        <a href="../../">
                             <i class="icon-dashboard"></i>
                             <span class="menu-text"> 首页 </span>
                         </a>
@@ -69,7 +69,7 @@
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a href="${ContextPath}/base/view/svn.modify_password">
+                                <a href="../../base/view/svn.modify_password">
                                     <i class="icon-double-angle-right"></i>
                                     密码修改
                                 </a>
@@ -85,19 +85,19 @@
                         </a>
                         <ul class="submenu">
                             <li>
-                                <a href="${ContextPath}/base/view/fileupload">
+                                <a href="../../base/view/fileupload">
                                     <i class="icon-double-angle-right"></i>
                                     文件上传
                                 </a>
                             </li>
                             <li>
-                                <a href="${ContextPath}/path/not/exists/">
+                                <a href="../../path/not/exists/">
                                     <i class="icon-double-angle-right"></i>
                                     404页面
                                 </a>
                             </li>
                             <li>
-                                <a href="${ContextPath}/base/view/error">
+                                <a href="../../base/view/error">
                                     <i class="icon-double-angle-right"></i>
                                     500页面
                                 </a>
@@ -121,7 +121,7 @@
                     </ul><!-- .breadcrumb -->
                 </div>
                 <div class="page-content">
-                    #RenderBody()
+                    {{body}}
                 </div><!-- /.page-content -->
             </div><!-- /.main-content -->
         </div><!-- /#ace-settings-container -->
@@ -130,28 +130,22 @@
     <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
         <i class="icon-double-angle-up icon-only bigger-110"></i>
     </a>
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='${ContextPath}/base/resource/js/jquery-2.0.3.min.js'>" + "<" + "script>");
-    </script>
-    <script type="text/javascript">
-    if ("ontouchend" in document) document.write("<script src='${ContextPath}/base/resource/js/jquery.mobile.custom.min.js'>" + "<" + "script>");
-    </script>
-    <script src="${ContextPath}/base/resource/js/bootstrap.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/bootbox.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/typeahead-bs2.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/jquery.ui.touch-punch.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/jquery.slimscroll.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/jquery.easy-pie-chart.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/jquery.sparkline.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/flot/jquery.flot.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/flot/jquery.flot.pie.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/flot/jquery.flot.resize.min.js"></script>
-    <!-- ace scripts -->
-    <script src="${ContextPath}/base/resource/js/ace-extra.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/ace-elements.min.js"></script>
-    <script src="${ContextPath}/base/resource/js/ace.min.js"></script>
 
-    <!-- inline scripts related to this page -->
+    <script src='../../base/resource/js/jquery-2.0.3.min.js'></script>
+    <script src="../../base/resource/js/bootstrap.min.js"></script>
+    <script src="../../base/resource/js/bootbox.min.js"></script>
+    <script src="../../base/resource/js/typeahead-bs2.min.js"></script>
+    <script src="../../base/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="../../base/resource/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="../../base/resource/js/jquery.slimscroll.min.js"></script>
+    <script src="../../base/resource/js/jquery.easy-pie-chart.min.js"></script>
+    <script src="../../base/resource/js/jquery.sparkline.min.js"></script>
+    <script src="../../base/resource/js/flot/jquery.flot.min.js"></script>
+    <script src="../../base/resource/js/flot/jquery.flot.pie.min.js"></script>
+    <script src="../../base/resource/js/flot/jquery.flot.resize.min.js"></script>
+    
+    <script src="../../base/resource/js/ace-extra.min.js"></script>
+    <script src="../../base/resource/js/ace-elements.min.js"></script>
+    <script src="../../base/resource/js/ace.min.js"></script>
 </body>
 </html>
