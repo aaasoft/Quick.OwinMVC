@@ -44,14 +44,13 @@ namespace SvnManage.Middleware
             {
                 return Task.Factory.StartNew(() =>
                 {
-
                     var rep = context.Response;
-
                     if (sourceRequestPath != null)
                         req.Set("owin.RequestPath", sourceRequestPath);
                     var returnUrl = req.Uri.ToString();
-                    context.GetSession()[RETURN_URL_KEY] = returnUrl;
-                    var redirectUrl = $"{req.Get<String>("ContextPath")}{loginPath}";
+                    //对URL进行编码
+                    returnUrl = System.Web.HttpUtility.UrlEncode(returnUrl);
+                    var redirectUrl = $"{req.Get<String>("ContextPath")}{loginPath}?{RETURN_URL_KEY}={returnUrl}";
                     rep.Redirect(redirectUrl);
                 });
             }

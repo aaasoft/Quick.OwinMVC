@@ -41,6 +41,20 @@
                 $('button').show();
             }
 
+            //获取查询参数
+            function getQueryParams() {
+                var match,
+                pl = /\+/g,  // Regex for replacing addition symbol with a space
+                search = /([^&=]+)=?([^&]*)/g,
+                decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+                query = window.location.search.substring(1);
+
+                var urlParams = {};
+                while (match = search.exec(query))
+                    urlParams[decode(match[1])] = decode(match[2]);
+                return urlParams;
+            }
+
             //登录函数
             function login() {
                 var account = $('#account').val();
@@ -49,8 +63,9 @@
 
                 onBeforeLogin();
                 $.post("/base/api/login", { password: hash }, function (result) {
-                    if (result.code == 0)
-                        window.location.href = result.message;
+                    var queryParams = getQueryParams();
+                    if (result.code == 0 && "returnUrl" in queryParams)
+                        window.location.href = queryParams["returnUrl"];
                     else
                         bootbox.alert(result.message, onAfterLogin);
                 }).error(function () {
