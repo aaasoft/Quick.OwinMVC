@@ -1,4 +1,205 @@
-﻿<script type="text/html">
+﻿<html>
+<head>
+    <!--标题-->
+    <meta name="title" content="主页" />
+    <!--母版页-->
+    <meta name="masterPage" content="../../base/view/shared._Layout" />
+    <meta name="scripts" content="../../base/resource/js/highcharts.js" />
+    <script type="text/javascript">
+        window.jQuery &&
+        $(document).ready(function () {
+            Highcharts.setOptions({
+                global: {
+                    useUTC: false
+                },
+                colors: ['#FFCC00', '#28AB17', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
+            });
+
+            var cpuSerialCharts_MaxDataCount = 100;
+            var ramPieCharts_LastUsedRamM = 0;
+
+            //创建CPU折线图
+            var cpuCharts = null;
+            var createCpuCarts = function (time) {
+                return $('#divCpuChart').highcharts({
+                    chart: {
+                        type: 'area',
+                        animation: Highcharts.svg, // don't animate in old IE
+                        marginRight: 10,
+                    },
+                    credits: {
+                        enabled: false
+                    },
+                    title: {
+                        text: ''
+                    },
+                    xAxis: {
+                        type: 'datetime',
+                        tickPixelInterval: 150
+                    },
+                    yAxis: {
+                        title: {
+                            text: '使用率'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }]
+                    },
+                    tooltip: {
+                        formatter: function () {
+                            return this.series.name + ' ' + '<b>' + Highcharts.numberFormat(this.y, 2) + ' %' + '</b>' + '<br/>' +
+                                Highcharts.dateFormat('%H:%M:%S', this.x);
+                        }
+                    },
+                    legend: {
+                        enabled: false
+                    },
+                    series: [{
+                        name: '使用率',
+                        data: (function () {
+                            var data = [];
+                            for (var i = 0 - cpuSerialCharts_MaxDataCount; i <= 0; i += 1) {
+                                data.push({
+                                    x: time + i * 1000,
+                                    y: 0
+                                });
+                            }
+                            return data;
+                        }())
+                    }]
+                });
+            }
+
+            //创建内存饼图
+            var ramPieCharts = $('#divMemoryChart').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: ''
+                },
+                tooltip: {
+                    pointFormat: '<b>{point.y} M</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    name: "内存",
+                    colorByPoint: true,
+                    data: [{
+                        name: "已使用",
+                        y: 0
+                    }, {
+                        name: "剩余",
+                        y: 0
+                    }]
+                }]
+            });
+
+            var refrashBaseDataFunc = function () {
+                //刷新数据
+                jQuery.ajax({
+                    dataType: "json",
+                    url: "../../base/api/index?type=info",
+                    success: function (json) {
+                        var basic = json.basic;
+                        var cpu = json.cpu;
+                        var memory = json.memory;
+
+                        //基本信息
+                        jQuery("#tdOSName").html(basic.os_name);
+                        jQuery("#tdComputerName").html(basic.computer_name);
+                        jQuery("#tdProcessRunTime").html(basic.process_run_time);
+                        jQuery("#tdServerRunTime").html(basic.server_run_time);
+
+                        //内存信息
+                        var usedRamM = Math.round((memory.total - memory.free) / 1024 / 1024);
+                        //仅当已使用内存的数据变化时，才更新饼图
+                        if (usedRamM != ramPieCharts_LastUsedRamM) {
+                            ramPieCharts_LastUsedRamM = usedRamM;
+                            var freeRamM = Math.round(memory.free / 1024 / 1024);
+                            ramPieCharts.highcharts().series[0].setData([
+                                { y: usedRamM },
+                                { y: freeRamM }
+                            ]);
+                        }
+                        //CPU信息
+                        if (cpuCharts == null)
+                            cpuCharts = createCpuCarts(json.time);
+                        var x = json.time;
+                        var y = cpu.used;
+                        cpuCharts.highcharts().series[0].addPoint([x, y], true, true);
+                    }
+                });
+                //1秒后再次执行
+                setTimeout(refrashBaseDataFunc, 1 * 1000);
+            }
+
+            var refrashDiskDataFunc = function () {
+                //刷新数据
+                jQuery.ajax({
+                    dataType: "json",
+                    url: "../../base/api/index?type=disk",
+                    success: function (json) {
+                        //磁盘信息
+                        var disk = json;
+                        var diskInfoHtml = '<tbody>';
+                        for (i = 0; i < disk.length; i++) {
+                            var partion = disk[i];
+                            var percent = partion.totalUsed * 100 / partion.totalSize;
+                            percent = percent.toFixed(1);
+                            var progress_bar_color = "progress-bar-success";
+                            if (percent > 90)
+                                progress_bar_color = "progress-bar-danger";
+                            else if (percent > 80)
+                                progress_bar_color = "progress-bar-warning";
+                            diskInfoHtml += '<tr>'
+                            //名称
+                            diskInfoHtml += '<td width="20%"><strong>' + partion.name + '</strong></td>';
+                            diskInfoHtml += '<td>'
+                            diskInfoHtml += '<div class="progress progress-striped active" style="margin-bottom:0px" data-percent="';
+                            diskInfoHtml += percent + '%';
+                            diskInfoHtml += '  ';
+                            diskInfoHtml += partion.totalUsedString;
+                            diskInfoHtml += '/';
+                            diskInfoHtml += partion.totalSizeString;
+                            diskInfoHtml += '">';
+                            diskInfoHtml += '   <div class="progress-bar ' + progress_bar_color + '" style="width: ' + percent + '%;"></div>'
+
+                            diskInfoHtml += '</div>'
+                            diskInfoHtml += '</td>'
+                            diskInfoHtml += '</tr>'
+                        }
+                        diskInfoHtml += '</tbody>'
+                        jQuery("#tableDiskInfo").html(diskInfoHtml)
+                    }
+                });
+                //60秒后再次执行
+                setTimeout(refrashDiskDataFunc, 60 * 1000);
+            }
+
+            refrashBaseDataFunc();
+            refrashDiskDataFunc();
+        });
+    </script>
+</head>
+<body style="display:none">
     <div class="row">
         <div class="col-xs-12">
             <!-- PAGE CONTENT BEGINS -->
@@ -95,209 +296,8 @@
             <!-- PAGE CONTENT ENDS -->
         </div><!-- /.col -->
     </div><!-- /.row -->
-</script>
-
-<script src='../../base/resource/js/jquery-2.0.3.min.js'></script>
-<script src='../../base/resource/js/template.js'></script>
-<script src="../../base/resource/js/commonRender.js"></script>
-
-<script src="../../base/resource/js/bootstrap.min.js"></script>
-<script src="../../base/resource/js/highcharts.js"></script>
-
-<script type="text/javascript">
-    CommonRender.loadMasterPage({
-        //母版页地址
-        url: '../../base/view/shared._Layout',
-        //传递给母版页的数据
-        data: {
-            title: '主页',
-            body: $("script")[0].innerHTML
-        },
-        //页面加载完成后执行的代码
-        ready: function () {
-
-            Highcharts.setOptions({
-                global: {
-                    useUTC: false
-                },
-                colors: ['#FFCC00', '#28AB17', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
-            });
-
-            var cpuSerialCharts_MaxDataCount = 100;
-            var ramPieCharts_LastUsedRamM = 0;
-
-            //创建CPU折线图
-            var cpuCharts = $('#divCpuChart').highcharts({
-                chart: {
-                    type: 'area',
-                    animation: Highcharts.svg, // don't animate in old IE
-                    marginRight: 10,
-                },
-                credits: {
-                    enabled: false
-                },
-                title: {
-                    text: ''
-                },
-                xAxis: {
-                    type: 'datetime',
-                    tickPixelInterval: 150
-                },
-                yAxis: {
-                    title: {
-                        text: '使用率'
-                    },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }]
-                },
-                tooltip: {
-                    formatter: function () {
-                        return this.series.name + ' ' + '<b>' + Highcharts.numberFormat(this.y, 2) + ' %' + '</b>' + '<br/>' +
-                            Highcharts.dateFormat('%H:%M:%S', this.x);
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                series: [{
-                    name: '使用率',
-                    data: (function () {
-                        var data = [];
-                        var time = new Date().getTime();
-                        for (var i = 0 - cpuSerialCharts_MaxDataCount; i <= 0; i += 1) {
-                            data.push({
-                                x: time + i * 1000,
-                                y: 0
-                            });
-                        }
-                        return data;
-                    }())
-                }]
-            });
-            //创建内存饼图
-            var ramPieCharts = $('#divMemoryChart').highcharts({
-                chart: {
-                    plotBackgroundColor: null,
-                    plotBorderWidth: null,
-                    plotShadow: false,
-                    type: 'pie'
-                },
-                credits: {
-                    enabled: false
-                },
-                title: {
-                    text: ''
-                },
-                tooltip: {
-                    pointFormat: '<b>{point.y} M</b>'
-                },
-                plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: {
-                            enabled: false
-                        },
-                        showInLegend: true
-                    }
-                },
-                series: [{
-                    name: "内存",
-                    colorByPoint: true,
-                    data: [{
-                        name: "已使用",
-                        y: 0
-                    }, {
-                        name: "剩余",
-                        y: 0
-                    }]
-                }]
-            });
-
-            var refrashBaseDataFunc = function () {
-                //刷新数据
-                jQuery.ajax({
-                    dataType: "json",
-                    url: "../../base/api/index?type=info",
-                    success: function (json) {
-                        var basic = json.basic;
-                        var cpu = json.cpu;
-                        var memory = json.memory;
-
-                        //基本信息
-                        jQuery("#tdOSName").html(basic.os_name);
-                        jQuery("#tdComputerName").html(basic.computer_name);
-                        jQuery("#tdProcessRunTime").html(basic.process_run_time);
-                        jQuery("#tdServerRunTime").html(basic.server_run_time);
-
-                        //内存信息
-                        var usedRamM = Math.round((memory.total - memory.free) / 1024 / 1024);
-                        //仅当已使用内存的数据变化时，才更新饼图
-                        if (usedRamM != ramPieCharts_LastUsedRamM) {
-                            ramPieCharts_LastUsedRamM = usedRamM;
-                            var freeRamM = Math.round(memory.free / 1024 / 1024);
-                            ramPieCharts.highcharts().series[0].setData([
-                                { y: usedRamM },
-                                { y: freeRamM }
-                            ]);
-                        }
-                        //CPU信息
-                        var x = json.time;
-                        var y = cpu.used;
-                        cpuCharts.highcharts().series[0].addPoint([x, y], true, true);
-                    }
-                });
-                //1秒后再次执行
-                setTimeout(refrashBaseDataFunc, 1 * 1000);
-            }
-
-            var refrashDiskDataFunc = function () {
-                //刷新数据
-                jQuery.ajax({
-                    dataType: "json",
-                    url: "../../base/api/index?type=disk",
-                    success: function (json) {
-                        //磁盘信息
-                        var disk = json;
-                        var diskInfoHtml = '<tbody>';
-                        for (i = 0; i < disk.length; i++) {
-                            var partion = disk[i];
-                            var percent = partion.totalUsed * 100 / partion.totalSize;
-                            percent = percent.toFixed(1);
-                            var progress_bar_color = "progress-bar-success";
-                            if (percent > 90)
-                                progress_bar_color = "progress-bar-danger";
-                            else if (percent > 80)
-                                progress_bar_color = "progress-bar-warning";
-                            diskInfoHtml += '<tr>'
-                            //名称
-                            diskInfoHtml += '<td width="20%"><strong>' + partion.name + '</strong></td>';
-                            diskInfoHtml += '<td>'
-                            diskInfoHtml += '<div class="progress progress-striped active" style="margin-bottom:0px" data-percent="';
-                            diskInfoHtml += percent + '%';
-                            diskInfoHtml += '  ';
-                            diskInfoHtml += partion.totalUsedString;
-                            diskInfoHtml += '/';
-                            diskInfoHtml += partion.totalSizeString;
-                            diskInfoHtml += '">';
-                            diskInfoHtml += '   <div class="progress-bar ' + progress_bar_color + '" style="width: ' + percent + '%;"></div>'
-
-                            diskInfoHtml += '</div>'
-                            diskInfoHtml += '</td>'
-                            diskInfoHtml += '</tr>'
-                        }
-                        diskInfoHtml += '</tbody>'
-                        jQuery("#tableDiskInfo").html(diskInfoHtml)
-                    }
-                });
-                //60秒后再次执行
-                setTimeout(refrashDiskDataFunc, 60 * 1000);
-            }
-            refrashBaseDataFunc();
-            refrashDiskDataFunc();
-        }
-    });
-</script>
+    <footer>
+        <script src='../../base/resource/js/includeMasterPage.js'></script>
+    </footer>
+</body>
+</html>
