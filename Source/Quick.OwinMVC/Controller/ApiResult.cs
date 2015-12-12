@@ -15,11 +15,14 @@ namespace Quick.OwinMVC.Controller
         public Int32 Code { get; set; }
         [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
         public String Message { get; set; }
+        [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
+        public Object Data { get; set; }
 
-        public ApiResult(Int32 code, String message)
+        public ApiResult(Int32 code, String message, Object data)
         {
             this.Code = code;
             this.Message = message;
+            this.Data = data;
         }
 
         /// <summary>
@@ -28,7 +31,17 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static ApiResult Success()
         {
-            return Success(null);
+            return Success(null, null);
+        }
+
+        public static ApiResult Success(Object data)
+        {
+            return Success(null, null);
+        }
+
+        public static ApiResult Success(String message)
+        {
+            return Success(message, null);
         }
 
         /// <summary>
@@ -36,9 +49,9 @@ namespace Quick.OwinMVC.Controller
         /// </summary>
         /// <param name="message">消息</param>
         /// <returns></returns>
-        public static ApiResult Success(String message)
+        public static ApiResult Success(String message, Object data)
         {
-            return new ApiResult(0, message);
+            return new ApiResult(0, message, data);
         }
 
         /// <summary>
@@ -57,7 +70,39 @@ namespace Quick.OwinMVC.Controller
         /// <returns></returns>
         public static ApiResult Error(String message)
         {
-            return Error(-1, message);
+            return Error(-1, message, null);
+        }
+
+        /// <summary>
+        /// 返回失败的结果
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static ApiResult Error(String message, Object data)
+        {
+            return Error(-1, message, data);
+        }
+
+        /// <summary>
+        /// 返回失败的结果
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public static ApiResult Error(Object data)
+        {
+            return Error(-1, null, data);
+        }
+
+        /// <summary>
+        /// 返回失败的结果
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public static ApiResult Error(Int32 code, String message)
+        {
+            return Error(code, message, null);
         }
 
         /// <summary>
@@ -66,11 +111,11 @@ namespace Quick.OwinMVC.Controller
         /// <param name="code">错误码</param>
         /// <param name="message">消息</param>
         /// <returns></returns>
-        public static ApiResult Error(Int32 code, String message)
+        public static ApiResult Error(Int32 code, String message,Object data)
         {
             if (code == 0)
                 throw new Exception("code value is '0',not means error.");
-            return new ApiResult(code, message);
+            return new ApiResult(code, message,data);
         }
     }
 }
