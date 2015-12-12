@@ -36,7 +36,7 @@ namespace Quick.OwinMVC.Controller
 
         public static ApiResult Success(Object data)
         {
-            return Success(null, null);
+            return Success(null, data);
         }
 
         public static ApiResult Success(String message)

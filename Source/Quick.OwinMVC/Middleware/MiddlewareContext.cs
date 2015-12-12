@@ -16,6 +16,10 @@ namespace Quick.OwinMVC.Middleware
         /// 所有中间件对象列表
         /// </summary>
         public IEnumerable<OwinMiddleware> Middlewares { get; private set; }
+        /// <summary>
+        /// HTTP服务是否已准备好
+        /// </summary>
+        public bool IsReady { get; set; } = false;
 
         public MiddlewareContext(OwinMiddleware next) : base(next)
         {
@@ -34,6 +38,17 @@ namespace Quick.OwinMVC.Middleware
 
         public override Task Invoke(IOwinContext context)
         {
+            //如果WEB服务器还没有准备好
+            if (!IsReady)
+            {
+                var rep = context.Response;
+                rep.StatusCode = 503;
+                rep.ReasonPhrase = "Service Unavailable";
+                //5秒后重试
+                rep.Headers["Retry-After"] = "5";
+                return rep.WriteAsync("Oops,web server is not ready yet,please refresh later...");
+            }
+
             String path = context.Get<String>("owin.RequestPath");
             //设置原始请求路径
             context.Set("Quick.OwinMVC.SourceRequestPath", path);

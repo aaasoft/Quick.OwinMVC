@@ -162,6 +162,7 @@ namespace Quick.OwinMVC
             //初始化所有的中间件
             this.Middlewares = MiddlewareContext.Instance.Middlewares;
             HunterUtils.TryHunt(this.Middlewares, properties);
+            MiddlewareContext.Instance.IsReady = true;
         }
 
         public void Stop()
