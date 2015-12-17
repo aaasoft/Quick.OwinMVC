@@ -20,11 +20,13 @@ namespace Quick.OwinMVC.Resource
                 fileName = fileName.Substring(1);
             fileName = fileName.Replace("/", ".");
 
-            String fullFileName = Path.Combine(baseFolder, fileName);
-            if (File.Exists(fullFileName))
-            {
-                return new FileInfo(fullFileName).FullName;
-            }   
+            String[] fileNames = new String[2];
+            fileNames[0] = Path.Combine(baseFolder, fileName);
+            fileNames[1] = Path.Combine(baseFolder, "." + fileName);
+
+            foreach (var fullFileName in fileNames)
+                if (File.Exists(fullFileName))
+                    return new FileInfo(fullFileName).FullName;
 
             String[] nameArray = fileName.Split(new Char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 1; i < nameArray.Length; i++)
@@ -35,7 +37,7 @@ namespace Quick.OwinMVC.Resource
                     continue;
                 String subFileName = String.Join(".", nameArray, i, nameArray.Length - i);
 
-                fullFileName = findFilePath(fullFolderPath, subFileName);
+                var fullFileName = findFilePath(fullFolderPath, subFileName);
                 if (fullFileName != null)
                     return fullFileName;
             }

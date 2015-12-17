@@ -63,7 +63,22 @@ namespace Quick.OwinMVC.Resource
                     resourceName = resourceName.Substring(1);
                 resourceName = resourceName.Replace("/", ".");
                 resourceName = $"{assemblyName}.{resourceName}";
-                resourceInfo = Assembly.GetManifestResourceInfo(resourceName);
+
+                String[] resourceNames = new String[2];
+                resourceNames[0] = resourceName;
+                var dotIndex = resourceName.LastIndexOf('.');
+                if (dotIndex < 0)
+                    dotIndex = 0;
+                resourceNames[1] = resourceName.Insert(dotIndex, ".");
+                foreach (var currentResourceName in resourceNames)
+                {
+                    resourceInfo = Assembly.GetManifestResourceInfo(currentResourceName);
+                    if (resourceInfo != null)
+                    {
+                        resourceName = currentResourceName;
+                        break;
+                    }   
+                }
             }
         }
 
