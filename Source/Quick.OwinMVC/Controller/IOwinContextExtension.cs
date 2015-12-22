@@ -170,6 +170,17 @@ namespace Quick.OwinMVC.Controller
         /// <summary>
         /// 获取POST提交的表单数据到对象
         /// </summary>
+        /// <param name="context"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static Object GetFormData(this IOwinContext context, Type type)
+        {
+            return getJObject(context.GetFormData(), false).ToObject(type);
+        }
+
+        /// <summary>
+        /// 获取POST提交的表单数据到对象
+        /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="context"></param>
         /// <returns></returns>
