@@ -22,33 +22,52 @@ namespace Quick.OwinMVC.Controller
             switch (context.Request.Method)
             {
                 case "DELETE":
-                    return doDelete(context);
+                    return doDeleteAsync(context);
                 case "GET":
-                    return doGet(context);
+                    return doGetAsync(context);
                 case "HEAD":
-                    return doHead(context);
+                    return doHeadAsync(context);
                 case "OPTIONS":
-                    return doOptions(context);
+                    return doOptionsAsync(context);
                 case "POST":
-                    return doPost(context);
+                    return doPostAsync(context);
                 case "PUT":
-                    return doPut(context);
+                    return doPutAsync(context);
                 case "TRACE":
-                    return doTrace(context);
+                    return doTraceAsync(context);
                 default:
                     return null;
             }
         }
 
         /// <summary>
+        /// 异步处理DELETE请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual Task<object> doDeleteAsync(IOwinContext context)
+        {
+            return Task.FromResult(doDelete(context));
+        }
+
+        /// <summary>
         /// 处理DELETE请求
         /// </summary>
         /// <param name="context"></param>
-        /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual async Task<object> doDelete(IOwinContext context)
+        protected virtual object doDelete(IOwinContext context)
         {
-            return await Task.FromResult<object>(null);
+            return null;
+        }
+
+        /// <summary>
+        /// 异步处理GET请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual Task<object> doGetAsync(IOwinContext context)
+        {
+            return Task.FromResult(doGet(context));
         }
 
         /// <summary>
@@ -57,9 +76,19 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual async Task<object> doGet(IOwinContext context)
+        protected virtual object doGet(IOwinContext context)
         {
-            return await Task.FromResult<object>(null);
+            return null;
+        }
+
+        /// <summary>
+        /// 异步处理HEAD请求请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual Task<object> doHeadAsync(IOwinContext context)
+        {
+            return Task.FromResult(doHead(context));
         }
 
         /// <summary>
@@ -68,9 +97,19 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual async Task<object> doHead(IOwinContext context)
+        protected virtual object doHead(IOwinContext context)
         {
-            return await Task.FromResult<object>(null);
+            return null;
+        }
+
+        /// <summary>
+        /// 异步处理OPTIONS请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual Task<object> doOptionsAsync(IOwinContext context)
+        {
+            return Task.FromResult(doOptions(context));
         }
 
         /// <summary>
@@ -79,9 +118,19 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual async Task<object> doOptions(IOwinContext context)
+        protected virtual object doOptions(IOwinContext context)
         {
-            return await Task.FromResult<object>(null);
+            return null;
+        }
+
+        /// <summary>
+        /// 异步处理POST请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual Task<object> doPostAsync(IOwinContext context)
+        {
+            return Task.FromResult(doPost(context));
         }
 
         /// <summary>
@@ -90,9 +139,19 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual async Task<object> doPost(IOwinContext context)
+        protected virtual object doPost(IOwinContext context)
         {
-            return await Task.FromResult<object>(null);
+            return null;
+        }
+
+        /// <summary>
+        /// 异步处理PUT请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual Task<object> doPutAsync(IOwinContext context)
+        {
+            return Task.FromResult(doPut(context));
         }
 
         /// <summary>
@@ -101,9 +160,19 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual async Task<object> doPut(IOwinContext context)
+        protected virtual object doPut(IOwinContext context)
         {
-            return await Task.FromResult<object>(null);
+            return null;
+        }
+
+        /// <summary>
+        /// 异步处理TRACE请求
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        protected virtual Task<object> doTraceAsync(IOwinContext context)
+        {
+            return Task.FromResult(doTrace(context));
         }
 
         /// <summary>
@@ -112,9 +181,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual async Task<object> doTrace(IOwinContext context)
+        protected virtual object doTrace(IOwinContext context)
         {
-            return await Task.FromResult<object>(null);
+            return null;
         }
     }
 }
