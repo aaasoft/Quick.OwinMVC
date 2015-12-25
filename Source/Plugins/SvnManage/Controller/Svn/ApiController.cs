@@ -43,7 +43,7 @@ namespace SvnManage.Controller.Svn
             ApiController.Instance = this;
         }
 
-        public override object Service(IOwinContext context)
+        public override async Task<object> Service(IOwinContext context)
         {
             var method = context.Request.Method;
             var action = context.Request.Query["action"];
@@ -58,14 +58,14 @@ namespace SvnManage.Controller.Svn
                     var new_password = formData.Get("new_password");
                     try
                     {
-                        return modifyPassword(account, pre_password, new_password);
+                        return await Task.FromResult(modifyPassword(account, pre_password, new_password));
                     }
                     catch (Exception ex)
                     {
-                        return new
+                        return await Task.FromResult(new
                         {
                             msg = ex.ToString()
-                        };
+                        });
                     }
             }
             return null;

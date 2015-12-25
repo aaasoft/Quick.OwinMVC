@@ -17,7 +17,7 @@ namespace Quick.OwinMVC.Controller
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public virtual Object Service(IOwinContext context)
+        public virtual Task<object> Service(IOwinContext context)
         {
             switch (context.Request.Method)
             {
@@ -46,9 +46,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual Object doDelete(IOwinContext context)
+        protected virtual async Task<object> doDelete(IOwinContext context)
         {
-            return null;
+            return await Task.FromResult<object>(null);
         }
 
         /// <summary>
@@ -57,9 +57,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual Object doGet(IOwinContext context)
+        protected virtual async Task<object> doGet(IOwinContext context)
         {
-            return null;
+            return await Task.FromResult<object>(null);
         }
 
         /// <summary>
@@ -68,9 +68,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual Object doHead(IOwinContext context)
+        protected virtual async Task<object> doHead(IOwinContext context)
         {
-            return null;
+            return await Task.FromResult<object>(null);
         }
 
         /// <summary>
@@ -79,9 +79,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual Object doOptions(IOwinContext context)
+        protected virtual async Task<object> doOptions(IOwinContext context)
         {
-            return null;
+            return await Task.FromResult<object>(null);
         }
 
         /// <summary>
@@ -90,9 +90,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual Object doPost(IOwinContext context)
+        protected virtual async Task<object> doPost(IOwinContext context)
         {
-            return null;
+            return await Task.FromResult<object>(null);
         }
 
         /// <summary>
@@ -101,9 +101,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual Object doPut(IOwinContext context)
+        protected virtual async Task<object> doPut(IOwinContext context)
         {
-            return null;
+            return await Task.FromResult<object>(null);
         }
 
         /// <summary>
@@ -112,9 +112,9 @@ namespace Quick.OwinMVC.Controller
         /// <param name="context"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        protected virtual Object doTrace(IOwinContext context)
+        protected virtual async Task<object> doTrace(IOwinContext context)
         {
-            return null;
+            return await Task.FromResult<object>(null);
         }
     }
 }

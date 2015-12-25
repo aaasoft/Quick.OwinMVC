@@ -7,6 +7,7 @@ using Microsoft.Owin;
 using Quick.OwinMVC.Routing;
 using SvnManage.Middleware;
 using Quick.OwinMVC.Localization;
+using System.Threading.Tasks;
 
 namespace SvnManage.Controller
 {
@@ -23,14 +24,14 @@ namespace SvnManage.Controller
             ERROR_USER_PASSWORD_INCORRECT
         }
 
-        protected override object doGet(IOwinContext context)
+        protected override async Task<object> doGet(IOwinContext context)
         {
             var rep = context.Response;
             context.GetSession().Clear();
-            return ApiResult.Success();
+            return await Task.FromResult(ApiResult.Success());
         }
 
-        protected override Object doPost(IOwinContext context)
+        protected override async Task<object> doPost(IOwinContext context)
         {
             var req = context.Request;
             var session = context.GetSession();
@@ -48,9 +49,9 @@ namespace SvnManage.Controller
             if (Svn.ApiController.Instance.Check(account, password))
             {
                 session[LoginMiddleware.LOGINED_USER_KEY] = account;
-                return ApiResult.Success();
+                return await Task.FromResult(ApiResult.Success());
             }
-            return ApiResult.Error(context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT));
+            return await Task.FromResult(ApiResult.Error(context.GetText(Texts.ERROR_USER_PASSWORD_INCORRECT)));
         }
     }
 }

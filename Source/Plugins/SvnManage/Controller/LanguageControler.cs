@@ -7,19 +7,20 @@ using System.Text;
 using Microsoft.Owin;
 using Quick.OwinMVC.Localization;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace SvnManage.Controller
 {
     [Route("language")]
     public class LanguageControler : ApiController
     {
-        protected override object doGet(IOwinContext context)
+        protected override async Task<object> doGet(IOwinContext context)
         {
-            return TextManager.GetLanguages().Select(t => new
+            return await Task.FromResult(TextManager.GetLanguages().Select(t => new
             {
                 key = t,
                 value = new CultureInfo(t).NativeName
-            });
+            }));
         }
     }
 }

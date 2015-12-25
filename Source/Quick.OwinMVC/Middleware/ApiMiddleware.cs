@@ -15,22 +15,19 @@ namespace Quick.OwinMVC.Middleware
     {
         public ApiMiddleware(OwinMiddleware next) : base(next) { }
 
-        public override Task ExecuteController(ApiController controller, IOwinContext context, string plugin, string path)
+        public override async Task ExecuteController(ApiController controller, IOwinContext context, string plugin, string path)
         {
             var rep = context.Response;
-            Object obj = controller.Service(context);
+            var obj = await controller.Service(context);
             if (obj == null)
             {
                 rep.StatusCode = 204;
-                return Task.FromResult(0);
+                return;
             }
-            else
-            {
-                var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
-                rep.Expires = new DateTimeOffset(DateTime.Now);
-                rep.ContentType = "text/json; charset=UTF-8";
-                return Output(context, content);
-            }
+            var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
+            rep.Expires = new DateTimeOffset(DateTime.Now);
+            rep.ContentType = "text/json; charset=UTF-8";
+            await Output(context, content);
         }
     }
 }
