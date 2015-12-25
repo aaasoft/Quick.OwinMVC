@@ -54,11 +54,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Quick.OwinMVC.View.NVelocity\Quick.OwinMVC.View.NVelocity.csproj">
-      <Project>{f30ae8b8-023f-4814-8c44-a2edf2933a58}</Project>
-      <Name>Quick.OwinMVC.View.NVelocity</Name>
-      <Private>False</Private>
-    </ProjectReference>
     <ProjectReference Include="..\Quick.OwinMVC\Quick.OwinMVC.csproj">
       <Project>{17f47358-c8e5-49b2-bcac-0b315f93e114}</Project>
       <Name>Quick.OwinMVC</Name>

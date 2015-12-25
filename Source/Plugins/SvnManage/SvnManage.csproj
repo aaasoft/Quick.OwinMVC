@@ -40,14 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Error404Controller.cs" />
-    <Compile Include="Controller\ErrorController.cs" />
     <Compile Include="Controller\IndexApiController.cs" />
     <Compile Include="Controller\LanguageControler.cs" />
     <Compile Include="Controller\LoginController.cs" />
-    <Compile Include="Controller\FileuploadController.cs" />
     <Compile Include="Controller\Svn\ApiController.cs" />
-    <Compile Include="Controller\Svn\ModifyPasswordController.cs" />
     <Compile Include="Middleware\LoginMiddleware.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\SystemInfoUtils.cs" />
