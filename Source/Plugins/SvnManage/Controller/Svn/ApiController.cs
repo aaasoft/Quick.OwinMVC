@@ -14,7 +14,7 @@ using Quick.OwinMVC.Hunter;
 namespace SvnManage.Controller.Svn
 {
     [Route("svn")]
-    public class ApiController : Quick.OwinMVC.Controller.ApiController,IPropertyHunter
+    public class ApiController : Quick.OwinMVC.Controller.ApiController, IPropertyHunter
     {
         public static ApiController Instance;
 
@@ -24,7 +24,7 @@ namespace SvnManage.Controller.Svn
 
         void IPropertyHunter.Hunt(string key, string value)
         {
-            switch(key)
+            switch (key)
             {
                 case nameof(logFilePath):
                     logFilePath = value;
@@ -43,7 +43,7 @@ namespace SvnManage.Controller.Svn
             ApiController.Instance = this;
         }
 
-        public object Service(IOwinContext context)
+        public override object Service(IOwinContext context)
         {
             var method = context.Request.Method;
             var action = context.Request.Query["action"];
@@ -123,14 +123,14 @@ namespace SvnManage.Controller.Svn
                     msg = "此账号已被保护，无法修改密码！"
                 };
             }
-            
+
             if (!Check(account, pre_password))
             {
                 return new { msg = "账号或密码错误！" };
             }
 
             ManagementClass userClass = new ManagementClass("root\\VisualSVN", "VisualSVN_User", null);
-            if(userClass == null)
+            if (userClass == null)
             {
                 return new
                 {

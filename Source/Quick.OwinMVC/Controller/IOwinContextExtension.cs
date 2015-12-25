@@ -290,28 +290,6 @@ namespace Quick.OwinMVC.Controller
             return obj;
         }
 
-        public static IEnumerable<T> GetCustomAttributes<T>(this Assembly assembly)
-            where T : Attribute
-        {
-            return GetCustomAttributes<T>(assembly, true);
-        }
-        public static IEnumerable<T> GetCustomAttributes<T>(this Assembly assembly, Boolean inherit)
-            where T : Attribute
-        {
-            return assembly.GetCustomAttributes(typeof(T), inherit).Cast<T>();
-        }
-
-        public static IEnumerable<T> GetCustomAttributes<T>(this Type type)
-            where T : Attribute
-        {
-            return GetCustomAttributes<T>(type, true);
-        }
-        public static IEnumerable<T> GetCustomAttributes<T>(this Type type, Boolean inherit)
-            where T : Attribute
-        {
-            return type.GetCustomAttributes(typeof(T), inherit).Cast<T>();
-        }
-
         public static void Add(this IDictionary<string, object> dict, Object obj)
         {
             Type type = obj.GetType();

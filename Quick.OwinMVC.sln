@@ -23,8 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{0E5BFAAA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageResourceMaker", "Source\Tools\LanguageResourceMaker\LanguageResourceMaker.csproj", "{E042D831-07C4-4B39-846E-44D37687D433}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC.Server.Microsoft", "Quick.OwinMVC.Server.Microsoft\Quick.OwinMVC.Server.Microsoft.csproj", "{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,10 +49,6 @@ Global
 		{E042D831-07C4-4B39-846E-44D37687D433}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E042D831-07C4-4B39-846E-44D37687D433}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E042D831-07C4-4B39-846E-44D37687D433}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +58,5 @@ Global
 		{702F8491-75B4-4FAA-927B-3A97604088BB} = {7AB2CB70-AB73-49B7-8800-6479AFA60E6B}
 		{9492538C-F2F8-49B8-8B76-255D22B9C8D4} = {B19DDEE8-6724-4592-B0F7-25D18A107624}
 		{E042D831-07C4-4B39-846E-44D37687D433} = {0E5BFAAA-5EB1-4BC0-8D3A-3BD2198BEE08}
-		{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0} = {B19DDEE8-6724-4592-B0F7-25D18A107624}
 	EndGlobalSection
 EndGlobal
