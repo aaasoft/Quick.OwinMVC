@@ -19,17 +19,17 @@ namespace SvnManage.Controller
     {
         private UnitStringConverting storageUnitStringConverting = UnitStringConverting.StorageUnitStringConverting;
 
-        protected override async Task<object> doGet(IOwinContext context)
+        protected override object doGet(IOwinContext context)
         {
             switch (context.Request.Query["type"])
             {
                 case "user":
-                    return await Task.FromResult(new
+                    return new
                     {
                         user = context.GetSession()[LoginMiddleware.LOGINED_USER_KEY]
-                    });
+                    };
                 case "info":
-                    return await Task.FromResult(new
+                    return new
                     {
                         time = Convert.ToInt64(TimeUtils.GetTime(DateTime.Now)),
                         basic = new
@@ -48,9 +48,9 @@ namespace SvnManage.Controller
                             total = SystemInfoUtils.GetTotalMemory(),
                             free = SystemInfoUtils.GetFreeMemory(),
                         }
-                    });
+                    };
                 case "disk":
-                    return await Task.FromResult(System.IO.DriveInfo.GetDrives().Where(t => t.IsReady && t.TotalSize > 0).Select(t => new
+                    return System.IO.DriveInfo.GetDrives().Where(t => t.IsReady && t.TotalSize > 0).Select(t => new
                     {
                         name = t.Name,
                         totalSize = t.TotalSize,
@@ -58,9 +58,9 @@ namespace SvnManage.Controller
                         totalUsed = t.TotalSize - t.TotalFreeSpace,
                         totalUsedString = storageUnitStringConverting.GetString(t.TotalSize - t.TotalFreeSpace),
                         driveFormat = t.DriveFormat
-                    }));
+                    });
             }
-            return await Task.FromResult(0);
+            return null;
         }
     }
 }

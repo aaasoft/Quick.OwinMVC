@@ -14,13 +14,13 @@ namespace SvnManage.Controller
     [Route("language")]
     public class LanguageControler : ApiController
     {
-        protected override async Task<object> doGet(IOwinContext context)
+        protected override object doGet(IOwinContext context)
         {
-            return await Task.FromResult(TextManager.GetLanguages().Select(t => new
+            return TextManager.GetLanguages().Select(t => new
             {
                 key = t,
                 value = new CultureInfo(t).NativeName
-            }));
+            });
         }
     }
 }
