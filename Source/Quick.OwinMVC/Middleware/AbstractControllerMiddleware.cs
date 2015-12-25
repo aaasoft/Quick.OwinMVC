@@ -56,9 +56,9 @@ namespace Quick.OwinMVC.Middleware
             if (!controllerDict.ContainsKey(key))
                 return Next.Invoke(context);
             T controller = controllerDict[key];
-            return Task.Factory.StartNew(() => ExecuteController(controller, context, plugin, path));
+            return ExecuteController(controller, context, plugin, path);
         }
 
-        public abstract void ExecuteController(T controller, IOwinContext context, string plugin, string path);
+        public abstract Task ExecuteController(T controller, IOwinContext context, string plugin, string path);
     }
 }

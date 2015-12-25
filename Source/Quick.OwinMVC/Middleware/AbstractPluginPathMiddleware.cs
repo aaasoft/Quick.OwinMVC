@@ -71,7 +71,7 @@ namespace Quick.OwinMVC.Middleware
             return acceptEncoding.Contains("gzip");
         }
 
-        public void Output(IOwinContext context, Stream stream)
+        public Task Output(IOwinContext context, Stream stream)
         {
             IOwinResponse rep = context.Response;
             //如果启用压缩
@@ -79,18 +79,21 @@ namespace Quick.OwinMVC.Middleware
             {
                 rep.Headers["Content-Encoding"] = "gzip";
                 var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
-                stream.CopyTo(gzStream);
-                gzStream.Close();
-                gzStream.Dispose();
+                return stream.CopyToAsync(gzStream)
+                    .ContinueWith(t =>
+                    {
+                        gzStream.Close();
+                        gzStream.Dispose();
+                    });
             }
             else
             {
                 rep.ContentLength = stream.Length;
-                stream.CopyTo(rep.Body);
+                return stream.CopyToAsync(rep.Body);
             }
         }
 
-        public void Output(IOwinContext context, Byte[] content)
+        public Task Output(IOwinContext context, Byte[] content)
         {
             IOwinResponse rep = context.Response;
 
@@ -99,14 +102,17 @@ namespace Quick.OwinMVC.Middleware
             {
                 rep.Headers["Content-Encoding"] = "gzip";
                 var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
-                gzStream.Write(content, 0, content.Length);
-                gzStream.Close();
-                gzStream.Dispose();
+                return gzStream.WriteAsync(content, 0, content.Length)
+                    .ContinueWith(t=>
+                    {
+                        gzStream.Close();
+                        gzStream.Dispose();
+                    });                
             }
             else
             {
                 rep.ContentLength = content.Length;
-                rep.Write(content);
+                return rep.WriteAsync(content);
             }
         }
 

@@ -77,59 +77,53 @@ namespace Quick.OwinMVC.Middleware
             return handleResource(context, stream, resourceResponse, expires);
         }
 
-        private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse,double expires)
+        private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse, double expires)
         {
-            return Task.Factory.StartNew(() =>
+            var req = context.Request;
+            var rep = context.Response;
+            //验证缓存有效
             {
-                using (stream)
+                //===================
+                //先验证最后修改时间
+                //===================
+                var resourceLastModified = resourceResponse.LastModified;
+                //最后修改时间判断部分
+                var clientLastModified = req.Headers.Get("If-Modified-Since");
+                if (clientLastModified != null)
                 {
-                    var req = context.Request;
-                    var rep = context.Response;
-                    //验证缓存有效
+                    if (clientLastModified == resourceLastModified.ToString("R"))
                     {
-                        //===================
-                        //先验证最后修改时间
-                        //===================
-                        var resourceLastModified = resourceResponse.LastModified;
-                        //最后修改时间判断部分
-                        var clientLastModified = req.Headers.Get("If-Modified-Since");
-                        if (clientLastModified != null)
-                        {
-                            if (clientLastModified == resourceLastModified.ToString("R"))
-                            {
-                                rep.StatusCode = 304;
-                                return;
-                            }
-                        }
-                        //===================
-                        //然后验证ETag
-                        //===================
-                        //ETag设置判断部分
-                        String serverETag = null;
-                        if (UseMd5ETag)
-                            serverETag = HashUtils.ComputeETagByMd5(stream);
-                        else
-                            serverETag = resourceResponse.LastModified.Ticks.ToString();
-                        var clientETag = req.Headers.Get("If-None-Match");
-                        //如果客户端的ETag值与服务端相同，则返回304，表示资源未修改
-                        if (serverETag == clientETag)
-                        {
-                            rep.StatusCode = 304;
-                            return;
-                        }
-                        rep.ETag = serverETag;
-                        stream.Position = 0;
+                        rep.StatusCode = 304;
+                        return Task.FromResult(0);
                     }
-                    //设置MIME类型
-                    var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
-                    if (mime != null)
-                        rep.ContentType = mime;
-                    rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
-                    rep.Headers["Cache-Control"] = $"max-age={expires}";
-                    rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-                    Output(context, stream);
                 }
-            });
+                //===================
+                //然后验证ETag
+                //===================
+                //ETag设置判断部分
+                String serverETag = null;
+                if (UseMd5ETag)
+                    serverETag = HashUtils.ComputeETagByMd5(stream);
+                else
+                    serverETag = resourceResponse.LastModified.Ticks.ToString();
+                var clientETag = req.Headers.Get("If-None-Match");
+                //如果客户端的ETag值与服务端相同，则返回304，表示资源未修改
+                if (serverETag == clientETag)
+                {
+                    rep.StatusCode = 304;
+                    return Task.FromResult(0);
+                }
+                rep.ETag = serverETag;
+                stream.Position = 0;
+            }
+            //设置MIME类型
+            var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
+            if (mime != null)
+                rep.ContentType = mime;
+            rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
+            rep.Headers["Cache-Control"] = $"max-age={expires}";
+            rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
+            return Output(context, stream);
         }
 
         public override void Hunt(string key, string value)
