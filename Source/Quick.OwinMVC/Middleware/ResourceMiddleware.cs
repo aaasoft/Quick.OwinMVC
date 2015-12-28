@@ -94,7 +94,7 @@ namespace Quick.OwinMVC.Middleware
                     if (clientLastModified == resourceLastModified.ToString("R"))
                     {
                         rep.StatusCode = 304;
-                        return Task.FromResult(0);
+                        return Task.Run(() => stream.Dispose());
                     }
                 }
                 //===================
@@ -111,7 +111,7 @@ namespace Quick.OwinMVC.Middleware
                 if (serverETag == clientETag)
                 {
                     rep.StatusCode = 304;
-                    return Task.FromResult(0);
+                    return Task.Run(() => stream.Dispose());
                 }
                 rep.ETag = serverETag;
                 stream.Position = 0;
@@ -123,7 +123,11 @@ namespace Quick.OwinMVC.Middleware
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
             rep.Headers["Cache-Control"] = $"max-age={expires}";
             rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-            return Output(context, stream);
+            return Output(context, stream)
+                .ContinueWith(t =>
+                {
+                    stream.Dispose();
+                });
         }
 
         public override void Hunt(string key, string value)
