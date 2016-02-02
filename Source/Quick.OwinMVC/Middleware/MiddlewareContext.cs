@@ -52,6 +52,8 @@ namespace Quick.OwinMVC.Middleware
             String path = context.Get<String>("owin.RequestPath");
             //设置原始请求路径
             context.Set("Quick.OwinMVC.SourceRequestPath", path);
+            context.Set("Quick.OwinMVC.SourceRequestUri", context.Request.Uri);
+
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < path.Split('/').Length - 2; i++)
             {
