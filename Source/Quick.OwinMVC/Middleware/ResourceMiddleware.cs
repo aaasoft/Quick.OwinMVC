@@ -65,16 +65,23 @@ namespace Quick.OwinMVC.Middleware
             //加前缀
             if (!String.IsNullOrEmpty(prefix))
                 path = $"{prefix}/{path}";
+
+            List<String> pathList = new List<string>();
+            pathList.Add(path);
             //加后缀
             if (!String.IsNullOrEmpty(suffix))
                 path = $"{path}{suffix}";
+            pathList.Add(path);
+
             Stream stream;
             ResourceWebResponse resourceResponse;
-
-            stream = getUrlStream($"resource://{plugin}/{path}", out resourceResponse);
-            if (stream == null)
-                return noMatchHandler(context);
-            return handleResource(context, stream, resourceResponse, expires);
+            foreach (var currentPath in pathList)
+            {
+                stream = getUrlStream($"resource://{plugin}/{currentPath}", out resourceResponse);
+                if (stream != null)
+                    return handleResource(context, stream, resourceResponse, expires);
+            }
+            return noMatchHandler(context);
         }
 
         private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse, double expires)
