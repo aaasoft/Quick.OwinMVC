@@ -19,7 +19,7 @@ namespace SvnManage.Middleware
         };
         internal const String LOGINED_USER_KEY = "SVN_USER";
         internal const String RETURN_URL_KEY = "returnUrl";
-
+        private Encoding encoding = new UTF8Encoding(false);
 
         public LoginMiddleware(OwinMiddleware next) : base(next) { }
 
@@ -40,8 +40,20 @@ namespace SvnManage.Middleware
             if (allowPaths.Contains(sourceRequestPath))
                 return Next.Invoke(context);
             else
-            //否则，跳转到登录页面
+            //否则
             {
+                //如果是API访问，则返回带错误信息的JSON数据
+                var strs = sourceRequestPath.Split(new Char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                if (strs.Length > 2 && strs[1] == "api")
+                {
+                    var rep = context.Response;
+                    var result = ApiResult.Error(-1, "当前未登录！").ToString();
+                    rep.ContentType = "text/json; charset=UTF-8";
+                    byte[] content = encoding.GetBytes(result);
+                    rep.ContentLength = content.Length;
+                    return context.Response.WriteAsync(content);
+                }
+                //跳转到登录页面
                 return Task.Factory.StartNew(() =>
                 {
                     var rep = context.Response;

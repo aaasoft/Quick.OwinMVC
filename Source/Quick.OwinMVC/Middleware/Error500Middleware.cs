@@ -1,4 +1,6 @@
 ﻿using Microsoft.Owin;
+using Newtonsoft.Json;
+using Quick.OwinMVC.Controller;
 using Quick.OwinMVC.Hunter;
 using System;
 using System.Collections.Generic;
@@ -19,43 +21,57 @@ namespace Quick.OwinMVC.Middleware
             server = Server.Instance;
         }
 
-        public override Task Invoke(IOwinContext context)
+        public override async Task Invoke(IOwinContext context)
         {
-            return Task.Factory.StartNew(() =>
+            try
             {
+                await Next.Invoke(context);
+            }
+            catch (Exception ex)
+            {
+                var rep = context.Response;
+                rep.StatusCode = 500;
                 try
                 {
-                    Next.Invoke(context).Wait();
-                }
-                catch (Exception ex)
-                {
-                    var rep = context.Response;
-                    rep.StatusCode = 500;
-                    try
+                    if (String.IsNullOrEmpty(RewritePath))
                     {
-                        if (String.IsNullOrEmpty(RewritePath))
-                            throw new ArgumentNullException($"Property '{this.GetType().FullName}.{RewritePath}' must be set.");
+                        var result = ApiResult.Error(ex.HResult, ex.Message, new
+                        {
+                            Type = ex.GetType().FullName,
+                            ex.Source,
+                            ex.Data
+#if DEBUG
+                            ,
+                            ex.StackTrace
+#endif
+                        }).ToString();
 
-                        context.Set("Exception", ex);
-                        context.Set("owin.RequestPath", RewritePath);
-
-                        //清理OwinContext
-                        foreach (var cleaner in server.GetMiddlewares<IOwinContextCleaner>())
-                            cleaner.Clean(context);
-
-                        Next.Invoke(context).Wait();
-                        if (rep.StatusCode == 404)
-                            throw ex;
-                    }
-                    catch (Exception ex2)
-                    {
-                        rep.ContentType = "text/plain; charset=UTF-8";
-                        byte[] content = encoding.GetBytes(ex2.ToString());
+                        rep.ContentType = "text/json; charset=UTF-8";
+                        byte[] content = encoding.GetBytes(result);
                         rep.ContentLength = content.Length;
-                        context.Response.Write(content);
+                        await context.Response.WriteAsync(content);
+                        return;
                     }
+
+                    context.Set("Exception", ex);
+                    context.Set("owin.RequestPath", RewritePath);
+
+                    //清理OwinContext
+                    foreach (var cleaner in server.GetMiddlewares<IOwinContextCleaner>())
+                        cleaner.Clean(context);
+
+                    await Next.Invoke(context);
+                    if (rep.StatusCode == 404)
+                        throw ex;
                 }
-            });
+                catch (Exception ex2)
+                {
+                    rep.ContentType = "text/plain; charset=UTF-8";
+                    byte[] content = encoding.GetBytes(ex2.ToString());
+                    rep.ContentLength = content.Length;
+                    await context.Response.WriteAsync(content);
+                }
+            }
         }
 
         void IPropertyHunter.Hunt(string key, string value)

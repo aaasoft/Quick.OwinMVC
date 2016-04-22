@@ -25,6 +25,11 @@ namespace Quick.OwinMVC.Controller
             this.Data = data;
         }
 
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
         /// <summary>
         /// 返回成功结果
         /// </summary>
