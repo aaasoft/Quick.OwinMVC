@@ -3,12 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerManage", "Source\ServerManage\ServerManage.csproj", "{C56C37DF-E979-4169-AD8D-146BBB1B05E8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9492538C-F2F8-49B8-8B76-255D22B9C8D4} = {9492538C-F2F8-49B8-8B76-255D22B9C8D4}
-		{702F8491-75B4-4FAA-927B-3A97604088BB} = {702F8491-75B4-4FAA-927B-3A97604088BB}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC", "Source\Quick.OwinMVC\Quick.OwinMVC.csproj", "{17F47358-C8E5-49B2-BCAC-0B315F93E114}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B19DDEE8-6724-4592-B0F7-25D18A107624}"
@@ -23,16 +17,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{0E5BFAAA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LanguageResourceMaker", "Source\Tools\LanguageResourceMaker\LanguageResourceMaker.csproj", "{E042D831-07C4-4B39-846E-44D37687D433}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Program", "Source\Program\Program.csproj", "{291CC54D-2D94-4FC5-8C5C-2389D0C35EC8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9492538C-F2F8-49B8-8B76-255D22B9C8D4} = {9492538C-F2F8-49B8-8B76-255D22B9C8D4}
+		{702F8491-75B4-4FAA-927B-3A97604088BB} = {702F8491-75B4-4FAA-927B-3A97604088BB}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C56C37DF-E979-4169-AD8D-146BBB1B05E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C56C37DF-E979-4169-AD8D-146BBB1B05E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C56C37DF-E979-4169-AD8D-146BBB1B05E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C56C37DF-E979-4169-AD8D-146BBB1B05E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{17F47358-C8E5-49B2-BCAC-0B315F93E114}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17F47358-C8E5-49B2-BCAC-0B315F93E114}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F47358-C8E5-49B2-BCAC-0B315F93E114}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -49,6 +45,10 @@ Global
 		{E042D831-07C4-4B39-846E-44D37687D433}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E042D831-07C4-4B39-846E-44D37687D433}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E042D831-07C4-4B39-846E-44D37687D433}.Release|Any CPU.Build.0 = Release|Any CPU
+		{291CC54D-2D94-4FC5-8C5C-2389D0C35EC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{291CC54D-2D94-4FC5-8C5C-2389D0C35EC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{291CC54D-2D94-4FC5-8C5C-2389D0C35EC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{291CC54D-2D94-4FC5-8C5C-2389D0C35EC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
