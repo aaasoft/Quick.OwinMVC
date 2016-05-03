@@ -70,7 +70,7 @@
     <Compile Include="Static\DebugLauncher.cs" />
     <Compile Include="Static\ServiceLauncher.cs" />
     <Compile Include="Static\WinFormLauncher.cs" />
-    <Compile Include="Static\WinServiceInstaller.cs" />
+    <Compile Include="Utils\WinServiceInstaller.cs" />
     <Compile Include="Utils\AssemblyUtils.cs" />
     <Compile Include="Utils\DotNetServiceInstaller.cs" />
     <Compile Include="Utils\ProgramUtils.cs" />

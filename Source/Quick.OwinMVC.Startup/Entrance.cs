@@ -6,6 +6,8 @@ namespace Quick.OwinMVC.Startup
 {
     public static class Entrance
     {
+        public static String ConfigFilePath = "Config/app.properties";
+
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
@@ -52,16 +54,16 @@ namespace Quick.OwinMVC.Startup
                     ServiceLauncher.Launch();
                     break;
                 case "-install":
-                    WinServiceInstaller.Install();
+                    WinServiceInstaller.Instance.Install();
                     break;
                 case "-uninstall":
-                    WinServiceInstaller.Uninstall();
+                    WinServiceInstaller.Instance.Uninstall();
                     break;
                 case "-start":
-                    WinServiceInstaller.Start();
+                    WinServiceInstaller.Instance.Start();
                     break;
                 case "-stop":
-                    WinServiceInstaller.Stop();
+                    WinServiceInstaller.Instance.Stop();
                     break;
             }
         }

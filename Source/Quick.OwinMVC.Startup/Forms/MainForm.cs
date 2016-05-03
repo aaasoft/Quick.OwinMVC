@@ -1,4 +1,4 @@
-﻿using Quick.OwinMVC.Startup.Static;
+﻿using Quick.OwinMVC.Startup.Utils;
 using System;
 using System.Diagnostics;
 using System.ServiceProcess;
@@ -11,11 +11,12 @@ namespace Quick.OwinMVC.Startup.Forms
         public MainForm()
         {
             InitializeComponent();
+            this.Text = WinServiceInstaller.Instance.ServiceName;
         }
 
         private void tmrCheckServiceStatus_Tick(object sender, EventArgs e)
         {
-            ServiceController service = WinServiceInstaller.getService();
+            ServiceController service = WinServiceInstaller.Instance.GetService();
             if (service == null)
             {
                 btnInstall.Enabled = true;
@@ -58,6 +59,7 @@ namespace Quick.OwinMVC.Startup.Forms
         private void enableForm()
         {
             this.Enabled = true;
+            this.Activate();
         }
 
         private Process startSelfProcess(String arguments)

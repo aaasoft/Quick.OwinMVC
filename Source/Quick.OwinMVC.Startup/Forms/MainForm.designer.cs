@@ -44,7 +44,7 @@
             // btnInstall
             // 
             this.btnInstall.Enabled = false;
-            this.btnInstall.Location = new System.Drawing.Point(12, 57);
+            this.btnInstall.Location = new System.Drawing.Point(12, 35);
             this.btnInstall.Name = "btnInstall";
             this.btnInstall.Size = new System.Drawing.Size(75, 23);
             this.btnInstall.TabIndex = 1;
@@ -55,7 +55,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 31);
+            this.label2.Location = new System.Drawing.Point(12, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(89, 12);
             this.label2.TabIndex = 2;
@@ -65,7 +65,7 @@
             // 
             this.lblStatus.AutoSize = true;
             this.lblStatus.ForeColor = System.Drawing.Color.Red;
-            this.lblStatus.Location = new System.Drawing.Point(107, 31);
+            this.lblStatus.Location = new System.Drawing.Point(107, 9);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 12);
             this.lblStatus.TabIndex = 3;
@@ -73,7 +73,7 @@
             // btnUninstall
             // 
             this.btnUninstall.Enabled = false;
-            this.btnUninstall.Location = new System.Drawing.Point(93, 57);
+            this.btnUninstall.Location = new System.Drawing.Point(93, 35);
             this.btnUninstall.Name = "btnUninstall";
             this.btnUninstall.Size = new System.Drawing.Size(75, 23);
             this.btnUninstall.TabIndex = 2;
@@ -84,7 +84,7 @@
             // btnStop
             // 
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(93, 86);
+            this.btnStop.Location = new System.Drawing.Point(93, 64);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 4;
@@ -95,7 +95,7 @@
             // btnStart
             // 
             this.btnStart.Enabled = false;
-            this.btnStart.Location = new System.Drawing.Point(12, 86);
+            this.btnStart.Location = new System.Drawing.Point(12, 64);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 3;
@@ -111,7 +111,7 @@
             // 
             // btnRunDebug
             // 
-            this.btnRunDebug.Location = new System.Drawing.Point(93, 115);
+            this.btnRunDebug.Location = new System.Drawing.Point(93, 93);
             this.btnRunDebug.Name = "btnRunDebug";
             this.btnRunDebug.Size = new System.Drawing.Size(75, 23);
             this.btnRunDebug.TabIndex = 0;
@@ -121,7 +121,7 @@
             // 
             // btnSetting
             // 
-            this.btnSetting.Location = new System.Drawing.Point(12, 115);
+            this.btnSetting.Location = new System.Drawing.Point(12, 93);
             this.btnSetting.Name = "btnSetting";
             this.btnSetting.Size = new System.Drawing.Size(75, 23);
             this.btnSetting.TabIndex = 5;
@@ -133,7 +133,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(185, 150);
+            this.ClientSize = new System.Drawing.Size(185, 128);
             this.Controls.Add(this.btnSetting);
             this.Controls.Add(this.btnRunDebug);
             this.Controls.Add(this.btnStop);
@@ -145,9 +145,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Quick.OwinMVC";
             this.ResumeLayout(false);
             this.PerformLayout();
 

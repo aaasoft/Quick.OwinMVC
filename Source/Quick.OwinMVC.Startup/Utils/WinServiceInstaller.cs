@@ -1,26 +1,54 @@
-﻿using Quick.OwinMVC.Startup.Utils;
+﻿using Quick.OwinMVC.Hunter;
+using Quick.OwinMVC.Startup.Utils;
+using Quick.OwinMVC.Utils;
 using System;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Windows.Forms;
 
-namespace Quick.OwinMVC.Startup.Static
+namespace Quick.OwinMVC.Startup.Utils
 {
-    public class WinServiceInstaller
+    public class WinServiceInstaller : IPropertyHunter
     {
-        public const String SERVICE_NAME = "DCIM_3.0";
-        public const String DISPLAY_ERVICE_NAME = "数据中心智能管理系统 3.0";
+        public static WinServiceInstaller Instance = new WinServiceInstaller();
 
-        public static void Install()
+        public String ServiceName = null;
+        public String DisplayName = null;
+        public String Description = null;
+
+        public WinServiceInstaller()
+        {
+            //读取全部配置文件
+            var properties = PropertyUtils.LoadFile(Entrance.ConfigFilePath);
+            HunterUtils.TryHunt(this, properties);
+        }
+
+        public void Hunt(string key, string value)
+        {
+            switch (key)
+            {
+                case nameof(ServiceName):
+                    ServiceName = value;
+                    break;
+                case nameof(DisplayName):
+                    DisplayName = value;
+                    break;
+                case nameof(Description):
+                    Description = value;
+                    break;
+            }
+        }
+
+        public void Install()
         {
             DotNetServiceInstaller installer = new DotNetServiceInstaller();
             ServiceInstallInfo installInfo = new ServiceInstallInfo();
             // -service
             installInfo.ServiceFilePath = $"\"{typeof(WinServiceInstaller).Assembly.Location}\" -service";
-            installInfo.ServiceName = SERVICE_NAME;
-            installInfo.DisplayName = SERVICE_NAME;
-            installInfo.Description = DISPLAY_ERVICE_NAME;
+            installInfo.ServiceName = ServiceName;
+            installInfo.DisplayName = DisplayName;
+            installInfo.Description = Description;
             installInfo.StartType = ServiceStartMode.Automatic;
 
             installInfo.IfDelayedAutoStart = true;
@@ -36,14 +64,14 @@ namespace Quick.OwinMVC.Startup.Static
             }
         }
 
-        public static void Uninstall()
+        public void Uninstall()
         {
             DotNetServiceInstaller installer = new DotNetServiceInstaller();
             ServiceInstallInfo installInfo = new ServiceInstallInfo();
 
-            installInfo.ServiceName = SERVICE_NAME;
-            installInfo.DisplayName = SERVICE_NAME;
-            installInfo.Description = DISPLAY_ERVICE_NAME;
+            installInfo.ServiceName = ServiceName;
+            installInfo.DisplayName = DisplayName;
+            installInfo.Description = Description;
 
             try
             {
@@ -56,32 +84,33 @@ namespace Quick.OwinMVC.Startup.Static
             }
         }
 
-        internal static ServiceController getService()
+        internal ServiceController GetService()
         {
-            return getService(false);
+            return GetService(false);
         }
-        internal static ServiceController getService(bool showMsg)
+
+        internal ServiceController GetService(bool showMsg)
         {
-            try { return ServiceController.GetServices().FirstOrDefault(s => s.ServiceName == SERVICE_NAME); }
+            try { return ServiceController.GetServices().FirstOrDefault(s => s.ServiceName == ServiceName); }
             catch
             {
                 if (showMsg)
-                    MessageBox.Show($"服务[{SERVICE_NAME}]不存在！");
+                    MessageBox.Show($"服务[{ServiceName}]不存在！");
                 return null;
             }
         }
 
-        public static void Start()
+        public void Start()
         {
-            var service = getService(true);
+            var service = GetService(true);
             if (service == null)
                 return;
             service.Start();
         }
 
-        public static void Stop()
+        public void Stop()
         {
-            var service = getService(true);
+            var service = GetService(true);
             if (service == null)
                 return;
             service.Stop();
