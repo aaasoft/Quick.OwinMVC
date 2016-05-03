@@ -3,7 +3,7 @@
   <Import Project="$(SolutionDir)Setting\Common.setting" />
   <PropertyGroup>
     <!--设置Plugins项目的输出目录-->
-    <OutputPath>$(BaseOutputPath)\ServerManage\Plugins\$(MSBuildProjectName)</OutputPath>
+    <OutputPath>$(BaseOutputPath)\Program\Plugins\$(MSBuildProjectName)</OutputPath>
   </PropertyGroup>
   <Import Project="$(SolutionDir)Setting\Suffix.setting" />
 </Project>

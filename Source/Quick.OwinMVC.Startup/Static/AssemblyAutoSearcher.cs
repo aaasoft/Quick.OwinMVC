@@ -23,7 +23,7 @@ namespace Quick.OwinMVC.Startup.Static
         /// </summary> 
         public static void Init()
         {
-            baseDirectory = Path.GetDirectoryName(typeof(AssemblyAutoSearcher).Assembly.Location);
+            baseDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             Environment.CurrentDirectory = baseDirectory;
 
             List<String> pathList = new List<string>();

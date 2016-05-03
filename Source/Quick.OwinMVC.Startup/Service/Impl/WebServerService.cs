@@ -25,28 +25,12 @@ namespace Quick.OwinMVC.Startup.Service.Impl
             server = new Server(properties, WebServerUri);
             server.Start();
             Console.Write("->地址：" + this.server.GetUrl());
-#if DEBUG
-            var webServerUriKey = $"{this.GetType().FullName}.{nameof(WebServerUri)}";
-            var url = properties[webServerUriKey].Replace("net://", "http://").Replace("http://0.0.0.0", "http://127.0.0.1");
-            //System.Diagnostics.Process.Start(url);
-#endif
         }
 
         public void Stop()
         {
             server.Stop();
             server = null;
-        }
-
-        public void Hunt(IDictionary<string, string> properties)
-        {
-            this.properties = properties;
-#if DEBUG
-            //修改调试的WEB服务端口为8094
-            var webServerUriKey = $"{this.GetType().FullName}.{nameof(WebServerUri)}";
-            if (properties.ContainsKey(webServerUriKey))
-                properties[webServerUriKey] = "net://0.0.0.0:8094";
-#endif
         }
 
         public void Hunt(string key, string value)
@@ -57,6 +41,11 @@ namespace Quick.OwinMVC.Startup.Service.Impl
                     WebServerUri = new Uri(value);
                     break;
             }
+        }
+
+        public void Hunt(IDictionary<string, string> properties)
+        {
+            this.properties = properties;
         }
     }
 }

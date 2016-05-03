@@ -36,12 +36,11 @@ namespace Quick.OwinMVC.Startup
             if (ProgramUtils.IsRuningOnWindows() && Environment.Version < Version.Parse("4.0.30319.17929"))
                 throw new ApplicationException("需要安装4.5或更新版本的Microsoft .NET Framework才能运行此程序！");
 
-            var properties = PropertyUtils.LoadFile(Entrance.ConfigFilePath);
             //启动所有服务
             foreach (var service in serviceList)
             {
                 Console.Write($"服务[{service.Name}]");
-                HunterUtils.TryHunt(service, properties);
+                HunterUtils.TryHunt(service, Entrance.Property);
                 Console.Write($"->启动中");
                 service.Start();
                 Console.WriteLine($"->完成");

@@ -11,8 +11,6 @@ namespace Quick.OwinMVC.Startup.Utils
 {
     public class WinServiceInstaller : IPropertyHunter
     {
-        public static WinServiceInstaller Instance = new WinServiceInstaller();
-
         public String ServiceName = null;
         public String DisplayName = null;
         public String Description = null;
@@ -20,8 +18,7 @@ namespace Quick.OwinMVC.Startup.Utils
         public WinServiceInstaller()
         {
             //读取全部配置文件
-            var properties = PropertyUtils.LoadFile(Entrance.ConfigFilePath);
-            HunterUtils.TryHunt(this, properties);
+            HunterUtils.TryHunt(this, Entrance.Property);
         }
 
         public void Hunt(string key, string value)

@@ -5,6 +5,18 @@ namespace Quick.OwinMVC.Program
     static class Program
     {
         /// <summary>
+        /// 应用程序的主入口点。
+        /// </summary>
+        static void Main(String[] args)
+        {
+            Startup.Entrance.Init("Config/Quick.OwinMVC.properties");
+            Program2.Start(args);
+        }
+    }
+
+    static class Program2
+    {
+        /// <summary>
         /// 未处理异常回掉函数
         /// </summary>
         /// <param name="sender"></param>
@@ -19,13 +31,9 @@ CLR版本:{Environment.Version.ToString()}
 异常:{Environment.NewLine}{e.ExceptionObject.ToString()}");
         }
 
-        /// <summary>
-        /// 应用程序的主入口点。
-        /// </summary>
-        static void Main(String[] args)
+        public static void Start(String[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionCallbackFun;
-
             Startup.Entrance.Start(args);
         }
     }

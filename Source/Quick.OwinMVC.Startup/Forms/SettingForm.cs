@@ -13,7 +13,6 @@ namespace Quick.OwinMVC.Startup.Forms
     public partial class SettingForm : Form
     {
         private const String AllIPAddress = "0.0.0.0";
-        private const String ConfigFile = "Config/Properties/web.properties";
         private const String WebServerUrlKey = "Quick.OwinMVC.Startup.Service.Impl.WebServerService.WebServerUri";
 
         private const String regexTemplate = @"^(?!#)\s*{0}\s*=\s*(?'value'.*?)\s*$";
@@ -90,17 +89,17 @@ namespace Quick.OwinMVC.Startup.Forms
             cbWebServer_IPAddress.SelectedIndex = 0;
 
             //加载配置文件
-            var configContent = getConfigContent(ConfigFile);
+            var configContent = getConfigContent(Entrance.ConfigFilePath);
             if (configContent == null)
             {
-                MessageBox.Show($"配置文件[{ConfigFile}]不存在或者无法打开！");
+                MessageBox.Show($"配置文件[{Entrance.ConfigFilePath}]不存在或者无法打开！");
                 this.Close();
                 return;
             }
             var match = webServerRegex.Match(configContent);
             if (match == null)
             {
-                MessageBox.Show($"配置文件[{ConfigFile}]中缺少配置项[{WebServerUrlKey}]！");
+                MessageBox.Show($"配置文件[{Entrance.ConfigFilePath}]中缺少配置项[{WebServerUrlKey}]！");
                 this.Close();
                 return;
             }
@@ -109,7 +108,7 @@ namespace Quick.OwinMVC.Startup.Forms
             try { uri = new Uri(url); }
             catch
             {
-                MessageBox.Show($"配置文件[{ConfigFile}]中配置项[{WebServerUrlKey}]的值格式不正确！");
+                MessageBox.Show($"配置文件[{Entrance.ConfigFilePath}]中配置项[{WebServerUrlKey}]的值格式不正确！");
                 this.Close();
                 return;
             }
@@ -127,10 +126,10 @@ namespace Quick.OwinMVC.Startup.Forms
 
         private void saveSetting()
         {
-            var configContent = getConfigContent(ConfigFile);
+            var configContent = getConfigContent(Entrance.ConfigFilePath);
             if (configContent == null)
             {
-                MessageBox.Show($"配置文件[{ConfigFile}]不存在或者无法打开！");
+                MessageBox.Show($"配置文件[{Entrance.ConfigFilePath}]不存在或者无法打开！");
                 this.Close();
                 return;
             }
@@ -139,7 +138,7 @@ namespace Quick.OwinMVC.Startup.Forms
                  var group = match.Groups["value"];
                  return $"{WebServerUrlKey} = net://{getIPAddress()}:{nudWebServer_Port.Value}";
              });
-            File.WriteAllText(ConfigFile, configContent);
+            File.WriteAllText(Entrance.ConfigFilePath, configContent);
         }
     }
 }

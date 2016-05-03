@@ -8,15 +8,18 @@ namespace Quick.OwinMVC.Startup.Forms
 {
     public partial class MainForm : Form
     {
+        private WinServiceInstaller winServiceInstaller = null;
+
         public MainForm()
         {
             InitializeComponent();
-            this.Text = WinServiceInstaller.Instance.ServiceName;
+            winServiceInstaller = new WinServiceInstaller();
+            this.Text = winServiceInstaller.ServiceName;
         }
 
         private void tmrCheckServiceStatus_Tick(object sender, EventArgs e)
         {
-            ServiceController service = WinServiceInstaller.Instance.GetService();
+            ServiceController service = winServiceInstaller.GetService();
             if (service == null)
             {
                 btnInstall.Enabled = true;

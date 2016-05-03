@@ -1,20 +1,36 @@
 ﻿using Quick.OwinMVC.Startup.Static;
 using Quick.OwinMVC.Startup.Utils;
+using Quick.OwinMVC.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace Quick.OwinMVC.Startup
 {
     public static class Entrance
     {
-        public static String ConfigFilePath = "Config/app.properties";
+        /// <summary>
+        /// Quick.OwinMVC配置文件路径
+        /// </summary>
+        public static String ConfigFilePath { get; private set; }
+
+        public static IDictionary<String, String> Property { get; private set; }
+
+        /// <summary>
+        /// 初始化
+        /// </summary>
+        public static void Init(String configFilePath)
+        {
+            Entrance.ConfigFilePath = configFilePath;
+            //初始化程序集自动搜索器
+            AssemblyAutoSearcher.Init();
+        }
 
         /// <summary>
         /// 应用程序的主入口点。
         /// </summary>
         public static void Start(String[] args)
         {
-            //初始化程序集自动搜索器
-            AssemblyAutoSearcher.Init();
+            Property = PropertyUtils.LoadFile(ConfigFilePath);
 
             //如果没有带参数，则启动控制WinForm界面
             if (args == null || args.Length == 0)
@@ -54,16 +70,16 @@ namespace Quick.OwinMVC.Startup
                     ServiceLauncher.Launch();
                     break;
                 case "-install":
-                    WinServiceInstaller.Instance.Install();
+                    new WinServiceInstaller().Install();
                     break;
                 case "-uninstall":
-                    WinServiceInstaller.Instance.Uninstall();
+                    new WinServiceInstaller().Uninstall();
                     break;
                 case "-start":
-                    WinServiceInstaller.Instance.Start();
+                    new WinServiceInstaller().Start();
                     break;
                 case "-stop":
-                    WinServiceInstaller.Instance.Stop();
+                    new WinServiceInstaller().Stop();
                     break;
             }
         }

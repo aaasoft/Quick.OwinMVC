@@ -3,7 +3,7 @@
   <Import Project="$(SolutionDir)Setting\Common.setting" />
   <PropertyGroup>
     <!--设置类库项目的输出目录-->
-    <OutputPath>$(BaseOutputPath)\ServerManage\Libs</OutputPath>
+    <OutputPath>$(BaseOutputPath)\Program\Libs</OutputPath>
   </PropertyGroup>
   <Import Project="$(SolutionDir)Setting\Suffix.setting" />
 </Project>

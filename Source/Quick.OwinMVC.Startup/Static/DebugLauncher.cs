@@ -22,7 +22,7 @@ namespace Quick.OwinMVC.Startup.Static
             //如果是运行的Windows操作系统，则设置控制台标题
             if (ProgramUtils.IsRuningOnWindows())
                 Console.Title = versionAndTime;
-
+            
             service.Start(null);
             while (true)
             {
