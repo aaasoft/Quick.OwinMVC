@@ -1,11 +1,11 @@
-﻿using Quick.OwinMVC.Program.Utils;
+﻿using Quick.OwinMVC.Startup.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Quick.OwinMVC.Program.Static
+namespace Quick.OwinMVC.Startup.Static
 {
     public class AssemblyAutoSearcher
     {

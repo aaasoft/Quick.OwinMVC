@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Quick.OwinMVC.Program.Static
+namespace Quick.OwinMVC.Startup.Static
 {
     public static class ServiceLauncher
     {

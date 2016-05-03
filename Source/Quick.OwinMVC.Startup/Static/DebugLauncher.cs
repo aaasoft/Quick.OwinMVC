@@ -1,4 +1,4 @@
-﻿using Quick.OwinMVC.Program.Utils;
+﻿using Quick.OwinMVC.Startup.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace Quick.OwinMVC.Program.Static
+namespace Quick.OwinMVC.Startup.Static
 {
     public static class DebugLauncher
     {

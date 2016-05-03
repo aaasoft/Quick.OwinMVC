@@ -1,6 +1,6 @@
 ﻿using Microsoft.Win32;
 using Quick.OwinMVC.Localization;
-using Quick.OwinMVC.Program.Static;
+using Quick.OwinMVC.Startup.Static;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Reflection;
 using System.ServiceProcess;
 
-namespace Quick.OwinMVC.Program.Utils
+namespace Quick.OwinMVC.Startup.Utils
 {
     #region .NET 服务安装类
     /// <summary>

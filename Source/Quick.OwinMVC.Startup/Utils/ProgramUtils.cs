@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Quick.OwinMVC.Program.Utils
+namespace Quick.OwinMVC.Startup.Utils
 {
     public class ProgramUtils
     {

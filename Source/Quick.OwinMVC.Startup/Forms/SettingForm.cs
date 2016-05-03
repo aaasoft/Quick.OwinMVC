@@ -8,13 +8,13 @@ using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace Quick.OwinMVC.Program.Forms
+namespace Quick.OwinMVC.Startup.Forms
 {
     public partial class SettingForm : Form
     {
         private const String AllIPAddress = "0.0.0.0";
         private const String ConfigFile = "Config/Properties/web.properties";
-        private const String WebServerUrlKey = "Quick.OwinMVC.Program.Service.Impl.WebServerService.WebServerUri";
+        private const String WebServerUrlKey = "Quick.OwinMVC.Startup.Service.Impl.WebServerService.WebServerUri";
 
         private const String regexTemplate = @"^(?!#)\s*{0}\s*=\s*(?'value'.*?)\s*$";
         private Regex webServerRegex = new Regex(String.Format(regexTemplate, WebServerUrlKey), RegexOptions.Multiline);

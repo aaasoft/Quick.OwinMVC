@@ -5,7 +5,7 @@ using System.Configuration.Install;
 using System.IO;
 using System.ServiceProcess;
 
-namespace Quick.OwinMVC.Program.Utils
+namespace Quick.OwinMVC.Startup.Utils
 {
     #region 服务安装辅助类
     /// <summary>

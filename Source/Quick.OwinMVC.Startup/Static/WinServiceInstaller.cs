@@ -1,11 +1,11 @@
-﻿using Quick.OwinMVC.Program.Utils;
+﻿using Quick.OwinMVC.Startup.Utils;
 using System;
 using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Windows.Forms;
 
-namespace Quick.OwinMVC.Program.Static
+namespace Quick.OwinMVC.Startup.Static
 {
     public class WinServiceInstaller
     {

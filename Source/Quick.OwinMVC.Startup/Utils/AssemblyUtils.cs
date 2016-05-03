@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Quick.OwinMVC.Program.Utils
+namespace Quick.OwinMVC.Startup.Utils
 {
     public static class AssemblyUtils
     {

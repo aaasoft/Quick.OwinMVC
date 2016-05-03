@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Quick.OwinMVC.Program.Service
+namespace Quick.OwinMVC.Startup.Service
 {
     /// <summary>
     /// 内部微服务

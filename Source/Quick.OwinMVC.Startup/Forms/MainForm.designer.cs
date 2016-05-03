@@ -1,4 +1,4 @@
-﻿namespace Quick.OwinMVC.Program.Forms
+﻿namespace Quick.OwinMVC.Startup.Forms
 {
     partial class MainForm
     {

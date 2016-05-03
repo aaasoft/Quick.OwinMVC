@@ -1,7 +1,7 @@
-﻿using Quick.OwinMVC.Program.Service;
-using Quick.OwinMVC.Program.Service.Impl;
-using Quick.OwinMVC.Program.Static;
-using Quick.OwinMVC.Program.Utils;
+﻿using Quick.OwinMVC.Startup.Service;
+using Quick.OwinMVC.Startup.Service.Impl;
+using Quick.OwinMVC.Startup.Static;
+using Quick.OwinMVC.Startup.Utils;
 using Quick.OwinMVC.Hunter;
 using Quick.OwinMVC.Utils;
 using System;
@@ -13,7 +13,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 
-namespace Quick.OwinMVC.Program
+namespace Quick.OwinMVC.Startup
 {
     public partial class WinService : ServiceBase
     {
@@ -65,8 +65,8 @@ CLR版本:{Environment.Version.ToString()}
             {
                 sourceFileWatcher = new FileSystemWatcher(sourceCodeFolder.FullName);
                 List<String> monitorFolderList = new List<string>();
-                monitorFolderList.AddRange(PathUtils.SearchFolder(Path.Combine(sourceCodeFolder.FullName, "Quick.OwinMVC.Program.Plugin.*", "view")));
-                monitorFolderList.AddRange(PathUtils.SearchFolder(Path.Combine(sourceCodeFolder.FullName, "Quick.OwinMVC.Program.Plugin.*", "resource")));
+                monitorFolderList.AddRange(PathUtils.SearchFolder(Path.Combine(sourceCodeFolder.FullName, "Quick.OwinMVC.Startup.Plugin.*", "view")));
+                monitorFolderList.AddRange(PathUtils.SearchFolder(Path.Combine(sourceCodeFolder.FullName, "Quick.OwinMVC.Startup.Plugin.*", "resource")));
                 sourceFileWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.FileName;
 
                 sourceFileWatcher.Renamed += (sender, e) =>

@@ -1,4 +1,4 @@
-﻿namespace Quick.OwinMVC.Program
+﻿namespace Quick.OwinMVC.Startup
 {
     partial class WinService
     {

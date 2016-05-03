@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Quick.OwinMVC.Program.Service.Impl
+namespace Quick.OwinMVC.Startup.Service.Impl
 {
     public class WebServerService : IService, IPropertyHunter, IHungryPropertyHunter
     {

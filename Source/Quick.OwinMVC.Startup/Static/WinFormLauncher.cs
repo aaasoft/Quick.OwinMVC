@@ -1,5 +1,5 @@
-﻿using Quick.OwinMVC.Program.Forms;
-using Quick.OwinMVC.Program.Utils;
+﻿using Quick.OwinMVC.Startup.Forms;
+using Quick.OwinMVC.Startup.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Quick.OwinMVC.Program.Static
+namespace Quick.OwinMVC.Startup.Static
 {
     public static class WinFormLauncher
     {

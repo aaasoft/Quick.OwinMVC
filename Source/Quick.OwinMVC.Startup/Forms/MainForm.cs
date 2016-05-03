@@ -1,10 +1,10 @@
-﻿using Quick.OwinMVC.Program.Static;
+﻿using Quick.OwinMVC.Startup.Static;
 using System;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Windows.Forms;
 
-namespace Quick.OwinMVC.Program.Forms
+namespace Quick.OwinMVC.Startup.Forms
 {
     public partial class MainForm : Form
     {
