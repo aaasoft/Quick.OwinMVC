@@ -16,6 +16,9 @@ namespace Quick.OwinMVC.Startup.Utils
         }
         #endregion
 
+        [DllImport("kernel32.dll")]
+        public static extern bool FreeConsole();
+
         #region 分配控制台
         /// <summary>
         /// 分配控制台

@@ -42,21 +42,8 @@ namespace Quick.OwinMVC.Startup
                 }
                 else
                 {
-                    while (true)
-                    {
-                        Console.WriteLine("Please select: 1:RunAsWinForm  2:RunAsDebug");
-                        var inLine = Console.ReadLine();
-                        if (inLine == "1")
-                        {
-                            WinFormLauncher.Launch();
-                            return;
-                        }
-                        else if (inLine == "2")
-                        {
-                            DebugLauncher.Launch();
-                            return;
-                        }
-                    }
+                    DebugLauncher.Launch();
+                    return;
                 }
             }
 

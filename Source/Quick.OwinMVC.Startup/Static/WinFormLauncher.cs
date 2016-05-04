@@ -17,6 +17,9 @@ namespace Quick.OwinMVC.Startup.Static
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            if (ProgramUtils.IsRuningOnWindows())
+                ProgramUtils.FreeConsole();
+
             MainForm form = new MainForm();
             Application.Run(form);
             if (form.DialogResult == DialogResult.None)
