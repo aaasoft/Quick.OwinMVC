@@ -18,7 +18,7 @@ namespace Quick.OwinMVC.Startup.Utils
         public WinServiceInstaller()
         {
             //读取全部配置文件
-            HunterUtils.TryHunt(this, Entrance.Property);
+            HunterUtils.TryHunt(this, Entrance.Parameter.Properties);
         }
 
         public void Hunt(string key, string value)

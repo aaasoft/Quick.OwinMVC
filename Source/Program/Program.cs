@@ -9,9 +9,19 @@ namespace Quick.OwinMVC.Program
         /// </summary>
         static void Main(String[] args)
         {
-            Startup.Entrance.Init("Config/Quick.OwinMVC.properties");
+            var parameter = new Startup.EntranceParameter()
+            {
+                ConfigFilePath = "Config/Quick.OwinMVC.properties",
+                StartupArguments = args
+            };
+#if DEBUG
+            //修改调试的WEB服务端口为8094
+            var webServerUriKey = $"{typeof(Startup.Service.Impl.WebServerService).FullName}.{nameof(Startup.Service.Impl.WebServerService.WebServerUri)}";
+            if (parameter.Properties.ContainsKey(webServerUriKey))
+                parameter.Properties[webServerUriKey] = "net://0.0.0.0:8094";
+#endif
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionCallbackFun;
-            Startup.Entrance.Start(args);
+            Startup.Entrance.Start(parameter);
         }
 
         /// <summary>

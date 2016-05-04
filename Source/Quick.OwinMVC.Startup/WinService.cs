@@ -40,7 +40,7 @@ namespace Quick.OwinMVC.Startup
             foreach (var service in serviceList)
             {
                 Console.Write($"服务[{service.Name}]");
-                HunterUtils.TryHunt(service, Entrance.Property);
+                HunterUtils.TryHunt(service, Entrance.Parameter.Properties);
                 Console.Write($"->启动中");
                 service.Start();
                 Console.WriteLine($"->完成");

@@ -13,7 +13,7 @@ namespace Quick.OwinMVC.Startup.Service.Impl
         /// <summary>
         /// WEB服务URI
         /// </summary>
-        private Uri WebServerUri { get; set; }
+        public Uri WebServerUri { get; private set; }
         private IDictionary<string, string> properties;
 
         private Server server = null;
