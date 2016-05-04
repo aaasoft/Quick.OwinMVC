@@ -10,12 +10,10 @@ namespace Quick.OwinMVC.Program
         static void Main(String[] args)
         {
             Startup.Entrance.Init("Config/Quick.OwinMVC.properties");
-            Program2.Start(args);
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionCallbackFun;
+            Startup.Entrance.Start(args);
         }
-    }
 
-    static class Program2
-    {
         /// <summary>
         /// 未处理异常回掉函数
         /// </summary>
@@ -29,12 +27,6 @@ CLR版本:{Environment.Version.ToString()}
 是否64位系统:{Environment.Is64BitOperatingSystem}
 是否64位进程:{Environment.Is64BitProcess}
 异常:{Environment.NewLine}{e.ExceptionObject.ToString()}");
-        }
-
-        public static void Start(String[] args)
-        {
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionCallbackFun;
-            Startup.Entrance.Start(args);
         }
     }
 }
