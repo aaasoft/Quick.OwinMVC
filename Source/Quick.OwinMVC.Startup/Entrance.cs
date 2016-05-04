@@ -17,7 +17,7 @@ namespace Quick.OwinMVC.Startup
         {
             Parameter = parameter;
             //初始化程序集自动搜索器
-            AssemblyAutoSearcher.Init();
+            AssemblyAutoSearcher.Init(parameter.LoadAllPlugins);
 
             var args = parameter.StartupArguments;
             //如果没有带参数，则启动控制WinForm界面

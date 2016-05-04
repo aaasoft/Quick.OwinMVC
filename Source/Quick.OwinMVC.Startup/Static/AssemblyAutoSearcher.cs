@@ -9,7 +9,6 @@ namespace Quick.OwinMVC.Startup.Static
 {
     public class AssemblyAutoSearcher
     {
-        private static String baseDirectory;
         private static String[] assemblySearchPathArray;
 
         static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -21,37 +20,38 @@ namespace Quick.OwinMVC.Startup.Static
         /// <summary>
         /// 初始化
         /// </summary> 
-        public static void Init()
+        public static void Init(Boolean loadAllPlugins)
         {
-            baseDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var baseDirectory = Entrance.Parameter.BasePath;
             Environment.CurrentDirectory = baseDirectory;
-
             List<String> pathList = new List<string>();
             pathList.Add(baseDirectory);
-            pathList.Add(Path.Combine(baseDirectory, "Libs"));
+            pathList.Add(Path.Combine(baseDirectory, Entrance.Parameter.LibsPath));
             if (Environment.Is64BitProcess)
             {
-                var path = Path.Combine(baseDirectory, "Libs", "x64");
+                var path = Path.Combine(baseDirectory, Entrance.Parameter.LibsPath, "x64");
                 pathList.Add(path);
                 ProgramUtils.SetLibDirectory(path);
             }
             else
             {
-                var path = Path.Combine(baseDirectory, "Libs", "x86");
+                var path = Path.Combine(baseDirectory, Entrance.Parameter.LibsPath, "x86");
                 ProgramUtils.SetLibDirectory(path);
             }
 
-            var pluginDirectory = new DirectoryInfo(Path.Combine(baseDirectory, "Plugins"));
+            var pluginDirectory = new DirectoryInfo(Path.Combine(baseDirectory, Entrance.Parameter.PluginsPath));
             if (pluginDirectory.Exists)
             {
                 foreach (var pluginDi in pluginDirectory.GetDirectories())
                 {
                     pathList.Add(pluginDi.FullName);
-
-                    String pluginName = pluginDi.Name;
-                    String pluginFilePath = Path.Combine(pluginDi.FullName, pluginName + ".dll");
-                    if (!File.Exists(pluginFilePath)) continue;
-                    Assembly assembly = Assembly.UnsafeLoadFrom(pluginFilePath);
+                    if (loadAllPlugins)
+                    {
+                        String pluginName = pluginDi.Name;
+                        String pluginFilePath = Path.Combine(pluginDi.FullName, pluginName + ".dll");
+                        if (!File.Exists(pluginFilePath)) continue;
+                        Assembly assembly = Assembly.UnsafeLoadFrom(pluginFilePath);
+                    }
                 }
             }
             assemblySearchPathArray = pathList.ToArray();

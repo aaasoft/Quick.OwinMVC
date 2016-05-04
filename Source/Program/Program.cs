@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace Quick.OwinMVC.Program
 {
@@ -12,7 +13,11 @@ namespace Quick.OwinMVC.Program
             var parameter = new Startup.EntranceParameter()
             {
                 ConfigFilePath = "Config/Quick.OwinMVC.properties",
-                StartupArguments = args
+                StartupArguments = args,
+                BasePath = Path.GetDirectoryName(typeof(Program).Assembly.Location),
+                LibsPath = "Libs",
+                PluginsPath = "Plugins",
+                LoadAllPlugins = true
             };
 #if DEBUG
             //修改调试的WEB服务端口为8094

@@ -30,5 +30,21 @@ namespace Quick.OwinMVC.Startup
         /// 启动参数
         /// </summary>
         public String[] StartupArguments { get; set; }
+        /// <summary>
+        /// 基础路径
+        /// </summary>
+        public String BasePath { get; set; }
+        /// <summary>
+        /// 库目录
+        /// </summary>
+        public String LibsPath { get; set; }
+        /// <summary>
+        /// 插件目录
+        /// </summary>
+        public String PluginsPath { get; set; }
+        /// <summary>
+        /// 是否加载全部的插件
+        /// </summary>
+        public bool LoadAllPlugins { get; set; }
     }
 }
