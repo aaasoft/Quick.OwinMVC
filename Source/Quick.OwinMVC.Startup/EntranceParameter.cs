@@ -46,5 +46,22 @@ namespace Quick.OwinMVC.Startup
         /// 是否加载全部的插件
         /// </summary>
         public bool LoadAllPlugins { get; set; }
+
+        /// <summary>
+        /// 当服务正在启动时
+        /// </summary>
+        public Action OnServiceStarting { get; set; }
+        /// <summary>
+        /// 当服务启动后
+        /// </summary>
+        public Action OnServiceStarted { get; set; }
+        /// <summary>
+        /// 当服务正在停止时
+        /// </summary>
+        public Action OnServiceStoping { get; set; }
+        /// <summary>
+        /// 当服务停止后
+        /// </summary>
+        public Action OnServiceStoped { get; set; }
     }
 }

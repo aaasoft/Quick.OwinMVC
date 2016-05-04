@@ -5,6 +5,7 @@ using System.Linq;
 using Quick.OwinMVC.Middleware;
 using System.Text;
 using System.Threading.Tasks;
+using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Manager
 {
@@ -21,6 +22,8 @@ namespace Quick.OwinMVC.Manager
 
         public override void Register(OwinMiddleware item)
         {
+            HunterUtils.TryHunt(item, Server.Instance.properties);
+
             var preLastMiddleware = GetItems().LastOrDefault();
             base.Register(item);
             if (preLastMiddleware != null)

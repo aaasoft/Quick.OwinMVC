@@ -38,6 +38,9 @@ namespace Quick.OwinMVC.Startup
             if (ProgramUtils.IsRuningOnWindows() && Environment.Version < Version.Parse("4.0.30319.17929"))
                 throw new ApplicationException("需要安装4.5或更新版本的Microsoft .NET Framework才能运行此程序！");
 
+            if (Entrance.Parameter.OnServiceStarting != null)
+                Entrance.Parameter.OnServiceStarting.Invoke();
+
             //启动所有服务
             foreach (var service in serviceList)
             {
@@ -61,10 +64,15 @@ namespace Quick.OwinMVC.Startup
                 foreach (var activator in pluginActivators)
                     activator.Start();
             }
+            if (Entrance.Parameter.OnServiceStarted != null)
+                Entrance.Parameter.OnServiceStarted.Invoke();
         }
 
         protected override void OnStop()
         {
+            if (Entrance.Parameter.OnServiceStoping != null)
+                Entrance.Parameter.OnServiceStoping.Invoke();
+
             if (Entrance.Parameter.LoadAllPlugins)
             {
                 //停止所有插件
@@ -77,6 +85,10 @@ namespace Quick.OwinMVC.Startup
             {
                 service.Stop();
             }
+
+            if (Entrance.Parameter.OnServiceStoped != null)
+                Entrance.Parameter.OnServiceStoped.Invoke();
+
             Environment.Exit(0);
         }
     }

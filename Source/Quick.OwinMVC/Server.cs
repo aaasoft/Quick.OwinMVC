@@ -19,7 +19,7 @@ namespace Quick.OwinMVC
     {
         internal static Server Instance { get; private set; }
 
-        private IDictionary<String, String> properties;
+        internal IDictionary<String, String> properties;
         //所有的中间件
         private IEnumerable<OwinMiddleware> Middlewares;
 

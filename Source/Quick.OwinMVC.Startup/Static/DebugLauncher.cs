@@ -17,12 +17,11 @@ namespace Quick.OwinMVC.Startup.Static
             if (ProgramUtils.IsRuningOnWindows())
                 ProgramUtils.AllocConsole();
             var assembly = typeof(DebugLauncher).Assembly;
-            var versionAndTime = "Ver:" + assembly.GetName().Version.ToString()
-                                + "  Build:" + AssemblyUtils.GetLinkerTime(assembly).ToString("F");
+            var versionAndTime = $"{new WinServiceInstaller().ServiceName} Ver:{assembly.GetName().Version}  Build:{AssemblyUtils.GetLinkerTime(assembly).ToString("F")}";
             //如果是运行的Windows操作系统，则设置控制台标题
             if (ProgramUtils.IsRuningOnWindows())
                 Console.Title = versionAndTime;
-            
+
             service.Start(null);
             while (true)
             {
