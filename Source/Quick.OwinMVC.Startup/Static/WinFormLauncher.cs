@@ -22,9 +22,6 @@ namespace Quick.OwinMVC.Startup.Static
 
             MainForm form = new MainForm();
             Application.Run(form);
-            if (form.DialogResult == DialogResult.None)
-                return;
-            DebugLauncher.Launch();
         }
 
         /// <summary>

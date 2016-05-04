@@ -16,6 +16,7 @@ namespace Quick.OwinMVC.Startup
         public static void Start(EntranceParameter parameter)
         {
             Parameter = parameter;
+
             //初始化程序集自动搜索器
             AssemblyAutoSearcher.Init(parameter.LoadAllPlugins);
 

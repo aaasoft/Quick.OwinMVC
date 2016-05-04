@@ -30,10 +30,22 @@ namespace Quick.OwinMVC.Startup
         /// 启动参数
         /// </summary>
         public String[] StartupArguments { get; set; }
+
+        private String _BasePath;
         /// <summary>
         /// 基础路径
         /// </summary>
-        public String BasePath { get; set; }
+        public String BasePath
+        {
+            get { return _BasePath; }
+            set
+            {
+                _BasePath = value;
+                if (!String.IsNullOrEmpty(value))
+                    Environment.CurrentDirectory = value;
+            }
+        }
+
         /// <summary>
         /// 库目录
         /// </summary>

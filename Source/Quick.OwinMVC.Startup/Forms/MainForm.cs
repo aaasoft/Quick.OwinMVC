@@ -65,11 +65,11 @@ namespace Quick.OwinMVC.Startup.Forms
             this.Activate();
         }
 
-        private Process startSelfProcess(String arguments)
+        private Process startSelfProcess(String arguments, bool needAdmin)
         {
             var fileName = Application.ExecutablePath;
             ProcessStartInfo processStartInfo = new ProcessStartInfo(fileName, arguments);
-            if (System.Environment.OSVersion.Version.Major >= 6)
+            if (needAdmin && System.Environment.OSVersion.Version.Major >= 6)
             {
                 processStartInfo.Verb = "runas";
             }
@@ -87,28 +87,28 @@ namespace Quick.OwinMVC.Startup.Forms
         private void btnInstall_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-install")?.WaitForExit();
+            startSelfProcess("-install", true)?.WaitForExit();
             enableForm();
         }
 
         private void btnUninstall_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-uninstall")?.WaitForExit();
+            startSelfProcess("-uninstall", true)?.WaitForExit();
             enableForm();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-start")?.WaitForExit();
+            startSelfProcess("-start", true)?.WaitForExit();
             enableForm();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-stop")?.WaitForExit();
+            startSelfProcess("-stop", true)?.WaitForExit();
             enableForm();
         }
 
@@ -121,7 +121,8 @@ namespace Quick.OwinMVC.Startup.Forms
 
         private void btnRunDebug_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.OK;
+            disableForm();
+            startSelfProcess("-debug", false);
             this.Close();
         }
     }

@@ -12,9 +12,9 @@ namespace Quick.OwinMVC.Program
         {
             var parameter = new Startup.EntranceParameter()
             {
+                BasePath = Path.GetDirectoryName(typeof(Program).Assembly.Location),
                 ConfigFilePath = "Config/Quick.OwinMVC.properties",
                 StartupArguments = args,
-                BasePath = Path.GetDirectoryName(typeof(Program).Assembly.Location),
                 LibsPath = "Libs",
                 PluginsPath = "Plugins",
                 LoadAllPlugins = true
