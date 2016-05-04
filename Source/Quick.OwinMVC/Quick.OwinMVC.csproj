@@ -67,6 +67,8 @@
     <Compile Include="Hunter\IHungryPropertyHunter.cs" />
     <Compile Include="Localization\TextAttribute.cs" />
     <Compile Include="Localization\TextManager.cs" />
+    <Compile Include="Manager\AbstractManager.cs" />
+    <Compile Include="Manager\PreMiddlewareManager.cs" />
     <Compile Include="Middleware\AbstractControllerMiddleware.cs" />
     <Compile Include="Middleware\AbstractPluginPathMiddleware.cs" />
     <Compile Include="Middleware\ApiMiddleware.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="Hunter\IPropertyHunter.cs" />
     <Compile Include="Hunter\ITypeHunter.cs" />
     <Compile Include="Middleware\Error404Middleware.cs" />
+    <Compile Include="Middleware\OwinMiddlewareExtension.cs" />
+    <Compile Include="Middleware\PreMiddleware.cs" />
     <Compile Include="Middleware\RedirectMiddleware.cs" />
     <Compile Include="Middleware\ResourceMiddleware.cs" />
     <Compile Include="Middleware\RewriteMiddleware.cs" />
