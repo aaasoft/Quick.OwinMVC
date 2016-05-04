@@ -12,12 +12,14 @@ using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
+using Quick.OwinMVC.Plugin;
 
 namespace Quick.OwinMVC.Startup
 {
     public partial class WinService : ServiceBase
     {
         private List<IService> serviceList = new List<IService>();
+        private IPluginActivator[] pluginActivators = null;
 
         public WinService()
         {
@@ -45,10 +47,31 @@ namespace Quick.OwinMVC.Startup
                 service.Start();
                 Console.WriteLine($"->完成");
             }
+
+            if (Entrance.Parameter.LoadAllPlugins)
+            {
+                pluginActivators = AppDomain.CurrentDomain.GetAssemblies()
+                    .Select(ass => ass.GetTypes().FirstOrDefault(t =>
+                      !t.IsAbstract && !t.IsNotPublic && t.IsClass
+                      && typeof(IPluginActivator).IsAssignableFrom(t)
+                    )).Where(t => t != null)
+                    .Select(t => (IPluginActivator)Activator.CreateInstance(t)).ToArray();
+
+                //启动所有插件
+                foreach (var activator in pluginActivators)
+                    activator.Start();
+            }
         }
 
         protected override void OnStop()
         {
+            if (Entrance.Parameter.LoadAllPlugins)
+            {
+                //停止所有插件
+                foreach (var activator in pluginActivators)
+                    activator.Stop();
+            }
+
             //停止所有服务
             foreach (var service in serviceList)
             {

@@ -21,7 +21,7 @@ namespace SvnManage.Middleware
         internal const String RETURN_URL_KEY = "returnUrl";
         private Encoding encoding = new UTF8Encoding(false);
 
-        public LoginMiddleware(OwinMiddleware next) : base(next) { }
+        public LoginMiddleware(OwinMiddleware next = null) : base(next) { }
 
         public override Task Invoke(IOwinContext context)
         {
