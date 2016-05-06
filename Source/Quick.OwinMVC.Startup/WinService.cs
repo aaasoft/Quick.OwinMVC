@@ -41,16 +41,6 @@ namespace Quick.OwinMVC.Startup
             if (Entrance.Parameter.OnServiceStarting != null)
                 Entrance.Parameter.OnServiceStarting.Invoke();
 
-            //启动所有服务
-            foreach (var service in serviceList)
-            {
-                Console.Write($"服务[{service.Name}]");
-                HunterUtils.TryHunt(service, Entrance.Parameter.Properties);
-                Console.Write($"->启动中");
-                service.Start();
-                Console.WriteLine($"->完成");
-            }
-
             if (Entrance.Parameter.LoadAllPlugins)
             {
                 pluginActivators = AppDomain.CurrentDomain.GetAssemblies()
@@ -64,6 +54,17 @@ namespace Quick.OwinMVC.Startup
                 foreach (var activator in pluginActivators)
                     activator.Start();
             }
+
+            //启动所有服务
+            foreach (var service in serviceList)
+            {
+                Console.Write($"服务[{service.Name}]");
+                HunterUtils.TryHunt(service, Entrance.Parameter.Properties);
+                Console.Write($"->启动中");
+                service.Start();
+                Console.WriteLine($"->完成");
+            }
+
             if (Entrance.Parameter.OnServiceStarted != null)
                 Entrance.Parameter.OnServiceStarted.Invoke();
         }
