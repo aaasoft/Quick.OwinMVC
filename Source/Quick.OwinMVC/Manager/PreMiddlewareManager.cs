@@ -18,7 +18,26 @@ namespace Quick.OwinMVC.Manager
                 return GetItems().FirstOrDefault() ?? TailMiddleware;
             }
         }
-        public OwinMiddleware TailMiddleware { get; set; }
+
+        private OwinMiddleware _TailMiddleware;
+        public OwinMiddleware TailMiddleware
+        {
+            get { return _TailMiddleware; }
+            set
+            {
+                _TailMiddleware = value;
+                OwinMiddleware preMiddleware = null;
+                foreach (var middleware in GetItems())
+                {
+                    if (preMiddleware != null)
+                    {
+                        preMiddleware.SetNext(middleware);
+                    }
+                    preMiddleware = middleware;
+                }
+                preMiddleware.SetNext(TailMiddleware);
+            }
+        }
 
         public override void Register(OwinMiddleware item)
         {
