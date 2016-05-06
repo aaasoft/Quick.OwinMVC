@@ -35,7 +35,8 @@ namespace Quick.OwinMVC.Manager
                     }
                     preMiddleware = middleware;
                 }
-                preMiddleware.SetNext(TailMiddleware);
+                if (preMiddleware != null)
+                    preMiddleware.SetNext(TailMiddleware);
             }
         }
 
