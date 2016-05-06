@@ -18,6 +18,7 @@ using System.Runtime.CompilerServices;
 using System.Globalization;
 using Quick.OwinMVC.Localization;
 using HttpMultipartParser;
+using System.IO.Compression;
 
 namespace Quick.OwinMVC.Controller
 {
@@ -289,6 +290,69 @@ namespace Quick.OwinMVC.Controller
             JsonConvert.PopulateObject(jsonString, obj);
             return obj;
         }
+
+        public static Boolean IsAllowCompress(this IOwinRequest req)
+        {
+            var acceptEncoding = req.Headers.Get("Accept-Encoding");
+            if (acceptEncoding == null)
+                return false;
+            return acceptEncoding.Contains("gzip");
+        }
+
+        public static Task Output(this IOwinContext context, Stream stream, bool closeStreamWhenFinish, bool enableCompress = true)
+        {
+            IOwinResponse rep = context.Response;
+            Task rtnTask = null;
+            //如果启用压缩
+            if (enableCompress && IsAllowCompress(context.Request))
+            {
+                rep.Headers["Content-Encoding"] = "gzip";
+                var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
+                rtnTask = stream.CopyToAsync(gzStream)
+                    .ContinueWith(t =>
+                    {
+                        gzStream.Close();
+                        gzStream.Dispose();
+                    });
+            }
+            else
+            {
+                rep.ContentLength = stream.Length;
+                rtnTask = stream.CopyToAsync(rep.Body);
+            }
+            return rtnTask.ContinueWith(t =>
+            {
+                if (closeStreamWhenFinish)
+                {
+                    stream.Close();
+                    stream.Dispose();
+                }
+            });
+        }
+
+        public static Task Output(this IOwinContext context, Byte[] content, bool enableCompress = true)
+        {
+            IOwinResponse rep = context.Response;
+
+            //如果启用压缩
+            if (enableCompress && IsAllowCompress(context.Request))
+            {
+                rep.Headers["Content-Encoding"] = "gzip";
+                var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
+                return gzStream.WriteAsync(content, 0, content.Length)
+                    .ContinueWith(t =>
+                    {
+                        gzStream.Close();
+                        gzStream.Dispose();
+                    });
+            }
+            else
+            {
+                rep.ContentLength = content.Length;
+                return rep.WriteAsync(content);
+            }
+        }
+
 
         public static void Add(this IDictionary<string, object> dict, Object obj)
         {

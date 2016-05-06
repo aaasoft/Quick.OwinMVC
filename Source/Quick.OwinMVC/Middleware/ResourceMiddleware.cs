@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Owin;
+using Quick.OwinMVC.Controller;
 using Quick.OwinMVC.Resource;
 using System.Net;
 using Quick.OwinMVC.Utils;
@@ -130,11 +131,7 @@ namespace Quick.OwinMVC.Middleware
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
             rep.Headers["Cache-Control"] = $"max-age={expires}";
             rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-            return Output(context, stream)
-                .ContinueWith(t =>
-                {
-                    stream.Dispose();
-                });
+            return context.Output(stream, true, EnableCompress);
         }
 
         public override void Hunt(string key, string value)

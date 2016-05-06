@@ -26,7 +26,7 @@ namespace Quick.OwinMVC.Middleware
         /// <summary>
         /// 是否启用压缩
         /// </summary>
-        private bool EnableCompress { get; set; } = false;
+        protected bool EnableCompress { get; set; } = false;
 
         protected IDictionary<String, String> pluginAliasDict;
         private Regex route;
@@ -60,61 +60,6 @@ namespace Quick.OwinMVC.Middleware
         }
 
         public abstract Task Invoke(IOwinContext context, String plugin, String path);
-
-        private Boolean allowCompress(IOwinRequest req)
-        {
-            if (!EnableCompress)
-                return false;
-            var acceptEncoding = req.Headers.Get("Accept-Encoding");
-            if (acceptEncoding == null)
-                return false;
-            return acceptEncoding.Contains("gzip");
-        }
-
-        public Task Output(IOwinContext context, Stream stream)
-        {
-            IOwinResponse rep = context.Response;
-            //如果启用压缩
-            if (allowCompress(context.Request))
-            {
-                rep.Headers["Content-Encoding"] = "gzip";
-                var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
-                return stream.CopyToAsync(gzStream)
-                    .ContinueWith(t =>
-                    {
-                        gzStream.Close();
-                        gzStream.Dispose();
-                    });
-            }
-            else
-            {
-                rep.ContentLength = stream.Length;
-                return stream.CopyToAsync(rep.Body);
-            }
-        }
-
-        public Task Output(IOwinContext context, Byte[] content)
-        {
-            IOwinResponse rep = context.Response;
-
-            //如果启用压缩
-            if (allowCompress(context.Request))
-            {
-                rep.Headers["Content-Encoding"] = "gzip";
-                var gzStream = new GZipStream(rep.Body, CompressionMode.Compress);
-                return gzStream.WriteAsync(content, 0, content.Length)
-                    .ContinueWith(t=>
-                    {
-                        gzStream.Close();
-                        gzStream.Dispose();
-                    });                
-            }
-            else
-            {
-                rep.ContentLength = content.Length;
-                return rep.WriteAsync(content);
-            }
-        }
 
         public virtual void Hunt(Assembly assembly)
         {

@@ -20,14 +20,11 @@ namespace Quick.OwinMVC.Middleware
             var rep = context.Response;
             var obj = await controller.Service(context);
             if (obj == null)
-            {
-                rep.StatusCode = 204;
                 return;
-            }
             var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
             rep.Expires = new DateTimeOffset(DateTime.Now);
             rep.ContentType = "text/json; charset=UTF-8";
-            await Output(context, content);
+            await context.Output(content, EnableCompress);
         }
     }
 }
