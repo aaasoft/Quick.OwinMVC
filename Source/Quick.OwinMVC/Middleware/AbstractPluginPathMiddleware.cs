@@ -22,7 +22,7 @@ namespace Quick.OwinMVC.Middleware
         /// <summary>
         /// 路由
         /// </summary>
-        protected String Route { get; set; }
+        public String Route { get; private set; }
         /// <summary>
         /// 是否启用压缩
         /// </summary>
