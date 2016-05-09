@@ -311,8 +311,11 @@ namespace Quick.OwinMVC.Controller
                 rtnTask = stream.CopyToAsync(gzStream)
                     .ContinueWith(t =>
                     {
+                        gzStream.Flush();
                         gzStream.Close();
                         gzStream.Dispose();
+
+                        rep.Body.Flush();
                     });
             }
             else

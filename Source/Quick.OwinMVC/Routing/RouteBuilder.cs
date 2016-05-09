@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Routing
 {
-    internal static class RouteBuilder
+    public static class RouteBuilder
     {
-        private static readonly Regex paramRegex = new Regex(@":(?<name>[A-Za-z0-9_]*)", RegexOptions.Compiled);
+        private static readonly Regex paramRegex = new Regex(@":(?<name>[A-Za-z0-9_\.]*)", RegexOptions.Compiled);
 
-        internal static Regex RouteToRegex(string route)
+        public static Regex RouteToRegex(string route)
         {
             var parts = route.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries).AsEnumerable();
 
