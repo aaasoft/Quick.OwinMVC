@@ -65,10 +65,12 @@ namespace Quick.OwinMVC.Startup.Forms
             this.Activate();
         }
 
-        private Process startSelfProcess(String arguments, bool needAdmin)
+        private Process startSelfProcess(String arguments, bool needAdmin, bool hideConsole = true)
         {
             var fileName = Application.ExecutablePath;
             ProcessStartInfo processStartInfo = new ProcessStartInfo(fileName, arguments);
+            if (hideConsole)
+                processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             if (needAdmin && System.Environment.OSVersion.Version.Major >= 6)
             {
                 processStartInfo.Verb = "runas";
@@ -122,7 +124,7 @@ namespace Quick.OwinMVC.Startup.Forms
         private void btnRunDebug_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-debug", false);
+            startSelfProcess("-debug", false, false);
             this.Close();
         }
     }
