@@ -4,6 +4,7 @@ using Quick.OwinMVC.Utils;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.ServiceProcess;
 using System.Windows.Forms;
 
@@ -42,7 +43,7 @@ namespace Quick.OwinMVC.Startup.Utils
             DotNetServiceInstaller installer = new DotNetServiceInstaller();
             ServiceInstallInfo installInfo = new ServiceInstallInfo();
             // -service
-            installInfo.ServiceFilePath = $"\"{typeof(WinServiceInstaller).Assembly.Location}\" -service";
+            installInfo.ServiceFilePath = $"\"{Assembly.GetEntryAssembly().Location}\" -service";
             installInfo.ServiceName = ServiceName;
             installInfo.DisplayName = DisplayName;
             installInfo.Description = Description;
