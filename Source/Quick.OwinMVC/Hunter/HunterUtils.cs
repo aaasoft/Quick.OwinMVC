@@ -38,6 +38,11 @@ namespace Quick.OwinMVC.Hunter
 
         public static void TryHunt(Object obj, IDictionary<String, String> properties)
         {
+            TryHunt(obj.GetType(), obj, properties);
+        }
+
+        public static void TryHunt(Type objType, Object obj, IDictionary<String, String> properties)
+        {
             if (obj is IHungryPropertyHunter)
             {
                 IHungryPropertyHunter hunter = (IHungryPropertyHunter)obj;
@@ -46,7 +51,7 @@ namespace Quick.OwinMVC.Hunter
             if (obj is IPropertyHunter)
             {
                 IPropertyHunter hunter = (IPropertyHunter)obj;
-                var prefix = hunter.GetType().FullName + ".";
+                var prefix = objType.FullName + ".";
                 foreach (String key in properties.Keys.Where(t => t.StartsWith(prefix)))
                     hunter.Hunt(key.Substring(prefix.Length), properties[key]);
             }
@@ -65,7 +70,7 @@ namespace Quick.OwinMVC.Hunter
         public static void TryHunt(IEnumerable objs, IDictionary<String, String> properties)
         {
             foreach (var obj in objs)
-                TryHunt(obj, properties);
+                TryHunt(obj.GetType(), obj, properties);
         }
     }
 }
