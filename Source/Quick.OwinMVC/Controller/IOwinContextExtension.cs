@@ -19,6 +19,7 @@ using System.Globalization;
 using Quick.OwinMVC.Localization;
 using HttpMultipartParser;
 using System.IO.Compression;
+using Quick.OwinMVC.Utils;
 
 namespace Quick.OwinMVC.Controller
 {
@@ -299,10 +300,20 @@ namespace Quick.OwinMVC.Controller
             return acceptEncoding.Contains("gzip");
         }
 
-        public static Task Output(this IOwinContext context, Stream stream, bool closeStreamWhenFinish, bool enableCompress = true)
+        public static Task Output(this IOwinContext context, Stream stream, bool closeStreamWhenFinish, bool enableCompress = true, string resourceName = null)
         {
             IOwinResponse rep = context.Response;
             Task rtnTask = null;
+
+            //如果要设置MIME
+            if (!String.IsNullOrEmpty(resourceName))
+            {
+                //设置MIME类型
+                var mime = MimeUtils.GetMime(resourceName);
+                if (mime != null)
+                    rep.ContentType = mime;
+            }
+
             //如果启用压缩
             if (enableCompress && IsAllowCompress(context.Request))
             {

@@ -124,14 +124,10 @@ namespace Quick.OwinMVC.Middleware
                 rep.ETag = serverETag;
                 stream.Position = 0;
             }
-            //设置MIME类型
-            var mime = MimeUtils.GetMime(resourceResponse.Uri.LocalPath);
-            if (mime != null)
-                rep.ContentType = mime;
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
             rep.Headers["Cache-Control"] = $"max-age={expires}";
             rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-            return context.Output(stream, true, EnableCompress);
+            return context.Output(stream, true, EnableCompress, resourceResponse.Uri.LocalPath);
         }
 
         public override void Hunt(string key, string value)
