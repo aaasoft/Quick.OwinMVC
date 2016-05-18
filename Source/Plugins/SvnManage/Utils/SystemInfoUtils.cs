@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -10,6 +11,24 @@ namespace SvnManage.Utils
 {
     public class SystemInfoUtils
     {
+        [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+        public class ReadFileAttribute : Attribute
+        {
+            public PlatformID PlatformID { get; set; }
+            /// <summary>
+            /// 文件
+            /// </summary>
+            public String File { get; set; }
+            public Regex Regex { get; set; }
+            public ReadFileAttribute(PlatformID platformID,String file, String regex = null)
+            {
+                this.PlatformID = platformID;
+                File = file;
+                if (regex != null)
+                    Regex = new Regex(regex);
+            }
+        }
+
         [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
         public class ShellCmdAttribute : Attribute
         {
@@ -65,8 +84,28 @@ namespace SvnManage.Utils
             memFreeCounter = new PerformanceCounter("Memory", "Available KBytes");
         }
 
+        private static string readFile()
+        {
+            PlatformID currentPlatform = Environment.OSVersion.Platform;
+            var stackFrame = new StackTrace(1).GetFrame(0);
+            var method = stackFrame.GetMethod();
+            var readFileAttr = method.GetCustomAttributes(typeof(ReadFileAttribute), false)
+                .Cast<ReadFileAttribute>()
+                .Where(t => t.PlatformID == currentPlatform).FirstOrDefault();
+            if (!File.Exists(readFileAttr.File))
+                return null;
+            var content = File.ReadAllText(readFileAttr.File);
+            if (readFileAttr.Regex == null)
+                return content;
 
-        private static String executeShell()
+            var match = readFileAttr.Regex.Match(content);
+            if (match == null || !match.Success)
+                return null;
+            var value = match.Groups["value"].Value;
+            return value;
+        }
+
+        private static string executeShell()
         {
             PlatformID currentPlatform = Environment.OSVersion.Platform;
             var stackFrame = new StackTrace(1).GetFrame(0);
@@ -131,21 +170,54 @@ namespace SvnManage.Utils
             return executeShell();
         }
 
+        private static Int32 preCpuIdle = 0;
+        private static Int32 preCpuTotal = 0;
         /// <summary>
         /// 获取CPU使用率
         /// </summary>
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic cpu get LoadPercentage", @"^LoadPercentage\s*(?'value'.*?)\s*$")]
         [ShellCmd(PlatformID.Unix, "bash", "-c \"grep 'cpu ' /proc/stat| awk '{value=($2+$4)*100/($2+$4+$5)} END {print value}'\"", @"^\s*(?'value'.*?)\s*$")]
+        [ReadFile(PlatformID.Unix, "/proc/stat", "cpu (?'value'.*)")]
         public static Double GetCpuUsage()
         {
             if (IsRuningOnWindows())
                 return cpuCounter.NextValue();
 
-            var value = executeShell();
+            var value = readFile();
             if (String.IsNullOrEmpty(value))
                 return 0;
-            return Double.Parse(value);
+
+            var intValues = value.Split(new Char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(t => Int32.Parse(t))
+                .ToArray();
+
+            var idle = intValues[3];
+            var total = intValues.Sum();
+
+            var spIdle = idle - preCpuIdle;
+            var spTotal = total - preCpuTotal;
+
+            preCpuIdle = idle;
+            preCpuTotal = total;
+
+            return (spTotal - spIdle) * 100F / spTotal;
+        }
+
+        /// <summary>
+        /// 获取CPU温度
+        /// </summary>
+        /// <returns></returns>
+        [ShellCmd(PlatformID.Unix, "bash", "-c \"cat /sys/class/thermal/thermal_zone0/temp\"", @"^\s*(?'value'.*?)\s*$")]
+        [ReadFile(PlatformID.Unix, "/sys/class/thermal/thermal_zone0/temp")]
+        public static Double GetCpuTempature()
+        {
+            if (IsRuningOnWindows())
+                return 0;
+            var value = readFile();
+            if (String.IsNullOrEmpty(value))
+                return 0;
+            return Double.Parse(value) / 1000;
         }
 
         /// <summary>
@@ -154,6 +226,7 @@ namespace SvnManage.Utils
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get TotalVisibleMemorySize", @"^TotalVisibleMemorySize\s*(?'value'.*?)\s*$")]
         [ShellCmd(PlatformID.Unix, "bash", "-c \"free | awk 'NR==2{total= $2}END{print total}'\"", @"^\s*(?'value'.*?)\s*$")]
+        [ReadFile(PlatformID.Unix, "/proc/meminfo", @"MemTotal:\s*(?'value'\d*)\s*kB")]
         public static long GetTotalMemory()
         {
             if (IsRuningOnWindows())
@@ -162,7 +235,7 @@ namespace SvnManage.Utils
                 GlobalMemoryStatusEx(meminfo);
                 return Convert.ToInt64(meminfo.ullTotalPhys);
             }
-            var value = executeShell();
+            var value = readFile();
             if (String.IsNullOrEmpty(value))
                 return 0;
             return Int64.Parse(value) * 1024;
@@ -174,6 +247,7 @@ namespace SvnManage.Utils
         /// <returns></returns>
         [ShellCmd(PlatformID.Win32NT, "cmd", "/c wmic OS get FreePhysicalMemory", @"^FreePhysicalMemory\s*(?'value'.*?)\s*$")]
         [ShellCmd(PlatformID.Unix, "bash", "-c \"free | awk 'NR==3{free= $4}END{print free}'\"", @"^\s*(?'value'.*?)\s*$")]
+        [ReadFile(PlatformID.Unix, "/proc/meminfo", @"MemAvailable:\s*(?'value'\d*)\s*kB")]
         public static long GetFreeMemory()
         {
             if (IsRuningOnWindows())
@@ -185,7 +259,7 @@ namespace SvnManage.Utils
                     return Convert.ToInt64(meminfo.ullAvailPhys);
                 }
             }
-            var value = executeShell();
+            var value = readFile();
             if (String.IsNullOrEmpty(value))
                 return 0;
             return Int64.Parse(value) * 1024;

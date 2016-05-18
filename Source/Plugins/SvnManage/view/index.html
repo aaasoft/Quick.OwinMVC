@@ -35,19 +35,14 @@
                         type: 'datetime',
                         tickPixelInterval: 150
                     },
-                    yAxis: {
+                    yAxis: [{
                         title: {
-                            text: '使用率'
-                        },
-                        plotLines: [{
-                            value: 0,
-                            width: 1,
-                            color: '#808080'
-                        }]
-                    },
+                            text: 'CPU信息'
+                        }
+                    }],
                     tooltip: {
                         formatter: function () {
-                            return this.series.name + ' ' + '<b>' + Highcharts.numberFormat(this.y, 2) + ' %' + '</b>' + '<br/>' +
+                            return this.series.name + ': ' + '<b>' + Highcharts.numberFormat(this.y, 2) + '</b>' + '<br/>' +
                                 Highcharts.dateFormat('%H:%M:%S', this.x);
                         }
                     },
@@ -55,7 +50,19 @@
                         enabled: false
                     },
                     series: [{
-                        name: '使用率',
+                        name: '使用率(%)',
+                        data: (function () {
+                            var data = [];
+                            for (var i = 0 - cpuSerialCharts_MaxDataCount; i <= 0; i += 1) {
+                                data.push({
+                                    x: time + i * 1000,
+                                    y: null
+                                });
+                            }
+                            return data;
+                        }())
+                    }, {
+                        name: '温度(℃)',
                         data: (function () {
                             var data = [];
                             for (var i = 0 - cpuSerialCharts_MaxDataCount; i <= 0; i += 1) {
@@ -117,15 +124,43 @@
                     url: "/base/api/index?type=info",
                     success: function (json) {
                         var basic = json.basic;
-                        var cpu = json.cpu;
-                        var memory = json.memory;
-
                         //基本信息
                         jQuery("#tdOSName").html(basic.os_name);
                         jQuery("#tdComputerName").html(basic.computer_name);
                         jQuery("#tdProcessRunTime").html(basic.process_run_time);
                         jQuery("#tdServerRunTime").html(basic.server_run_time);
+                    }
+                });
+                //1秒后再次执行
+                setTimeout(refrashBaseDataFunc, 1 * 1000);
+            }
 
+            var refrashCpuDataFunc = function () {
+                //刷新数据
+                jQuery.ajax({
+                    dataType: "json",
+                    url: "/base/api/index?type=cpu",
+                    success: function (json) {
+                        var cpu = json.cpu;
+                        //CPU信息
+                        if (cpuCharts == null)
+                            cpuCharts = createCpuCarts(json.time);
+                        var x = json.time;
+                        cpuCharts.highcharts().series[0].addPoint([x, cpu.used], true, true);
+                        cpuCharts.highcharts().series[1].addPoint([x, cpu.temp], true, true);
+                    }
+                });
+                //1秒后再次执行
+                setTimeout(refrashCpuDataFunc, 1 * 1000);
+            }
+
+            var refrashMemoryDataFunc = function () {
+                //刷新数据
+                jQuery.ajax({
+                    dataType: "json",
+                    url: "/base/api/index?type=memory",
+                    success: function (json) {
+                        var memory = json.memory;
                         //内存信息
                         var usedRamM = Math.round((memory.total - memory.free) / 1024 / 1024);
                         //仅当已使用内存的数据变化时，才更新饼图
@@ -137,16 +172,10 @@
                                 { y: freeRamM }
                             ]);
                         }
-                        //CPU信息
-                        if (cpuCharts == null)
-                            cpuCharts = createCpuCarts(json.time);
-                        var x = json.time;
-                        var y = cpu.used;
-                        cpuCharts.highcharts().series[0].addPoint([x, y], true, true);
                     }
                 });
-                //1秒后再次执行
-                setTimeout(refrashBaseDataFunc, 1 * 1000);
+                //10秒后再次执行
+                setTimeout(refrashMemoryDataFunc, 10 * 1000);
             }
 
             var refrashDiskDataFunc = function () {
@@ -193,6 +222,8 @@
             }
 
             refrashBaseDataFunc();
+            refrashCpuDataFunc();            
+            refrashMemoryDataFunc();
             refrashDiskDataFunc();
         });
     </script>
@@ -227,10 +258,6 @@
                                         <tr>
                                             <td><strong>进程运行时长：</strong></td>
                                             <td id="tdProcessRunTime"></td>
-                                        </tr>
-                                        <tr>
-                                            <td><strong>计算机运行时长：</strong></td>
-                                            <td id="tdServerRunTime"></td>
                                         </tr>
                                     </tbody>
                                 </table>
