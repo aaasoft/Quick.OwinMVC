@@ -1,4 +1,5 @@
-﻿using Quick.OwinMVC.Utils;
+﻿using Quick.OwinMVC.Startup.Utils;
+using Quick.OwinMVC.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,5 +76,23 @@ namespace Quick.OwinMVC.Startup
         /// 当服务停止后
         /// </summary>
         public Action OnServiceStoped { get; set; }
+
+        /// <summary>
+        /// 按钮功能字典
+        /// </summary>
+        public IDictionary<String, Action> ButtonDict { get; set; }
+
+        /// <summary>
+        /// 设置Action
+        /// </summary>
+        public static readonly KeyValuePair<String, Action> SettingAction = new KeyValuePair<string, Action>("设置", () =>
+          {
+              new Forms.SettingForm().ShowDialog();
+          });
+        public static readonly KeyValuePair<String, Action> DebugAction = new KeyValuePair<string, Action>("调试运行", () =>
+        {
+            ProgramUtils.StartSelfProcess("-debug", false, false);
+            Environment.Exit(0);
+        });
     }
 }

@@ -37,14 +37,13 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.btnStart = new System.Windows.Forms.Button();
             this.tmrCheckServiceStatus = new System.Windows.Forms.Timer(this.components);
-            this.btnRunDebug = new System.Windows.Forms.Button();
-            this.btnSetting = new System.Windows.Forms.Button();
+            this.flpTools = new System.Windows.Forms.FlowLayoutPanel();
             this.SuspendLayout();
             // 
             // btnInstall
             // 
             this.btnInstall.Enabled = false;
-            this.btnInstall.Location = new System.Drawing.Point(12, 35);
+            this.btnInstall.Location = new System.Drawing.Point(13, 35);
             this.btnInstall.Name = "btnInstall";
             this.btnInstall.Size = new System.Drawing.Size(75, 23);
             this.btnInstall.TabIndex = 1;
@@ -73,7 +72,7 @@
             // btnUninstall
             // 
             this.btnUninstall.Enabled = false;
-            this.btnUninstall.Location = new System.Drawing.Point(93, 35);
+            this.btnUninstall.Location = new System.Drawing.Point(94, 35);
             this.btnUninstall.Name = "btnUninstall";
             this.btnUninstall.Size = new System.Drawing.Size(75, 23);
             this.btnUninstall.TabIndex = 2;
@@ -84,7 +83,7 @@
             // btnStop
             // 
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(93, 64);
+            this.btnStop.Location = new System.Drawing.Point(94, 64);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 4;
@@ -95,7 +94,7 @@
             // btnStart
             // 
             this.btnStart.Enabled = false;
-            this.btnStart.Location = new System.Drawing.Point(12, 64);
+            this.btnStart.Location = new System.Drawing.Point(13, 64);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 3;
@@ -109,33 +108,22 @@
             this.tmrCheckServiceStatus.Interval = 1000;
             this.tmrCheckServiceStatus.Tick += new System.EventHandler(this.tmrCheckServiceStatus_Tick);
             // 
-            // btnRunDebug
+            // flpTools
             // 
-            this.btnRunDebug.Location = new System.Drawing.Point(93, 93);
-            this.btnRunDebug.Name = "btnRunDebug";
-            this.btnRunDebug.Size = new System.Drawing.Size(75, 23);
-            this.btnRunDebug.TabIndex = 0;
-            this.btnRunDebug.Text = "调试运行";
-            this.btnRunDebug.UseVisualStyleBackColor = true;
-            this.btnRunDebug.Click += new System.EventHandler(this.btnRunDebug_Click);
-            // 
-            // btnSetting
-            // 
-            this.btnSetting.Location = new System.Drawing.Point(12, 93);
-            this.btnSetting.Name = "btnSetting";
-            this.btnSetting.Size = new System.Drawing.Size(75, 23);
-            this.btnSetting.TabIndex = 5;
-            this.btnSetting.Text = "设置";
-            this.btnSetting.UseVisualStyleBackColor = true;
-            this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
+            this.flpTools.AutoSize = true;
+            this.flpTools.Location = new System.Drawing.Point(10, 90);
+            this.flpTools.MaximumSize = new System.Drawing.Size(200, 0);
+            this.flpTools.Name = "flpTools";
+            this.flpTools.Size = new System.Drawing.Size(160, 0);
+            this.flpTools.TabIndex = 6;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(185, 128);
-            this.Controls.Add(this.btnSetting);
-            this.Controls.Add(this.btnRunDebug);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(185, 101);
+            this.Controls.Add(this.flpTools);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.btnUninstall);
@@ -148,6 +136,7 @@
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -161,7 +150,6 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Timer tmrCheckServiceStatus;
-        private System.Windows.Forms.Button btnRunDebug;
-        private System.Windows.Forms.Button btnSetting;
+        private System.Windows.Forms.FlowLayoutPanel flpTools;
     }
 }

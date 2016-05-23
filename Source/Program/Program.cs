@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Quick.OwinMVC.Program
 {
@@ -17,7 +18,13 @@ namespace Quick.OwinMVC.Program
                 StartupArguments = args,
                 LibsPath = "Libs",
                 PluginsPath = "Plugins",
-                LoadAllPlugins = true
+                LoadAllPlugins = true,
+                ButtonDict = new Dictionary<String, Action>()
+                {
+                    ["常用工具"] = null,
+                    [Startup.EntranceParameter.SettingAction.Key] = Startup.EntranceParameter.SettingAction.Value,
+                    [Startup.EntranceParameter.DebugAction.Key] = Startup.EntranceParameter.DebugAction.Value
+                }
             };
 #if DEBUG
             //修改调试的WEB服务端口为8094

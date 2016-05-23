@@ -1,5 +1,6 @@
 ﻿using Quick.OwinMVC.Startup.Utils;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.ServiceProcess;
 using System.Windows.Forms;
@@ -65,67 +66,75 @@ namespace Quick.OwinMVC.Startup.Forms
             this.Activate();
         }
 
-        private Process startSelfProcess(String arguments, bool needAdmin, bool hideConsole = true)
-        {
-            var fileName = Application.ExecutablePath;
-            ProcessStartInfo processStartInfo = new ProcessStartInfo(fileName, arguments);
-            if (hideConsole)
-                processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            if (needAdmin && System.Environment.OSVersion.Version.Major >= 6)
-            {
-                processStartInfo.Verb = "runas";
-            }
-            try
-            {
-                return Process.Start(processStartInfo);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "安装失败", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return null;
-            }
-        }
-
         private void btnInstall_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-install", true)?.WaitForExit();
+            try { ProgramUtils.StartSelfProcess("-install", true)?.WaitForExit(); }
+            catch { MessageBox.Show("安装服务失败!"); }
             enableForm();
         }
 
         private void btnUninstall_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-uninstall", true)?.WaitForExit();
+            try { ProgramUtils.StartSelfProcess("-uninstall", true)?.WaitForExit(); }
+            catch { MessageBox.Show("卸载服务失败!"); }
             enableForm();
         }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-start", true)?.WaitForExit();
+            try { ProgramUtils.StartSelfProcess("-start", true)?.WaitForExit(); }
+            catch { MessageBox.Show("启动服务失败!"); }
             enableForm();
         }
 
         private void btnStop_Click(object sender, EventArgs e)
         {
             disableForm();
-            startSelfProcess("-stop", true)?.WaitForExit();
+            try { ProgramUtils.StartSelfProcess("-stop", true)?.WaitForExit(); }
+            catch { MessageBox.Show("停止服务失败!"); }
             enableForm();
         }
 
-        private void btnSetting_Click(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
-            this.Hide();
-            new SettingForm().ShowDialog();
-            this.Show();
-        }
-
-        private void btnRunDebug_Click(object sender, EventArgs e)
-        {
-            disableForm();
-            startSelfProcess("-debug", false, false);
-            this.Close();
+            if (Entrance.Parameter.ButtonDict == null
+                || Entrance.Parameter.ButtonDict.Count == 0)
+                return;
+            foreach (var key in Entrance.Parameter.ButtonDict.Keys)
+            {
+                var value = Entrance.Parameter.ButtonDict[key];
+                if (value == null)
+                {
+                    flpTools.Controls.Add(new Label()
+                    {
+                        Text = key,
+                        Font = new System.Drawing.Font(Font.FontFamily, Font.Size, System.Drawing.FontStyle.Bold),
+                        Margin = new Padding(0),
+                        Width = flpTools.Width,
+                        TextAlign = System.Drawing.ContentAlignment.BottomCenter
+                    });
+                    flpTools.Controls.Add(new GroupBox()
+                    {
+                        Width = flpTools.Width,
+                        Height = 0,
+                        Margin = new Padding(0),
+                    });
+                }
+                else
+                {
+                    var btn = new Button() { Text = key };
+                    btn.Click += (sender2, e2) =>
+                    {
+                        disableForm();
+                        value();
+                        enableForm();
+                    };
+                    flpTools.Controls.Add(btn);
+                }
+            }
         }
     }
 }

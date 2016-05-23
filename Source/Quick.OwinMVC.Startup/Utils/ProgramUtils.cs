@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Quick.OwinMVC.Startup.Utils
 {
@@ -47,6 +49,19 @@ namespace Quick.OwinMVC.Startup.Utils
             if (IsRuningOnWindows())
                 return SetDllDirectory(pathName);
             return false;
+        }
+
+        public static Process StartSelfProcess(String arguments, bool needAdmin, bool hideConsole = true)
+        {
+            var fileName = Application.ExecutablePath;
+            ProcessStartInfo processStartInfo = new ProcessStartInfo(fileName, arguments);
+            if (hideConsole)
+                processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            if (needAdmin && System.Environment.OSVersion.Version.Major >= 6)
+            {
+                processStartInfo.Verb = "runas";
+            }
+            return Process.Start(processStartInfo);
         }
     }
 }
