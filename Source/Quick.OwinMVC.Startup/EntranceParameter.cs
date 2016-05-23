@@ -83,16 +83,20 @@ namespace Quick.OwinMVC.Startup
         public IDictionary<String, Action> ButtonDict { get; set; }
 
         /// <summary>
-        /// 设置Action
+        /// 设置
         /// </summary>
-        public static readonly KeyValuePair<String, Action> SettingAction = new KeyValuePair<string, Action>("设置", () =>
-          {
-              new Forms.SettingForm().ShowDialog();
-          });
-        public static readonly KeyValuePair<String, Action> DebugAction = new KeyValuePair<string, Action>("调试运行", () =>
+        public static void Action_Setting()
+        {
+            new Forms.SettingForm().ShowDialog();
+        }
+
+        /// <summary>
+        /// 调度运行
+        /// </summary>
+        public static void Action_Debug()
         {
             ProgramUtils.StartSelfProcess("-debug", false, false);
             Environment.Exit(0);
-        });
+        }
     }
 }

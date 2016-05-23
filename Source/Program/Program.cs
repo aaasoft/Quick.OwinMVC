@@ -22,8 +22,8 @@ namespace Quick.OwinMVC.Program
                 ButtonDict = new Dictionary<String, Action>()
                 {
                     ["常用工具"] = null,
-                    [Startup.EntranceParameter.SettingAction.Key] = Startup.EntranceParameter.SettingAction.Value,
-                    [Startup.EntranceParameter.DebugAction.Key] = Startup.EntranceParameter.DebugAction.Value
+                    ["设置"] = Startup.EntranceParameter.Action_Setting,
+                    ["调试运行"] = Startup.EntranceParameter.Action_Debug
                 }
             };
 #if DEBUG
