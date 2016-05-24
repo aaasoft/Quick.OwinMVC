@@ -13,15 +13,19 @@ namespace Quick.OwinMVC.Startup.Static
     {
         public static void Launch()
         {
-            Application.ThreadException += ThreadExceptionCallbackFun;
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
             if (ProgramUtils.IsRuningOnWindows())
                 ProgramUtils.FreeConsole();
 
-            MainForm form = new MainForm();
-            Application.Run(form);
+            Thread staThread = new Thread(obj =>
+            {
+                Application.ThreadException += ThreadExceptionCallbackFun;
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                MainForm form = new MainForm();
+                Application.Run(form);
+            });
+            staThread.SetApartmentState(ApartmentState.STA);
+            staThread.Start();
         }
 
         /// <summary>
