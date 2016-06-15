@@ -21,6 +21,27 @@ namespace Quick.OwinMVC.Middleware
             server = Server.Instance;
         }
 
+        public class ExceptionInfo
+        {
+            public String Message { get; set; }
+            public int HResult { get; set; }
+            public String Type { get; set; }
+            public String Source { get; set; }
+            public String StackTrace { get; set; }
+            public ExceptionInfo InnerException { get; set; }
+
+            public ExceptionInfo(Exception ex)
+            {
+                Message = ex.Message;
+                HResult = ex.HResult;
+                Type = ex.GetType().FullName;
+                Source = ex.Source;
+                StackTrace = ex.StackTrace;
+                if (ex.InnerException != null)
+                    InnerException = new ExceptionInfo(ex.InnerException);
+            }
+        }
+
         public override async Task Invoke(IOwinContext context)
         {
             try
@@ -35,16 +56,7 @@ namespace Quick.OwinMVC.Middleware
                 {
                     if (String.IsNullOrEmpty(RewritePath))
                     {
-                        var result = ApiResult.Error(ex.HResult, ex.Message, new
-                        {
-                            Type = ex.GetType().FullName,
-                            ex.Source,
-                            ex.Data
-#if DEBUG
-                            ,
-                            ex.StackTrace
-#endif
-                        }).ToString();
+                        var result = ApiResult.Error("500 内部错误", new ExceptionInfo(ex)).ToString();
 
                         rep.ContentType = "text/json; charset=UTF-8";
                         byte[] content = encoding.GetBytes(result);
