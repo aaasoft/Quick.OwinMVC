@@ -13,7 +13,7 @@ namespace Quick.OwinMVC.Startup.Static
         public static void Launch()
         {
             WinService service = new WinService();
-            var assembly = typeof(DebugLauncher).Assembly;
+            var assembly = System.Reflection.Assembly.GetEntryAssembly();
             var versionAndTime = $"{new WinServiceInstaller().ServiceName} Ver:{assembly.GetName().Version}  Build:{AssemblyUtils.GetLinkerTime(assembly).ToString("F")}";
             //如果是运行的Windows操作系统，则设置控制台标题
             if (ProgramUtils.IsRuningOnWindows())
