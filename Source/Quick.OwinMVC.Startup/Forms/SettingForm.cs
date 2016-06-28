@@ -21,6 +21,7 @@ namespace Quick.OwinMVC.Startup.Forms
         public SettingForm()
         {
             InitializeComponent();
+            this.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().Location);
         }
 
         private void SettingForm_Load(object sender, EventArgs e)

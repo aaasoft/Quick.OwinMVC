@@ -16,6 +16,7 @@ namespace Quick.OwinMVC.Startup.Forms
             InitializeComponent();
             winServiceInstaller = new WinServiceInstaller();
             this.Text = winServiceInstaller.DisplayName;
+            this.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().Location);
         }
 
         private void tmrCheckServiceStatus_Tick(object sender, EventArgs e)

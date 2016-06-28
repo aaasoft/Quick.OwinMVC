@@ -28,15 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingForm));
             this.gbWebEngine = new System.Windows.Forms.GroupBox();
+            this.btnCheck = new System.Windows.Forms.Button();
             this.nudWebServer_Port = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
             this.cbWebServer_IPAddress = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.btnCheck = new System.Windows.Forms.Button();
             this.gbWebEngine.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudWebServer_Port)).BeginInit();
             this.SuspendLayout();
@@ -56,6 +55,17 @@
             this.gbWebEngine.TabIndex = 0;
             this.gbWebEngine.TabStop = false;
             this.gbWebEngine.Text = "Web服务";
+            // 
+            // btnCheck
+            // 
+            this.btnCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCheck.Location = new System.Drawing.Point(134, 43);
+            this.btnCheck.Name = "btnCheck";
+            this.btnCheck.Size = new System.Drawing.Size(51, 23);
+            this.btnCheck.TabIndex = 4;
+            this.btnCheck.Text = "检测";
+            this.btnCheck.UseVisualStyleBackColor = true;
+            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
             // 
             // nudWebServer_Port
             // 
@@ -125,17 +135,6 @@
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // btnCheck
-            // 
-            this.btnCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCheck.Location = new System.Drawing.Point(134, 43);
-            this.btnCheck.Name = "btnCheck";
-            this.btnCheck.Size = new System.Drawing.Size(51, 23);
-            this.btnCheck.TabIndex = 4;
-            this.btnCheck.Text = "检测";
-            this.btnCheck.UseVisualStyleBackColor = true;
-            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
-            // 
             // SettingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -145,7 +144,6 @@
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.gbWebEngine);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SettingForm";
