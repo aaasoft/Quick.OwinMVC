@@ -44,11 +44,22 @@ namespace Quick.OwinMVC.Node
                 if (nodeMethod == null)
                     return Next.Invoke(context);
 
-                var data = nodeMethod?.Invoke(context);
-                if (data == null)
-                    return Task.Delay(0);
-                else
-                    return rep.WriteAsync(JsonConvert.SerializeObject(data));
+                Object data = null;
+                try
+                {
+                    data = nodeMethod?.Invoke(context);
+                    if (data == null)
+                        return Task.Delay(0);
+                    if (NodeManager.Instance.ReturnValueHandler != null)
+                        data = NodeManager.Instance.ReturnValueHandler.Invoke(data);
+                }
+                catch (Exception ex)
+                {
+                    if (NodeManager.Instance.ExceptionHandler == null)
+                        throw ex;
+                    data = NodeManager.Instance.ExceptionHandler.Invoke(ex);
+                }
+                return rep.WriteAsync(JsonConvert.SerializeObject(data));
             }
             return Next.Invoke(context);
         }

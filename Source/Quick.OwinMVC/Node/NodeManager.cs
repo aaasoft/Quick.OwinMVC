@@ -15,6 +15,15 @@ namespace Quick.OwinMVC.Node
         private Dictionary<String, INode> dict = new Dictionary<string, INode>();
         private Dictionary<string, IMethod> methodDict = new Dictionary<string, IMethod>();
 
+        /// <summary>
+        /// 返回值处理器
+        /// </summary>
+        public Func<Object,Object> ReturnValueHandler { get; set; }
+        /// <summary>
+        /// 异常处理器
+        /// </summary>
+        public Func<Exception,Object> ExceptionHandler { get; set; }
+
         public void Register(INode t)
         {
             Stack<INode> nodeStack = new Stack<INode>();
