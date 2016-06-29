@@ -24,12 +24,11 @@ namespace Quick.OwinMVC.Node
             {
                 if (HttpMethod == AbstractNode.HTTP_METHOD_POST)
                 {
-                    return $@"code为0代表成功，否则代表失败。
-成功时示例：
-{JsonConvert.SerializeObject(ApiResult.Success("成功提示文本。"), Formatting.Indented)}
+                    return $@"成功时示例：
+{JsonConvert.SerializeObject(ApiResult.Success($"{Name}成功"), Formatting.Indented)}
 
 失败时示例：
-{JsonConvert.SerializeObject(ApiResult.Error("失败提示文本。"), Formatting.Indented)}
+{JsonConvert.SerializeObject(ApiResult.Error($"{Name}失败"), Formatting.Indented)}
 ";
                 }
                 return String.Empty;
