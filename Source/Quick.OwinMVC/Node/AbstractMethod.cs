@@ -38,11 +38,24 @@ namespace Quick.OwinMVC.Node
 
         public object Invoke(IOwinContext context)
         {
+            NodeParameterAttribute attribute = typeof(TInput)
+                .GetCustomAttributes(typeof(NodeParameterAttribute), false)
+                .FirstOrDefault() as NodeParameterAttribute;
+
+            bool valueToObject = false;
+            String[] ignoreProperties = null;
+
+            if (attribute != null)
+            {
+                valueToObject = attribute.ValueToObject;
+                ignoreProperties = attribute.IgnoreProperties;
+            }
+
             TInput input;
             if (context.Request.Method == "GET")
-                input = context.GetQueryData<TInput>();
+                input = context.GetQueryData<TInput>(valueToObject, ignoreProperties);
             else
-                input = context.GetFormData<TInput>();
+                input = context.GetFormData<TInput>(valueToObject, ignoreProperties);
             return Invoke(context, input);
         }
 
