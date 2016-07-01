@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Quick.OwinMVC.Controller;
 
 namespace Quick.OwinMVC.Node
 {
@@ -12,6 +13,7 @@ namespace Quick.OwinMVC.Node
     {
         public static NodeApiMiddleware Instance { get; private set; }
         public String Prefix = "/api/";
+        private Encoding encoding = new UTF8Encoding(false);
 
         public NodeApiMiddleware(OwinMiddleware next = null) : base(next)
         {
@@ -59,7 +61,10 @@ namespace Quick.OwinMVC.Node
                         throw ex;
                     data = NodeManager.Instance.ExceptionHandler.Invoke(ex);
                 }
-                return rep.WriteAsync(JsonConvert.SerializeObject(data));
+                var content = encoding.GetBytes(JsonConvert.SerializeObject(data));
+                rep.Expires = new DateTimeOffset(DateTime.Now);
+                rep.ContentType = "text/json; charset=UTF-8";
+                return context.Output(content, true);
             }
             return Next.Invoke(context);
         }
