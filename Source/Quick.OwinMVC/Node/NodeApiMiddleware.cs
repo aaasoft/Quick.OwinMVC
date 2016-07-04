@@ -53,7 +53,7 @@ namespace Quick.OwinMVC.Node
                     if (data == null)
                         return Task.Delay(0);
                     if (NodeManager.Instance.ReturnValueHandler != null)
-                        data = NodeManager.Instance.ReturnValueHandler.Invoke(data);
+                        data = NodeManager.Instance.ReturnValueHandler.Invoke(nodeMethod, data);
                 }
                 catch (Exception ex)
                 {

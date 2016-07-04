@@ -18,7 +18,7 @@ namespace Quick.OwinMVC.Node
         /// <summary>
         /// 返回值处理器
         /// </summary>
-        public Func<Object,Object> ReturnValueHandler { get; set; }
+        public Func<IMethod, Object, Object> ReturnValueHandler { get; set; }
         /// <summary>
         /// 异常处理器
         /// </summary>
