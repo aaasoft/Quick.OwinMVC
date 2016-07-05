@@ -16,8 +16,10 @@ namespace Quick.OwinMVC.Node
 
         //以类名作为ID
         public string Id { get { return this.GetType().Name; } }
-
-        public abstract string Name { get; }
+        /// <summary>
+        /// 节点名称
+        /// </summary>
+        public virtual string Name { get { return Id; } } 
 
         private Dictionary<String, INode> childDict = new Dictionary<string, INode>();
         private Dictionary<String, IMethod> methodDict = new Dictionary<string, IMethod>();

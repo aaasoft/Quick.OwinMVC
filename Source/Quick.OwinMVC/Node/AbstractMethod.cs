@@ -15,7 +15,7 @@ namespace Quick.OwinMVC.Node
         public String Path { get; set; }
         public String HttpMethod { get; set; }
         public abstract string Name { get; }
-        public abstract string Description { get; }
+        public virtual string Description { get; } = String.Empty;
         public Type InputType { get; } = typeof(TInput);
         public virtual string InvokeExample { get; } = String.Empty;
         public virtual string ReturnValueExample
