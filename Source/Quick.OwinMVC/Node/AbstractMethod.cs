@@ -56,6 +56,10 @@ namespace Quick.OwinMVC.Node
                 input = context.GetQueryData<TInput>(valueToObject, ignoreProperties);
             else
                 input = context.GetFormData<TInput>(valueToObject, ignoreProperties);
+
+            if (NodeManager.Instance.ParameterHandler != null)
+                input = (TInput)NodeManager.Instance.ParameterHandler.Invoke(this, context, input);
+
             return Invoke(context, input);
         }
 
