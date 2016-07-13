@@ -127,6 +127,8 @@ namespace Quick.OwinMVC.Controller
                 else
                 {
                     var text = pair.Value[0];
+                    if (String.IsNullOrEmpty(text))
+                        continue;
                     //如果要将字符串转换为JSON对象或数组
                     if (valueToObject)
                     {
