@@ -37,6 +37,8 @@
             this.btnStart = new System.Windows.Forms.Button();
             this.tmrCheckServiceStatus = new System.Windows.Forms.Timer(this.components);
             this.flpTools = new System.Windows.Forms.FlowLayoutPanel();
+            this.niMain = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cmsMain = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.SuspendLayout();
             // 
             // btnInstall
@@ -116,24 +118,37 @@
             this.flpTools.Size = new System.Drawing.Size(160, 0);
             this.flpTools.TabIndex = 6;
             // 
+            // niMain
+            // 
+            this.niMain.ContextMenuStrip = this.cmsMain;
+            this.niMain.Visible = true;
+            this.niMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.niMain_MouseClick);
+            // 
+            // cmsMain
+            // 
+            this.cmsMain.Name = "cmsMain";
+            this.cmsMain.Size = new System.Drawing.Size(61, 4);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(185, 101);
-            this.Controls.Add(this.flpTools);
-            this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.btnStart);
-            this.Controls.Add(this.btnUninstall);
-            this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnInstall);
+            this.Controls.Add(this.btnUninstall);
+            this.Controls.Add(this.btnStart);
+            this.Controls.Add(this.btnStop);
+            this.Controls.Add(this.flpTools);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MainForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -149,5 +164,7 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Timer tmrCheckServiceStatus;
         private System.Windows.Forms.FlowLayoutPanel flpTools;
+        private System.Windows.Forms.NotifyIcon niMain;
+        private System.Windows.Forms.ContextMenuStrip cmsMain;
     }
 }
