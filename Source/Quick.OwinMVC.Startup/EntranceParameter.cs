@@ -91,12 +91,11 @@ namespace Quick.OwinMVC.Startup
         }
 
         /// <summary>
-        /// 调度运行
+        /// 调试运行
         /// </summary>
         public static void Action_Debug()
         {
             ProgramUtils.StartSelfProcess("-debug", false, false);
-            Environment.Exit(0);
         }
     }
 }
