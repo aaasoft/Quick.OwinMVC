@@ -175,7 +175,9 @@ namespace Quick.OwinMVC.Startup.Forms
             //回到最外层
             if (groupName == null)
             {
-                currentToolStripItemCollection = cmsMain.Items;                
+                currentToolStripItemCollection = cmsMain.Items;
+                if (!Entrance.Parameter.SplitTopControl)
+                    return;
             }
             else
             {

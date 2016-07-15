@@ -77,6 +77,10 @@ namespace Quick.OwinMVC.Startup
         public Action OnServiceStoped { get; set; }
 
         /// <summary>
+        /// 是否分隔顶层控件
+        /// </summary>
+        public bool SplitTopControl { get; set; } = true;
+        /// <summary>
         /// 获取控件的函数
         /// </summary>
         public Func<KeyValuePair<String, Object>[]> GetControlConfigFunc { get; set; }
