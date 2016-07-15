@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO.Pipes;
+using System.Security.AccessControl;
 using System.ServiceProcess;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Quick.OwinMVC.Startup.Forms
@@ -21,6 +24,51 @@ namespace Quick.OwinMVC.Startup.Forms
             //托盘图标
             niMain.Text = this.Text;
             niMain.Icon = this.Icon;
+            
+            ensureOnlyOne();
+        }
+
+        private NamedPipeServerStream createNewNamedPipedServerStream(String pipeName)
+        {
+            return new NamedPipeServerStream(
+                    pipeName,
+                    PipeDirection.InOut,
+                    1,
+                    PipeTransmissionMode.Byte,
+                    PipeOptions.Asynchronous);
+        }
+
+        private void ensureOnlyOne()
+        {
+            var pipeName = $"{this.GetType().FullName}.{winServiceInstaller.ServiceName}";
+            try
+            {
+                var serverStream = createNewNamedPipedServerStream(pipeName);
+                AsyncCallback ac = null;
+                ac = ar =>
+                {
+                    showForm();
+                    serverStream.Close();
+                    serverStream = createNewNamedPipedServerStream(pipeName);
+                    serverStream.BeginWaitForConnection(ac, null);
+                };
+                serverStream.BeginWaitForConnection(ac, null);
+            }
+            catch
+            {
+                try
+                {
+                    var clientStream = new NamedPipeClientStream(pipeName);
+                    clientStream.Connect();
+                    clientStream.Close();
+                }
+                finally
+                {
+                    this.DialogResult = DialogResult.Cancel;
+                    this.Close();
+                    Environment.Exit(0);
+                }
+            }
         }
 
         private void disableForm()
@@ -31,6 +79,27 @@ namespace Quick.OwinMVC.Startup.Forms
         {
             this.Enabled = true;
             this.Activate();
+        }
+
+        private void showForm()
+        {
+            this.Invoke(new Action(() =>
+            {
+                if (this.CanFocus)
+                {
+                    if (this.Location == HideLocation)
+                        this.Location = BeforeHideLocation;
+                    this.Activate();
+                }
+                else
+                {
+                    foreach (Form form in Application.OpenForms)
+                    {
+                        if (form.Visible && form.CanFocus)
+                            form.Activate();
+                    }
+                }
+            }));            
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -44,12 +113,6 @@ namespace Quick.OwinMVC.Startup.Forms
             foreach (var keyValuePair in controlConfig)
             {
                 var key = keyValuePair.Key;
-                //回到最外层
-                if (key == null)
-                {
-                    currentToolStripItemCollection = cmsMain.Items;
-                    continue;
-                }
                 var value = keyValuePair.Value;
                 if (value == null)
                 {
@@ -92,6 +155,7 @@ namespace Quick.OwinMVC.Startup.Forms
                             else
                                 btn.Enabled = sourceButton.Enabled;
                         };
+                        btn.Enabled = sourceButton.Enabled;
                         control = btn;
                         addNotifyIconButton(btn);
                     }
@@ -108,24 +172,32 @@ namespace Quick.OwinMVC.Startup.Forms
         //处理分组
         private void handleGroup(string groupName)
         {
-            flpTools.Controls.Add(new Label()
+            //回到最外层
+            if (groupName == null)
             {
-                Text = groupName,
-                Font = new System.Drawing.Font(Font.FontFamily, Font.Size, System.Drawing.FontStyle.Bold),
-                Margin = new Padding(0),
-                Width = flpTools.Width,
-                TextAlign = System.Drawing.ContentAlignment.BottomCenter
-            });
+                currentToolStripItemCollection = cmsMain.Items;                
+            }
+            else
+            {
+                flpTools.Controls.Add(new Label()
+                {
+                    Text = groupName,
+                    Font = new System.Drawing.Font(Font.FontFamily, Font.Size, System.Drawing.FontStyle.Bold),
+                    Margin = new Padding(0),
+                    Width = flpTools.Width,
+                    TextAlign = System.Drawing.ContentAlignment.BottomCenter
+                });
+                var dropDown = new ToolStripMenuItem();
+                dropDown.Text = groupName;
+                cmsMain.Items.Add(dropDown);
+                currentToolStripItemCollection = dropDown.DropDownItems;
+            }
             flpTools.Controls.Add(new GroupBox()
             {
                 Width = flpTools.Width,
                 Height = 0,
                 Margin = new Padding(0),
             });
-            var dropDown = new ToolStripMenuItem();
-            dropDown.Text = groupName;
-            cmsMain.Items.Add(dropDown);
-            currentToolStripItemCollection = dropDown.DropDownItems;
         }
 
         private ToolStripItemCollection currentToolStripItemCollection;
@@ -166,22 +238,7 @@ namespace Quick.OwinMVC.Startup.Forms
         private void niMain_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
-            {
-                if (this.CanFocus)
-                {
-                    if (this.Location == HideLocation)
-                        this.Location = BeforeHideLocation;
-                    this.Activate();
-                }
-                else
-                {
-                    foreach (Form form in Application.OpenForms)
-                    {
-                        if (form.Visible && form.CanFocus)
-                            form.Activate();
-                    }
-                }
-            }
+                showForm();
         }
     }
 }
