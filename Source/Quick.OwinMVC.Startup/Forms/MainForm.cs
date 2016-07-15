@@ -23,6 +23,16 @@ namespace Quick.OwinMVC.Startup.Forms
             niMain.Icon = this.Icon;
         }
 
+        private void disableForm()
+        {
+            this.Enabled = false;
+        }
+        private void enableForm()
+        {
+            this.Enabled = true;
+            this.Activate();
+        }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             var controlConfig = Entrance.Parameter.GetControlConfigFunc?.Invoke();
@@ -56,14 +66,32 @@ namespace Quick.OwinMVC.Startup.Forms
                     {
                         var action = (Action)value;
                         var btn = new Button() { Text = key };
-                        btn.Click += (sender2, e2) => action();
+                        btn.Click += (sender2, e2) =>
+                        {
+                            disableForm();
+                            action();
+                            enableForm();
+                        };
                         control = btn;
                         addNotifyIconButton(btn);
                     }
                     else if (value is Button)
                     {
-                        Button btn = (Button)value;
-                        btn.Text = key;
+                        Button sourceButton = (Button)value;
+                        var btn = new Button() { Text = key };
+                        btn.Click += (sender2, e2) =>
+                        {
+                            disableForm();
+                            sourceButton.PerformClick();
+                            enableForm();
+                        };
+                        sourceButton.EnabledChanged += (sender2, e2) =>
+                        {
+                            if (btn.InvokeRequired)
+                                btn.Invoke(new Action(() => btn.Enabled = sourceButton.Enabled));
+                            else
+                                btn.Enabled = sourceButton.Enabled;
+                        };
                         control = btn;
                         addNotifyIconButton(btn);
                     }
@@ -141,12 +169,13 @@ namespace Quick.OwinMVC.Startup.Forms
             {
                 if (this.CanFocus)
                 {
-                    this.Location = BeforeHideLocation;
+                    if (this.Location == HideLocation)
+                        this.Location = BeforeHideLocation;
                     this.Activate();
                 }
                 else
                 {
-                    foreach(Form form in Application.OpenForms)
+                    foreach (Form form in Application.OpenForms)
                     {
                         if (form.Visible && form.CanFocus)
                             form.Activate();
