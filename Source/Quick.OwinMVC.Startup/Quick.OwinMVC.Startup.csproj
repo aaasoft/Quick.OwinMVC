@@ -50,6 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Buttons\CommonButtons.cs" />
+    <Compile Include="Buttons\ServiceButtons.cs" />
     <Compile Include="EntranceParameter.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>

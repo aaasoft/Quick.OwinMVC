@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using Quick.OwinMVC.Startup.Buttons;
 
 namespace Quick.OwinMVC.Program
 {
@@ -19,12 +20,21 @@ namespace Quick.OwinMVC.Program
                 LibsPath = "Libs",
                 PluginsPath = "Plugins",
                 LoadAllPlugins = true,
-                ButtonDict = new Dictionary<String, Action>()
-                {
-                    ["常用工具"] = null,
-                    ["设置"] = Startup.EntranceParameter.Action_Setting,
-                    ["调试运行"] = Startup.EntranceParameter.Action_Debug
-                }
+                GetControlConfigFunc = () => new KeyValuePair<string, object>[]
+                 {
+                    new KeyValuePair<string, object>("服务状态",ServiceButtons.Instance.StatusLabel),
+                    new KeyValuePair<string, object>("启动",ServiceButtons.Instance.StartButton),
+                    new KeyValuePair<string, object>("停止",ServiceButtons.Instance.StopButton),
+                    new KeyValuePair<string, object>("服务配置",null),
+                    new KeyValuePair<string, object>("安装",ServiceButtons.Instance.InstallButton),
+                    new KeyValuePair<string, object>("卸载",ServiceButtons.Instance.UninstallButton),
+                    new KeyValuePair<string, object>(null,null),
+                    new KeyValuePair<string, object>("常用工具",null),
+                    new KeyValuePair<string, object>("设置",CommonButtons.Instance.Action_Setting),
+                    new KeyValuePair<string, object>("调试运行",CommonButtons.Instance.Action_Debug),
+                    new KeyValuePair<string, object>(null,null),
+                    new KeyValuePair<string, object>("退出",CommonButtons.Instance.Action_Exit)
+                 }
             };
 #if DEBUG
             //修改调试的WEB服务端口为8094

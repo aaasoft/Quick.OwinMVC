@@ -23,145 +23,81 @@ namespace Quick.OwinMVC.Startup.Forms
             niMain.Icon = this.Icon;
         }
 
-        private void tmrCheckServiceStatus_Tick(object sender, EventArgs e)
-        {
-            ServiceController service = winServiceInstaller.GetService();
-            if (service == null)
-            {
-                btnInstall.Enabled = true;
-                btnUninstall.Enabled = false;
-                btnStart.Enabled = false;
-                btnStop.Enabled = false;
-                lblStatus.Text = "未安装";
-            }
-            else
-            {
-                lblStatus.Text = service.Status.ToString();
-                switch (service.Status)
-                {
-                    case ServiceControllerStatus.Stopped:
-                        btnInstall.Enabled = false;
-                        btnUninstall.Enabled = true;
-                        btnStart.Enabled = true;
-                        btnStop.Enabled = false;
-                        break;
-                    case ServiceControllerStatus.Running:
-                        btnInstall.Enabled = false;
-                        btnUninstall.Enabled = false;
-                        btnStart.Enabled = false;
-                        btnStop.Enabled = true;
-                        break;
-                    default:
-                        btnInstall.Enabled = false;
-                        btnUninstall.Enabled = false;
-                        btnStart.Enabled = false;
-                        btnStop.Enabled = false;
-                        break;
-                }
-            }
-        }
-
-        private void disableForm()
-        {
-            this.Enabled = false;
-        }
-        private void enableForm()
-        {
-            this.Enabled = true;
-            this.Activate();
-        }
-
-        private void btnInstall_Click(object sender, EventArgs e)
-        {
-            disableForm();
-            try { ProgramUtils.StartSelfProcess("-install", true)?.WaitForExit(); }
-            catch { MessageBox.Show("安装服务失败!"); }
-            enableForm();
-        }
-
-        private void btnUninstall_Click(object sender, EventArgs e)
-        {
-            disableForm();
-            try { ProgramUtils.StartSelfProcess("-uninstall", true)?.WaitForExit(); }
-            catch { MessageBox.Show("卸载服务失败!"); }
-            enableForm();
-        }
-
-        private void btnStart_Click(object sender, EventArgs e)
-        {
-            disableForm();
-            try { ProgramUtils.StartSelfProcess("-start", true)?.WaitForExit(); }
-            catch { MessageBox.Show("启动服务失败!"); }
-            enableForm();
-        }
-
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            disableForm();
-            try { ProgramUtils.StartSelfProcess("-stop", true)?.WaitForExit(); }
-            catch { MessageBox.Show("停止服务失败!"); }
-            enableForm();
-        }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
-            if (Entrance.Parameter.ButtonDict == null
-                || Entrance.Parameter.ButtonDict.Count == 0)
+            var controlConfig = Entrance.Parameter.GetControlConfigFunc?.Invoke();
+            if (controlConfig == null
+                || controlConfig.Length == 0)
                 return;
 
             currentToolStripItemCollection = cmsMain.Items;
-
-            foreach (var control in this.Controls)
+            foreach (var keyValuePair in controlConfig)
             {
-                if (control is Button)
-                    addNotifyIconButton((Button)control);
-            }
-            foreach (var key in Entrance.Parameter.ButtonDict.Keys)
-            {
-                var value = Entrance.Parameter.ButtonDict[key];
+                var key = keyValuePair.Key;
+                //回到最外层
+                if (key == null)
+                {
+                    currentToolStripItemCollection = cmsMain.Items;
+                    continue;
+                }
+                var value = keyValuePair.Value;
                 if (value == null)
                 {
-                    flpTools.Controls.Add(new Label()
-                    {
-                        Text = key,
-                        Font = new System.Drawing.Font(Font.FontFamily, Font.Size, System.Drawing.FontStyle.Bold),
-                        Margin = new Padding(0),
-                        Width = flpTools.Width,
-                        TextAlign = System.Drawing.ContentAlignment.BottomCenter
-                    });
-                    flpTools.Controls.Add(new GroupBox()
-                    {
-                        Width = flpTools.Width,
-                        Height = 0,
-                        Margin = new Padding(0),
-                    });
-                    var dropDown = new ToolStripMenuItem();
-                    dropDown.Text = key;
-                    cmsMain.Items.Add(dropDown);
-                    currentToolStripItemCollection = dropDown.DropDownItems;
+                    handleGroup(key);
                 }
                 else
                 {
-                    var btn = new Button() { Text = key };
-                    btn.Click += (sender2, e2) =>
+                    Control control = null;
+                    if (value is string)
                     {
-                        disableForm();
-                        value();
-                        enableForm();
-                    };
-                    flpTools.Controls.Add(btn);
-                    addNotifyIconButton(btn);
+                        control = new Label() { Text = (string)value };
+                    }
+                    else if (value is Action)
+                    {
+                        var action = (Action)value;
+                        var btn = new Button() { Text = key };
+                        btn.Click += (sender2, e2) => action();
+                        control = btn;
+                        addNotifyIconButton(btn);
+                    }
+                    else if (value is Button)
+                    {
+                        Button btn = (Button)value;
+                        btn.Text = key;
+                        control = btn;
+                        addNotifyIconButton(btn);
+                    }
+                    else if (value is Control)
+                    {
+                        flpTools.Controls.Add(new Label() { Text = key, Width = 73 });
+                        control = (Control)value;
+                    }
+                    flpTools.Controls.Add(control);
                 }
             }
-            //加入退出按钮
-            currentToolStripItemCollection = cmsMain.Items;
-            var exitButton = new Button() { Text = "退出" };
-            exitButton.Click += (sender2, e2) =>
+        }
+
+        //处理分组
+        private void handleGroup(string groupName)
+        {
+            flpTools.Controls.Add(new Label()
             {
-                niMain.Visible = false;
-                Environment.Exit(0);
-            };
-            addNotifyIconButton(exitButton);
+                Text = groupName,
+                Font = new System.Drawing.Font(Font.FontFamily, Font.Size, System.Drawing.FontStyle.Bold),
+                Margin = new Padding(0),
+                Width = flpTools.Width,
+                TextAlign = System.Drawing.ContentAlignment.BottomCenter
+            });
+            flpTools.Controls.Add(new GroupBox()
+            {
+                Width = flpTools.Width,
+                Height = 0,
+                Margin = new Padding(0),
+            });
+            var dropDown = new ToolStripMenuItem();
+            dropDown.Text = groupName;
+            cmsMain.Items.Add(dropDown);
+            currentToolStripItemCollection = dropDown.DropDownItems;
         }
 
         private ToolStripItemCollection currentToolStripItemCollection;
@@ -188,13 +124,15 @@ namespace Quick.OwinMVC.Startup.Forms
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            if (e.CloseReason == CloseReason.UserClosing
+                && this.DialogResult == DialogResult.None)
             {
-
                 e.Cancel = true;
                 BeforeHideLocation = this.Location;
                 this.Location = HideLocation;
+                return;
             }
+            niMain.Visible = false;
         }
 
         private void niMain_MouseClick(object sender, MouseEventArgs e)
