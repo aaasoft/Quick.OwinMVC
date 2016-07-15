@@ -57,9 +57,17 @@ namespace Quick.OwinMVC.Node
                 }
                 catch (Exception ex)
                 {
-                    if (NodeManager.Instance.ExceptionHandler == null)
-                        throw ex;
-                    data = NodeManager.Instance.ExceptionHandler.Invoke(ex);
+                    if (ex is NodeMethodException)
+                    {
+                        var mEx = (NodeMethodException)ex;
+                        data = ApiResult.Error(mEx.HResult, mEx.Message, mEx.MethodData);
+                    }
+                    else
+                    {
+                        if (NodeManager.Instance.ExceptionHandler == null)
+                            throw ex;
+                        data = NodeManager.Instance.ExceptionHandler.Invoke(ex);
+                    }
                 }
                 var content = encoding.GetBytes(JsonConvert.SerializeObject(data));
                 rep.Expires = new DateTimeOffset(DateTime.Now);
