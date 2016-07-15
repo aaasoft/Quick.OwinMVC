@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.ServiceProcess;
 using System.Windows.Forms;
 
@@ -181,12 +182,18 @@ namespace Quick.OwinMVC.Startup.Forms
             currentToolStripItemCollection.Add(tsButton);
         }
 
+
+        private Point HideLocation = new Point(-1000, -1000);
+        private Point BeforeHideLocation;
+
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
+
                 e.Cancel = true;
-                this.Hide();
+                BeforeHideLocation = this.Location;
+                this.Location = HideLocation;
             }
         }
 
@@ -194,8 +201,19 @@ namespace Quick.OwinMVC.Startup.Forms
         {
             if (e.Button == MouseButtons.Left)
             {
-                this.Show();
-                this.Activate();
+                if (this.CanFocus)
+                {
+                    this.Location = BeforeHideLocation;
+                    this.Activate();
+                }
+                else
+                {
+                    foreach(Form form in Application.OpenForms)
+                    {
+                        if (form.Visible && form.CanFocus)
+                            form.Activate();
+                    }
+                }
             }
         }
     }
