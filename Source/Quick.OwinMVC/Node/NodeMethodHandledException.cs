@@ -11,5 +11,16 @@ namespace Quick.OwinMVC.Node
     /// </summary>
     public class NodeMethodHandledException : Exception
     {
+        private NodeMethodHandledException()
+        {
+        }
+
+        public static Exception Instance
+        {
+            get
+            {
+                return new AppDomainUnloadedException(null, new NodeMethodHandledException());
+            }
+        }
     }
 }

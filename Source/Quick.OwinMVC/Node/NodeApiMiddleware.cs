@@ -57,7 +57,8 @@ namespace Quick.OwinMVC.Node
                 {
                     data = ApiResult.Error(ex.HResult, ex.Message, ex.MethodData);
                 }
-                catch (NodeMethodHandledException)
+                catch (AppDomainUnloadedException ex)
+                when (ex.InnerException is NodeMethodHandledException)
                 {
                     return Task.Delay(0);
                 }
