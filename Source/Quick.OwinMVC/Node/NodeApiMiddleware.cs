@@ -50,24 +50,22 @@ namespace Quick.OwinMVC.Node
                 try
                 {
                     data = nodeMethod?.Invoke(context);
-                    if (data == null)
-                        return Task.Delay(0);
                     if (NodeManager.Instance.ReturnValueHandler != null)
                         data = NodeManager.Instance.ReturnValueHandler.Invoke(nodeMethod, data);
                 }
+                catch (NodeMethodException ex)
+                {
+                    data = ApiResult.Error(ex.HResult, ex.Message, ex.MethodData);
+                }
+                catch (NodeMethodHandledException)
+                {
+                    return Task.Delay(0);
+                }
                 catch (Exception ex)
                 {
-                    if (ex is NodeMethodException)
-                    {
-                        var mEx = (NodeMethodException)ex;
-                        data = ApiResult.Error(mEx.HResult, mEx.Message, mEx.MethodData);
-                    }
-                    else
-                    {
-                        if (NodeManager.Instance.ExceptionHandler == null)
-                            throw ex;
-                        data = NodeManager.Instance.ExceptionHandler.Invoke(ex);
-                    }
+                    if (NodeManager.Instance.ExceptionHandler == null)
+                        throw ex;
+                    data = NodeManager.Instance.ExceptionHandler.Invoke(ex);
                 }
                 var content = encoding.GetBytes(JsonConvert.SerializeObject(data));
                 rep.Expires = new DateTimeOffset(DateTime.Now);

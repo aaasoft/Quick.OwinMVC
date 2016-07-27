@@ -14,7 +14,7 @@ namespace Quick.OwinMVC.Node
                 where TInput : class
     {
         [TextResource]
-        public enum Texts
+        private enum Texts
         {
             [Text("传入参数错误，请检查参数是否正确。{0}")]
             ARGUMENT_ERROR = 410

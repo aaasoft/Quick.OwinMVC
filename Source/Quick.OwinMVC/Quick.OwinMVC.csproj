@@ -96,6 +96,7 @@
     <Compile Include="Node\NodeApiMiddleware.cs" />
     <Compile Include="Node\NodeManager.cs" />
     <Compile Include="Node\NodeMethodException.cs" />
+    <Compile Include="Node\NodeMethodHandledException.cs" />
     <Compile Include="Node\NodeParameterAttribute.cs" />
     <Compile Include="Plugin\IPluginActivator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
