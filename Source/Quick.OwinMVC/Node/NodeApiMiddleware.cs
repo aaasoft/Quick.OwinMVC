@@ -12,7 +12,7 @@ namespace Quick.OwinMVC.Node
     public class NodeApiMiddleware : OwinMiddleware
     {
         public static NodeApiMiddleware Instance { get; private set; }
-        public String Prefix = "/api/";
+        public static string Prefix = "/api/";
         private Encoding encoding = new UTF8Encoding(false);
 
         public NodeApiMiddleware(OwinMiddleware next = null) : base(next)

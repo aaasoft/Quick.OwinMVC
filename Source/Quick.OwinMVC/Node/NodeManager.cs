@@ -41,7 +41,7 @@ namespace Quick.OwinMVC.Node
             foreach (var method in node.GetMethods())
             {
                 method.Value.HttpMethod = method.Key;
-                method.Value.Path = NodeApiMiddleware.Instance.Prefix + String.Join("/", nodeStack
+                method.Value.Path = NodeApiMiddleware.Prefix + String.Join("/", nodeStack
                         .Reverse()
                         .Select(t => t.Id)
                         .ToArray());
