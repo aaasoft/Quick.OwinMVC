@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Owin;
+using Quick.OwinMVC;
 using Quick.OwinMVC.Routing;
 using SvnManage.Middleware;
 using Quick.OwinMVC.Localization;

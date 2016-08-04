@@ -17,13 +17,15 @@ namespace Quick.OwinMVC.Utils
         /// <param name="fileHandler"></param>
         public static void HandleMultipartData(IOwinRequest req,
             StreamingMultipartFormDataParser.ParameterDelegate parameterHandler,
-            StreamingMultipartFormDataParser.FileStreamDelegate fileHandler)
+            StreamingMultipartFormDataParser.FileStreamDelegate fileHandler,
+            StreamingMultipartFormDataParser.StreamClosedDelegate streamClosedDelegate = null)
         {
             if (!req.ContentType.StartsWith("multipart/form-data;"))
                 throw new ArgumentException("'ContentType' not start with 'multipart/form-data;'.");
             var parser = new StreamingMultipartFormDataParser(req.Body);
             parser.ParameterHandler = parameterHandler;
             parser.FileHandler = fileHandler;
+            parser.StreamClosedHandler = streamClosedDelegate;
             parser.Run();
         }
     }

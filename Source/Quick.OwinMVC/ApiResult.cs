@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Quick.OwinMVC.Controller
+namespace Quick.OwinMVC
 {
     /// <summary>
     /// WEB API的返回结果

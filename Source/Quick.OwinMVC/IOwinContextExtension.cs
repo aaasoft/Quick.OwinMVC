@@ -21,7 +21,7 @@ using HttpMultipartParser;
 using System.IO.Compression;
 using Quick.OwinMVC.Utils;
 
-namespace Quick.OwinMVC.Controller
+namespace Quick.OwinMVC
 {
     public static class IOwinContextExtension
     {
@@ -58,6 +58,11 @@ namespace Quick.OwinMVC.Controller
             if (String.IsNullOrEmpty(language))
                 language = TextManager.DefaultLanguage;
             return language;
+        }
+
+        public static TextManager GetTextManager(this IOwinContext context)
+        {
+            return TextManager.GetInstance(context.GetLanguage());
         }
 
         /// <summary>
@@ -205,6 +210,33 @@ namespace Quick.OwinMVC.Controller
             where T : class
         {
             return getJObject(context.GetFormData(), valueToObject, ignoreProperties).ToObject<T>();
+        }
+
+        /// <summary>
+        /// 根据字典得到数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <param name="valueToObject"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public static T GetDictData<T>(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, params String[] ignoreProperties)
+        {
+            return getJObject(data, valueToObject, ignoreProperties).ToObject<T>();
+        }
+
+        /// <summary>
+        /// 根据字典得到数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <param name="data"></param>
+        /// <param name="valueToObject"></param>
+        /// <param name="ignoreProperties"></param>
+        /// <returns></returns>
+        public static T GetDictData<T>(this IOwinContext context, IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, params String[] ignoreProperties)
+        {
+            return getJObject(data, valueToObject, ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
