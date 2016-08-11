@@ -26,7 +26,7 @@ namespace Quick.OwinMVC.Node
         /// <summary>
         /// 异常处理器
         /// </summary>
-        public Func<Exception,Object> ExceptionHandler { get; set; }
+        public Func<Exception, Object> ExceptionHandler { get; set; }
 
         public void Register(INode t)
         {
@@ -85,6 +85,28 @@ namespace Quick.OwinMVC.Node
             if (methodDict.ContainsKey(httpMethod))
                 return methodDict[httpMethod];
             return null;
+        }
+
+        /// <summary>
+        /// 获取节点
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public INode GetNode(string path)
+        {
+            var nodeSegments = path.Split(new Char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+
+            INode currentNode = this;
+            IEnumerable<String> currentSegments = nodeSegments;
+            while (currentNode != null && currentSegments.Count() > 0)
+            {
+                var currentSegment = currentSegments.First();
+                currentNode = currentNode.GetChild(currentSegment);
+                if (currentNode == null)
+                    return null;
+                currentSegments = currentSegments.Skip(1);
+            }
+            return currentNode;
         }
     }
 }

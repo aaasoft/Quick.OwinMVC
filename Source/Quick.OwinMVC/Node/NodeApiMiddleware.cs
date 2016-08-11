@@ -20,28 +20,27 @@ namespace Quick.OwinMVC.Node
             Instance = this;
         }
 
+        /// <summary>
+        /// 获取节点路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public string GetNodePath(string path)
+        {
+            if (path.StartsWith(Prefix))
+                return path.Substring(Prefix.Length);
+            return null;
+        }
+
         public override Task Invoke(IOwinContext context)
         {
             var req = context.Request;
             var rep = context.Response;
-            var requestPath = req.Path.Value;
-            if (requestPath.StartsWith(Prefix))
+
+            var nodePath = GetNodePath(req.Path.Value);
+            if (!string.IsNullOrEmpty(nodePath))
             {
-                var nodePath = requestPath.Substring(Prefix.Length);
-                var nodeSegments = nodePath.Split(new Char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-
-                INode currentNode = NodeManager.Instance;
-                IEnumerable<String> currentSegments = nodeSegments;
-                while (currentNode != null && currentSegments.Count() > 0)
-                {
-                    var currentSegment = currentSegments.First();
-                    currentNode = currentNode.GetChild(currentSegment);
-                    if (currentNode == null)
-                        return Next.Invoke(context);
-
-                    currentSegments = currentSegments.Skip(1);
-                }
-
+                var currentNode = NodeManager.Instance.GetNode(nodePath);
                 var nodeMethod = currentNode?.GetMethod(req.Method);
                 if (nodeMethod == null)
                     return Next.Invoke(context);
