@@ -48,7 +48,12 @@ namespace Quick.OwinMVC.Node
                 Object data = null;
                 try
                 {
+                    //调用方法处理
+                    if (NodeManager.Instance.MethodInvokeHandler != null)
+                        nodeMethod = NodeManager.Instance.MethodInvokeHandler.Invoke(nodeMethod, context);
+                    //调用
                     data = nodeMethod?.Invoke(context);
+                    //返回值处理
                     if (NodeManager.Instance.ReturnValueHandler != null)
                         data = NodeManager.Instance.ReturnValueHandler.Invoke(nodeMethod, data);
                 }

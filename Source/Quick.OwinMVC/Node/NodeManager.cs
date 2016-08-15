@@ -16,6 +16,10 @@ namespace Quick.OwinMVC.Node
         private Dictionary<string, IMethod> methodDict = new Dictionary<string, IMethod>();
 
         /// <summary>
+        /// 方法调用处理器
+        /// </summary>
+        public Func<IMethod, IOwinContext, IMethod> MethodInvokeHandler { get; set; }
+        /// <summary>
         /// 传入参数处理器
         /// </summary>
         public Func<IMethod, IOwinContext, Object, Object> ParameterHandler { get; set; }
