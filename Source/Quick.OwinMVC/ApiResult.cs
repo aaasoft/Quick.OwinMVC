@@ -116,11 +116,11 @@ namespace Quick.OwinMVC
         /// <param name="code">错误码</param>
         /// <param name="message">消息</param>
         /// <returns></returns>
-        public static ApiResult Error(Int32 code, String message,Object data)
+        public static ApiResult Error(Int32 code, String message, Object data)
         {
             if (code == 0)
-                throw new Exception("code value is '0',not means error.");
-            return new ApiResult(code, message,data);
+                code = -1;
+            return new ApiResult(code, message, data);
         }
     }
 }
