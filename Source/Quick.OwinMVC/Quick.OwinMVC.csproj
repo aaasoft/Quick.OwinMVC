@@ -89,7 +89,9 @@
     <Compile Include="Middleware\StaticViewMiddleware.cs" />
     <Compile Include="Model\IRunnable.cs" />
     <Compile Include="Node\AbstractMethod.cs" />
+    <Compile Include="Node\AbstractMethodWithFileDownload.cs" />
     <Compile Include="Node\AbstractMethodWithFileUpload.cs" />
+    <Compile Include="Node\AbstractMethodWithStreamOutput.cs" />
     <Compile Include="Node\AbstractNode.cs" />
     <Compile Include="Node\IMethod.cs" />
     <Compile Include="Node\INode.cs" />
