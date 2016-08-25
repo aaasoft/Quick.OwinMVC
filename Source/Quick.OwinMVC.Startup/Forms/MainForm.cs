@@ -161,12 +161,14 @@ namespace Quick.OwinMVC.Startup.Forms
                     }
                     else if (value is Control)
                     {
-                        flpTools.Controls.Add(new Label() { Text = key, Width = 73 });
+                        flpTools.Controls.Add(new Label() { Text = key, Width = 56 });
                         control = (Control)value;
                     }
                     flpTools.Controls.Add(control);
                 }
             }
+
+            this.CenterToScreen();
         }
 
         //处理分组

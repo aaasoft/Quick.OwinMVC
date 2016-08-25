@@ -37,10 +37,11 @@
             // flpTools
             // 
             this.flpTools.AutoSize = true;
+            this.flpTools.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flpTools.Location = new System.Drawing.Point(10, 6);
             this.flpTools.MaximumSize = new System.Drawing.Size(200, 0);
             this.flpTools.Name = "flpTools";
-            this.flpTools.Size = new System.Drawing.Size(160, 0);
+            this.flpTools.Size = new System.Drawing.Size(0, 0);
             this.flpTools.TabIndex = 6;
             // 
             // niMain
@@ -59,7 +60,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(185, 14);
+            this.ClientSize = new System.Drawing.Size(52, 14);
             this.Controls.Add(this.flpTools);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
