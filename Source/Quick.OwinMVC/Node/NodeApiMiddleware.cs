@@ -72,7 +72,7 @@ namespace Quick.OwinMVC.Node
                         throw ex;
                     data = NodeManager.Instance.ExceptionHandler.Invoke(ex);
                 }
-                var content = encoding.GetBytes(JsonConvert.SerializeObject(data));
+                var content = encoding.GetBytes(JsonConvert.SerializeObject(data, NodeManager.Instance.JsonSerializerSettings));
                 rep.Expires = new DateTimeOffset(DateTime.Now);
                 rep.ContentType = "text/json; charset=UTF-8";
                 return context.Output(content, true);

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Owin;
+using Newtonsoft.Json;
 
 namespace Quick.OwinMVC.Node
 {
@@ -15,6 +16,10 @@ namespace Quick.OwinMVC.Node
         private Dictionary<String, INode> dict = new Dictionary<string, INode>();
         private Dictionary<string, IMethod> methodDict = new Dictionary<string, IMethod>();
 
+        /// <summary>
+        /// JSON序列化设置
+        /// </summary>
+        public JsonSerializerSettings JsonSerializerSettings { get; set; }
         /// <summary>
         /// 方法调用处理器
         /// </summary>
