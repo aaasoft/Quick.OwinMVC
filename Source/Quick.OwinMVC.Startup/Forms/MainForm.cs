@@ -234,6 +234,7 @@ namespace Quick.OwinMVC.Startup.Forms
                 e.Cancel = true;
                 BeforeHideLocation = this.Location;
                 this.Location = HideLocation;
+                niMain.ShowBalloonTip(5000, this.Text, "已经最小化到托盘图标，单击此图标可以显示面板窗体。", ToolTipIcon.Info);
                 return;
             }
             niMain.Visible = false;
