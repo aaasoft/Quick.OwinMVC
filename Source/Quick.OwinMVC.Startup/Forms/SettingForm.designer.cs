@@ -148,7 +148,7 @@
             this.MinimizeBox = false;
             this.Name = "SettingForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "设置";
+            this.Text = "Web设置";
             this.Load += new System.EventHandler(this.SettingForm_Load);
             this.gbWebEngine.ResumeLayout(false);
             this.gbWebEngine.PerformLayout();
