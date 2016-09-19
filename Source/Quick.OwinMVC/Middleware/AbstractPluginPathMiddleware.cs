@@ -27,6 +27,10 @@ namespace Quick.OwinMVC.Middleware
         /// 是否启用压缩
         /// </summary>
         protected bool EnableCompress { get; set; } = false;
+        /// <summary>
+        /// 额外的HTTP头
+        /// </summary>
+        public IDictionary<string, string> AddonHttpHeaders { get; private set; }
 
         protected IDictionary<String, String> pluginAliasDict;
         private Regex route;
@@ -55,6 +59,12 @@ namespace Quick.OwinMVC.Middleware
                 foreach (var key in dic.Keys.Where(t => t != "0"))
                     context.Environment.Add(key, dic[key]);
             }
+
+            //添加额外的HTTP头
+            if (AddonHttpHeaders != null && AddonHttpHeaders.Count > 0)
+                foreach (var header in AddonHttpHeaders)
+                    context.Response.Headers[header.Key] = header.Value;
+
             //交给派生的Middleware
             return Invoke(context, context.Get<String>(QOMVC_PLUGIN_KEY), context.Get<String>(QOMVC_PATH_KEY));
         }
@@ -89,6 +99,18 @@ namespace Quick.OwinMVC.Middleware
                     Route = value;
                     String fullRoute = $"/:{QOMVC_PLUGIN_KEY}/{Route}/:{QOMVC_PATH_KEY}";
                     route = RouteBuilder.RouteToRegex(fullRoute);
+                    break;
+                case nameof(AddonHttpHeaders):
+                    AddonHttpHeaders = new Dictionary<string, string>();
+                    foreach (var headerKeyValue in value.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        var tmpStrs = headerKeyValue.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (tmpStrs.Length < 2)
+                            continue;
+                        var headerKey = tmpStrs[0].Trim();
+                        var headerValue = tmpStrs[1].Trim();
+                        AddonHttpHeaders[headerKey] = headerValue;
+                    }
                     break;
             }
         }

@@ -13,7 +13,7 @@ namespace Quick.OwinMVC.Middleware
         //过期时间(默认1秒)
         private double Expires { get; set; } = 1;
         //视图文件后缀
-        private String ViewFileSuffix { get; set; }
+        private string ViewFileSuffix { get; set; }        
 
         public StaticViewMiddleware(OwinMiddleware next) : base(next)
         {
