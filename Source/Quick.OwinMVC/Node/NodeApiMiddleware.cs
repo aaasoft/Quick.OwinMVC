@@ -11,6 +11,7 @@ namespace Quick.OwinMVC.Node
 {
     public class NodeApiMiddleware : OwinMiddleware
     {
+        public const string JSONP_CALLBACK = "callback";
         public static NodeApiMiddleware Instance { get; private set; }
         public static string Prefix = "/api/";
         private Encoding encoding = new UTF8Encoding(false);
@@ -72,10 +73,24 @@ namespace Quick.OwinMVC.Node
                         throw ex;
                     data = NodeManager.Instance.ExceptionHandler.Invoke(ex);
                 }
-                var content = encoding.GetBytes(JsonConvert.SerializeObject(data, NodeManager.Instance.JsonSerializerSettings));
+                //要输出的内容
+                string result = null;
+                //JSON序列化的结果
+                var json = JsonConvert.SerializeObject(data, NodeManager.Instance.JsonSerializerSettings);
+                var jsonpCallback = req.Query[JSONP_CALLBACK];
+
+                if (string.IsNullOrEmpty(jsonpCallback))
+                {
+                    rep.ContentType = "text/json; charset=UTF-8";
+                    result = json;
+                }
+                else
+                {
+                    rep.ContentType = "application/x-javascript";
+                    result = $"{jsonpCallback}({json})";
+                }
                 rep.Expires = new DateTimeOffset(DateTime.Now);
-                rep.ContentType = "text/json; charset=UTF-8";
-                return context.Output(content, true);
+                return context.Output(encoding.GetBytes(result), true);
             }
             return Next.Invoke(context);
         }

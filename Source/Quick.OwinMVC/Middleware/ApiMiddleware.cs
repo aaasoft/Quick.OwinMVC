@@ -13,6 +13,8 @@ namespace Quick.OwinMVC.Middleware
 {
     public class ApiMiddleware : AbstractControllerMiddleware<ApiController>
     {
+        public const string JSONP_CALLBACK = "callback";
+
         public ApiMiddleware(OwinMiddleware next) : base(next) { }
 
         public override async Task ExecuteController(ApiController controller, IOwinContext context, string plugin, string path)
@@ -21,10 +23,26 @@ namespace Quick.OwinMVC.Middleware
             var obj = await controller.Service(context);
             if (obj == null)
                 return;
-            var content = encoding.GetBytes(JsonConvert.SerializeObject(obj));
+
+            var req = context.Request;
+            //要输出的内容
+            string result = null;
+            //JSON序列化的结果
+            var json = JsonConvert.SerializeObject(obj);
+            var jsonpCallback = req.Query[JSONP_CALLBACK];
+
+            if (string.IsNullOrEmpty(jsonpCallback))
+            {
+                rep.ContentType = "text/json; charset=UTF-8";
+                result = json;
+            }
+            else
+            {
+                rep.ContentType = "application/x-javascript";
+                result = $"{jsonpCallback}({json})";
+            }
             rep.Expires = new DateTimeOffset(DateTime.Now);
-            rep.ContentType = "text/json; charset=UTF-8";
-            await context.Output(content, EnableCompress);
+            await context.Output(encoding.GetBytes(result), EnableCompress);
         }
     }
 }
