@@ -6,10 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Quick.OwinMVC.Controller;
+using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Node
 {
-    public class NodeApiMiddleware : OwinMiddleware
+    public class NodeApiMiddleware : OwinMiddleware, IHungryPropertyHunter
     {
         public const string JSONP_CALLBACK = "callback";
         public static NodeApiMiddleware Instance { get; private set; }
@@ -93,6 +94,11 @@ namespace Quick.OwinMVC.Node
                 return context.Output(encoding.GetBytes(result), true);
             }
             return Next.Invoke(context);
+        }
+
+        public void Hunt(IDictionary<string, string> properties)
+        {
+            NodeManager.Instance.Init(properties);
         }
     }
 }

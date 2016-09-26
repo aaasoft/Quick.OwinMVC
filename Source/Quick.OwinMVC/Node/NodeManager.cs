@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Owin;
 using Newtonsoft.Json;
+using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Node
 {
@@ -116,6 +117,19 @@ namespace Quick.OwinMVC.Node
                 currentSegments = currentSegments.Skip(1);
             }
             return currentNode;
+        }
+
+        public void Init(IDictionary<string, string> properties)
+        {
+            _Init(this, properties);
+        }
+
+        private void _Init(INode node, IDictionary<string, string> properties)
+        {
+            HunterUtils.TryHunt(node, properties);
+            HunterUtils.TryHunt(node.GetMethods().Values, properties);
+            foreach (var childNode in node.GetChildren())
+                _Init(childNode, properties);
         }
     }
 }
