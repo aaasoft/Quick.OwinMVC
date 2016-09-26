@@ -21,6 +21,26 @@ namespace Quick.OwinMVC.Middleware
         /// </summary>
         public bool IsReady { get; set; } = false;
 
+        /// <summary>
+        /// 获取指定类型的中间件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public T GetMiddleware<T>()
+        {
+            return GetMiddlewares<T>().FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 获取指定类型的全部中间件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IEnumerable<T> GetMiddlewares<T>()
+        {
+            return Middlewares.Where(m => m is T).Cast<T>();
+        }
+
         public MiddlewareContext(OwinMiddleware next) : base(next)
         {
             Instance = this;

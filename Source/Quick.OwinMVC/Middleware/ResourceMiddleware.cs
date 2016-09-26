@@ -23,9 +23,14 @@ namespace Quick.OwinMVC.Middleware
         private Boolean UseMd5ETag = false;
 
         private ResourceWebRequestFactory resourceWebRequestFactory;
-        private String StaticFileFolder
+
+        /// <summary>
+        /// 静态文件目录
+        /// </summary>
+        public String StaticFileFolder
         {
-            set { resourceWebRequestFactory.StaticFileFolder = value; }
+            get { return resourceWebRequestFactory.StaticFileFolder; }
+            private set { resourceWebRequestFactory.StaticFileFolder = value; }
         }
 
         public ResourceMiddleware(OwinMiddleware next) : base(next)
