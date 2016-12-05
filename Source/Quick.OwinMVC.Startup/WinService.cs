@@ -35,7 +35,9 @@ namespace Quick.OwinMVC.Startup
 
         protected override void OnStart(string[] args)
         {
-            if (ProgramUtils.IsRuningOnWindows() && Environment.Version < Version.Parse("4.0.30319.17929"))
+            if (!ProgramUtils.IsMonoRuntime()
+                && ProgramUtils.IsRuningOnWindows()
+                && Environment.Version < Version.Parse("4.0.30319.17929"))
                 throw new ApplicationException("需要安装4.5或更新版本的Microsoft .NET Framework才能运行此程序！");
 
             if (Entrance.Parameter.OnServiceStarting != null)

@@ -20,6 +20,7 @@ namespace Quick.OwinMVC.Utils
         /// <returns></returns>
         public static IEnumerable<String> SearchFile(String searchPath)
         {
+            searchPath = Path.GetFullPath(searchPath);
             if (hasSearchChar(searchPath))
             {
                 var searchFileName = Path.GetFileName(searchPath);
@@ -50,6 +51,7 @@ namespace Quick.OwinMVC.Utils
         {
             if (String.IsNullOrEmpty(searchPath))
                 return new String[] { Environment.CurrentDirectory };
+            searchPath = Path.GetFullPath(searchPath);
 
             if (hasSearchChar(searchPath))
             {

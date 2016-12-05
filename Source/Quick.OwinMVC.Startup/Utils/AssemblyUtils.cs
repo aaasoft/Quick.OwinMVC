@@ -33,7 +33,16 @@ namespace Quick.OwinMVC.Startup.Utils
 
             var linkTimeUtc = epoch.AddSeconds(secondsSince1970);
 
-            var tz = target ?? TimeZoneInfo.Local;
+            var tz = target;
+            try
+            {
+                if (tz == null)
+                    tz = TimeZoneInfo.Local;
+            }
+            catch
+            {
+                tz = TimeZoneInfo.Utc;
+            }
             var localTime = TimeZoneInfo.ConvertTimeFromUtc(linkTimeUtc, tz);
 
             return localTime;

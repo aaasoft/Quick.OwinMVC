@@ -18,6 +18,15 @@ namespace Quick.OwinMVC.Startup.Utils
         }
         #endregion
 
+        /// <summary>
+        /// 检测是否是Mono运行环境
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsMonoRuntime()
+        {
+            return Type.GetType("Mono.Runtime") != null;
+        }
+
         [DllImport("kernel32.dll")]
         public static extern bool FreeConsole();
 
