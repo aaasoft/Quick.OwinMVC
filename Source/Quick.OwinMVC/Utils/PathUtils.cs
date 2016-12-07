@@ -13,6 +13,16 @@ namespace Quick.OwinMVC.Utils
             return searchPath.Contains("*") | searchPath.Contains("?");
         }
 
+        public static string GetFullPath(string path)
+        {
+            path = path.Replace('/', Path.DirectorySeparatorChar);
+            path = path.Replace('\\', Path.DirectorySeparatorChar);
+            var twoDirectorySeparatorCharString = Path.DirectorySeparatorChar.ToString() + Path.DirectorySeparatorChar.ToString();
+            while (path.Contains(twoDirectorySeparatorCharString))
+                path = path.Replace(twoDirectorySeparatorCharString, Path.DirectorySeparatorChar.ToString());
+            return path;
+        }
+
         /// <summary>
         /// 搜索文件
         /// </summary>
@@ -20,7 +30,7 @@ namespace Quick.OwinMVC.Utils
         /// <returns></returns>
         public static IEnumerable<String> SearchFile(String searchPath)
         {
-            searchPath = Path.GetFullPath(searchPath);
+            searchPath = GetFullPath(searchPath);
             if (hasSearchChar(searchPath))
             {
                 var searchFileName = Path.GetFileName(searchPath);
@@ -51,7 +61,7 @@ namespace Quick.OwinMVC.Utils
         {
             if (String.IsNullOrEmpty(searchPath))
                 return new String[] { Environment.CurrentDirectory };
-            searchPath = Path.GetFullPath(searchPath);
+            searchPath = GetFullPath(searchPath);
 
             if (hasSearchChar(searchPath))
             {
