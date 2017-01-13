@@ -12,6 +12,8 @@ using Quick.OwinMVC.WebServer;
 using Quick.OwinMVC.Hunter;
 using Quick.OwinMVC.Resource;
 using Quick.OwinMVC.Localization;
+using Quick.OwinMVC.Plugin;
+using Quick.OwinMVC.Service;
 
 namespace Quick.OwinMVC
 {

@@ -1,5 +1,7 @@
 ﻿using Quick.OwinMVC;
 using Quick.OwinMVC.Hunter;
+using Quick.OwinMVC.Plugin;
+using Quick.OwinMVC.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;

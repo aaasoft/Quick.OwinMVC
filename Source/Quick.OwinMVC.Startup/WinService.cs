@@ -13,19 +13,19 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Threading.Tasks;
 using Quick.OwinMVC.Plugin;
+using Quick.OwinMVC.Service;
 
 namespace Quick.OwinMVC.Startup
 {
     public partial class WinService : ServiceBase
     {
-        private List<IService> serviceList = new List<IService>();
         private IPluginActivator[] pluginActivators = null;
 
         public WinService()
         {
             InitializeComponent();
             //添加WEB服务器服务
-            serviceList.Add(new WebServerService());
+            ServiceManager.Instance.Register(new WebServerService());
         }
 
         public void Start(string[] args)
@@ -58,7 +58,7 @@ namespace Quick.OwinMVC.Startup
             }
 
             //启动所有服务
-            foreach (var service in serviceList)
+            foreach (var service in ServiceManager.Instance.GetItems())
             {
                 Console.Write($"服务[{service.Name}]");
                 HunterUtils.TryHunt(service, Entrance.Parameter.Properties);
@@ -84,7 +84,7 @@ namespace Quick.OwinMVC.Startup
             }
 
             //停止所有服务
-            foreach (var service in serviceList)
+            foreach (var service in ServiceManager.Instance.GetItems())
             {
                 service.Stop();
             }
