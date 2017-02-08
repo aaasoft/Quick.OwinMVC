@@ -9,6 +9,8 @@ using Microsoft.Owin.Hosting;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Builder;
 using Owin;
+using System.Net.NetworkInformation;
+using System.Security.Principal;
 
 namespace Quick.OwinMVC.Server.Microsoft
 {
@@ -25,21 +27,51 @@ namespace Quick.OwinMVC.Server.Microsoft
             webApp = null;
         }
 
+        public bool IsUserAdministrator()
+        {
+            //bool value to hold our return value
+            bool isAdmin;
+            WindowsIdentity user = null;
+            try
+            {
+                //get the currently logged in user
+                user = WindowsIdentity.GetCurrent();
+                WindowsPrincipal principal = new WindowsPrincipal(user);
+                isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                isAdmin = false;
+            }
+            catch (Exception)
+            {
+                isAdmin = false;
+            }
+            finally
+            {
+                if (user != null)
+                    user.Dispose();
+            }
+            return isAdmin;
+        }
+
         public void Start(Action<IAppBuilder> app, IPEndPoint endpoint)
         {
-            var url = string.Empty;
+            StartOptions options = new StartOptions();
+
             if (endpoint.Address == IPAddress.Any)
             {
-#if DEBUG
-                endpoint.Address = IPAddress.Loopback;
-                url = $"http://{endpoint.Address}:{endpoint.Port}";
-#else
-                url = $"http://*:{endpoint.Port}";
-#endif
+                if (IsUserAdministrator())
+                    options.Urls.Add($"http://*:{endpoint.Port}");
+                else
+                {
+                    endpoint.Address = IPAddress.Loopback;
+                    options.Urls.Add($"http://{endpoint.Address}:{endpoint.Port}");
+                }
             }
             else
-                url = $"http://{endpoint.Address}:{endpoint.Port}";
-            webApp = WebApp.Start(url, startup =>
+                options.Urls.Add($"http://{endpoint.Address}:{endpoint.Port}");
+            webApp = WebApp.Start(options, startup =>
             {
                 app(startup);
             });
