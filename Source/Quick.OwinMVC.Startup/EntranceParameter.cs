@@ -1,6 +1,7 @@
 ﻿using Quick.OwinMVC.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace Quick.OwinMVC.Startup
             set
             {
                 _ConfigFilePath = value;
-                Properties = PropertyUtils.LoadFile(ConfigFilePath);
+                if (File.Exists(_ConfigFilePath))
+                    Properties = PropertyUtils.LoadFile(_ConfigFilePath);
             }
         }
         /// <summary>

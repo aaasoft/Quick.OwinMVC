@@ -3,21 +3,34 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 
 namespace Quick.OwinMVC.Startup.Static
 {
+    
     public static class DebugLauncher
     {
         public static void Launch()
         {
             WinService service = new WinService();
+            StringBuilder titleSb = new StringBuilder();
+            //添加服务名称
+            titleSb.Append($"{new WinServiceInstaller().ServiceName}");
             var assembly = System.Reflection.Assembly.GetEntryAssembly();
-            var versionAndTime = $"{new WinServiceInstaller().ServiceName} Ver:{assembly.GetName().Version}  Build:{AssemblyUtils.GetLinkerTime(assembly).ToString("F")}";
+            //添加信息版本
+            foreach (var attr in assembly.CustomAttributes)
+                if (attr.AttributeType == typeof(AssemblyInformationalVersionAttribute))
+                    titleSb.Append($"-{attr.ConstructorArguments[0].Value}");
+            //添加版本号
+            titleSb.Append($" Ver:{assembly.GetName().Version}");
+            //添加编译时间
+            titleSb.Append($" Build:{AssemblyUtils.GetLinkerTime(assembly).ToString("F")}");
+            
             //如果是运行的Windows操作系统，则设置控制台标题
             if (ProgramUtils.IsRuningOnWindows())
-                Console.Title = versionAndTime;
+                Console.Title = titleSb.ToString();
 
             service.Start(null);
             while (true)
