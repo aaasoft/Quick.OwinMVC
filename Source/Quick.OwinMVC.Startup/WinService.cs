@@ -14,6 +14,7 @@ using System.ServiceProcess;
 using System.Threading.Tasks;
 using Quick.OwinMVC.Plugin;
 using Quick.OwinMVC.Service;
+using System.IO.Pipes;
 
 namespace Quick.OwinMVC.Startup
 {
@@ -33,8 +34,52 @@ namespace Quick.OwinMVC.Startup
             OnStart(args);
         }
 
+        private NamedPipeServerStream createNewNamedPipedServerStream(String pipeName)
+        {
+            return new NamedPipeServerStream(
+                    pipeName,
+                    PipeDirection.InOut,
+                    1,
+                    PipeTransmissionMode.Byte,
+                    PipeOptions.Asynchronous);
+        }
+
+        private void ensureOnlyOne()
+        {
+            var serviceName = new WinServiceInstaller().ServiceName;
+            var pipeName = $"{this.GetType().FullName}.{serviceName}";
+            try
+            {
+                var serverStream = createNewNamedPipedServerStream(pipeName);
+                AsyncCallback ac = null;
+                ac = ar =>
+                {
+                    serverStream.Close();
+                    serverStream = createNewNamedPipedServerStream(pipeName);
+                    serverStream.BeginWaitForConnection(ac, null);
+                };
+                serverStream.BeginWaitForConnection(ac, null);
+            }
+            catch
+            {
+                try
+                {
+                    var clientStream = new NamedPipeClientStream(pipeName);
+                    clientStream.Connect();
+                    clientStream.Close();
+                }
+                finally
+                {
+                    Console.WriteLine("程序已经启动，将在10秒后退出。");
+                    Task.Delay(10 * 1000).Wait();
+                    Environment.Exit(0);
+                }
+            }
+        }
+
         protected override void OnStart(string[] args)
         {
+            ensureOnlyOne();
             if (!ProgramUtils.IsMonoRuntime()
                 && ProgramUtils.IsRuningOnWindows()
                 && Environment.Version < Version.Parse("4.0.30319.17929"))
