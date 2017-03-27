@@ -15,6 +15,10 @@ namespace Quick.OwinMVC
         public Int32 Code { get; set; }
         [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
         public String Message { get; set; }
+        //元数据
+        [JsonProperty("meta", NullValueHandling = NullValueHandling.Ignore)]
+        public IDictionary<string, string> Meta { get; set; }
+
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
         public Object Data { get; set; }
 
@@ -23,6 +27,18 @@ namespace Quick.OwinMVC
             this.Code = code;
             this.Message = message;
             this.Data = data;
+        }
+
+        /// <summary>
+        /// 设置元信息
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void SetMetaInfo(string key, string value)
+        {
+            if (Meta == null)
+                Meta = new Dictionary<string, string>();
+            Meta[key] = value;
         }
 
         public override string ToString()
