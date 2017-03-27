@@ -54,10 +54,11 @@ namespace Quick.OwinMVC.Node
                     if (NodeManager.Instance.MethodInvokeHandler != null)
                         nodeMethod = NodeManager.Instance.MethodInvokeHandler.Invoke(nodeMethod, context);
                     //调用
+                    var invokeTime = DateTime.Now;
                     data = nodeMethod?.Invoke(context);
                     //返回值处理
                     if (NodeManager.Instance.ReturnValueHandler != null)
-                        data = NodeManager.Instance.ReturnValueHandler.Invoke(nodeMethod, data);
+                        data = NodeManager.Instance.ReturnValueHandler.Invoke(nodeMethod, data, invokeTime);
                 }
                 catch (NodeMethodException ex)
                 {
