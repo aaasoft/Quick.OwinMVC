@@ -32,7 +32,7 @@ namespace Quick.OwinMVC.Node
         /// <summary>
         /// 返回值处理器
         /// </summary>
-        public Func<IMethod, Object, Object, DateTime> ReturnValueHandler { get; set; }
+        public Func<IMethod, Object, DateTime, Object> ReturnValueHandler { get; set; }
         /// <summary>
         /// 异常处理器
         /// </summary>
