@@ -25,11 +25,13 @@ namespace Quick.OwinMVC.Node
         public sealed override object Invoke(IOwinContext context, TInput input)
         {
             var result = HandleDownload(context, input);
-
             var rep = context.Response;
             //输出附件文件名
             if (!string.IsNullOrEmpty(result.FileName))
-                rep.Headers["Content-Disposition"] = $"attachment; filename=\"{result.FileName}\"; filename*=UTF-8''{result.FileName}";
+            {
+                var encodedFileName = System.Net.WebUtility.UrlEncode(result.FileName);
+                rep.Headers["Content-Disposition"] = $"attachment; filename=\"{encodedFileName}\"";
+            }
             //内容大小
             rep.ContentLength = result.ContentLength;
             //内容类型
