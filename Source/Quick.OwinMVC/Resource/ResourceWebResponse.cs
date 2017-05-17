@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Reflection;
+using System.Text;
 
 namespace Quick.OwinMVC.Resource
 {
@@ -61,23 +62,40 @@ namespace Quick.OwinMVC.Resource
                 String assemblyName = Assembly.GetName().Name;
                 while (resourceName.StartsWith("/"))
                     resourceName = resourceName.Substring(1);
-                resourceName = resourceName.Replace("/", ".");
-                resourceName = $"{assemblyName}.{resourceName}";
 
-                String[] resourceNames = new String[2];
-                resourceNames[0] = resourceName;
-                var dotIndex = resourceName.LastIndexOf('.');
-                if (dotIndex < 0)
-                    dotIndex = 0;
-                resourceNames[1] = resourceName.Insert(dotIndex, ".");
-                foreach (var currentResourceName in resourceNames)
+                Func<string, string> dirHandler = t => t.Replace("-", "_");
+                Func<string, string> fileNameHandler = t => t.Replace("/", ".");
+
+                List<string> resourceNameList = new List<string>();
+                resourceNameList.Add(fileNameHandler.Invoke(resourceName));
+
+                var lastDotIndex = resourceName.LastIndexOf('.');
+                if (lastDotIndex > 0)
                 {
-                    resourceInfo = Assembly.GetManifestResourceInfo(currentResourceName);
+                    var dirName = Path.GetDirectoryName(resourceName);
+                    var fileName = Path.GetFileName(resourceName);
+
+                    dirName = dirName.Replace(Path.DirectorySeparatorChar, '/');
+                    dirName = dirHandler(dirName);
+                    dirName = dirName.Replace(".", "._");
+
+                    resourceNameList.Add(fileNameHandler.Invoke($"{dirName}/{fileName}"));
+                }
+                resourceNameList.Add(resourceName);
+
+                if (lastDotIndex < 0)
+                    lastDotIndex = 0;
+                resourceNameList.Add(fileNameHandler.Invoke(resourceName.Insert(lastDotIndex, ".")));
+
+                foreach (var currentResourceName in resourceNameList)
+                {
+                    var fullResourceName = $"{assemblyName}.{currentResourceName}";
+                    resourceInfo = Assembly.GetManifestResourceInfo(fullResourceName);
                     if (resourceInfo != null)
                     {
-                        resourceName = currentResourceName;
+                        resourceName = fullResourceName;
                         break;
-                    }   
+                    }
                 }
             }
         }

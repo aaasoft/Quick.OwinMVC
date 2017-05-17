@@ -59,6 +59,14 @@ namespace Quick.OwinMVC.Node
                     //返回值处理
                     if (NodeManager.Instance.ReturnValueHandler != null)
                         data = NodeManager.Instance.ReturnValueHandler.Invoke(nodeMethod, data, invokeTime);
+                    //如果返回值不是ApiResult
+                    if (!(data is ApiResult))
+                    {
+                        var message = $"{nodeMethod.Name}成功";
+                        var ret = ApiResult.Success(message, data);
+                        ret.SetMetaInfo("usedTime", (DateTime.Now - invokeTime).ToString());
+                        data = ret;
+                    }
                 }
                 catch (NodeMethodException ex)
                 {
