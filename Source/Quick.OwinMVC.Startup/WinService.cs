@@ -46,6 +46,10 @@ namespace Quick.OwinMVC.Startup
 
         private void ensureOnlyOne()
         {
+            //如果不是运行在Windows上
+            if (!ProgramUtils.IsRuningOnWindows())
+                return;
+
             var serviceName = new WinServiceInstaller().ServiceName;
             var pipeName = $"{this.GetType().FullName}.{serviceName}";
             try
