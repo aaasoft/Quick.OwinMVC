@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Quick.OwinMVC.Routing
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Assembly)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class RouteAttribute : Attribute
     {
         public String Path { get; private set; }

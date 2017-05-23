@@ -1,8 +1,8 @@
 ﻿<html>
 <head>
     <meta name="title" content="主页" />
-    <meta name="masterPage" content="/base/resource/shared._Layout.html" />
-    <meta name="scripts" content="/base/resource/js/highcharts.js" />
+    <meta name="masterPage" content="/SvnManage/resource/shared._Layout.html" />
+    <meta name="scripts" content="/SvnManage/resource/js/highcharts.js" />
     <script type="text/javascript">
         window.jQuery &&
         $(document).ready(function () {
@@ -121,7 +121,7 @@
                 //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "/base/api/index?type=info",
+                    url: "/SvnManage/api/index?type=info",
                     success: function (json) {
                         var basic = json.basic;
                         //基本信息
@@ -139,7 +139,7 @@
                 //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "/base/api/index?type=cpu",
+                    url: "/SvnManage/api/index?type=cpu",
                     success: function (json) {
                         var cpu = json.cpu;
                         //CPU信息
@@ -158,7 +158,7 @@
                 //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "/base/api/index?type=memory",
+                    url: "/SvnManage/api/index?type=memory",
                     success: function (json) {
                         var memory = json.memory;
                         //内存信息
@@ -182,7 +182,7 @@
                 //刷新数据
                 jQuery.ajax({
                     dataType: "json",
-                    url: "/base/api/index?type=disk",
+                    url: "/SvnManage/api/index?type=disk",
                     success: function (json) {
                         //磁盘信息
                         var disk = json;

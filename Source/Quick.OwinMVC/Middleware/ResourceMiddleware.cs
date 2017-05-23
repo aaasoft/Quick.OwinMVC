@@ -36,7 +36,6 @@ namespace Quick.OwinMVC.Middleware
         public ResourceMiddleware(OwinMiddleware next) : base(next)
         {
             resourceWebRequestFactory = new ResourceWebRequestFactory();
-            resourceWebRequestFactory.PluginAliasMap = base.pluginAliasDict;
             resourceWebRequestFactory.AssemblyMap = new Dictionary<String, Assembly>();
             //注册resource:前缀URI处理程序
             WebRequest.RegisterPrefix("resource:", resourceWebRequestFactory);
@@ -152,10 +151,9 @@ namespace Quick.OwinMVC.Middleware
             base.Hunt(key, value);
         }
 
-        public override void Hunt(Assembly assembly)
+        public void Hunt(Assembly assembly)
         {
             resourceWebRequestFactory.AssemblyMap[assembly.GetName().Name.ToLower()] = assembly;
-            base.Hunt(assembly);
         }
     }
 }

@@ -181,7 +181,7 @@ var Debug_Main = {
                         element.click(function () {
                             CommonRender.renderSelectFile({
                                 title: "请选择",
-                                url: "/base/api/select",
+                                url: "/SvnManage/api/select",
                                 fileType: field.ValueFormatValue.FileType,
                                 folderName: field.ValueFormatValue.FolderName,
                                 selectedIds: field.Value,
@@ -477,7 +477,7 @@ var Debug_Main = {
                         element.click(function () {
                             CommonRender.renderSelectFile({
                                 title: "请选择",
-                                url: "/base/api/select",
+                                url: "/SvnManage/api/select",
                                 fileType: field.ValueFormatValue.FileType,
                                 folderName: field.ValueFormatValue.FolderName,
                                 selectedIds: field.Value,

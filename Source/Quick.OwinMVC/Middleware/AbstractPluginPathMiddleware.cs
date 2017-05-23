@@ -14,7 +14,7 @@ using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Middleware
 {
-    public abstract class AbstractPluginPathMiddleware : OwinMiddleware, IAssemblyHunter, IOwinContextCleaner, IPropertyHunter
+    public abstract class AbstractPluginPathMiddleware : OwinMiddleware, IOwinContextCleaner, IPropertyHunter
     {
         public const String QOMVC_PLUGIN_KEY = "QOMVC_PLUGIN_KEY";
         public const String QOMVC_PATH_KEY = "QOMVC_PATH_KEY";
@@ -32,12 +32,10 @@ namespace Quick.OwinMVC.Middleware
         /// </summary>
         public IDictionary<string, string> AddonHttpHeaders { get; private set; }
 
-        protected IDictionary<String, String> pluginAliasDict;
         private Regex route;
 
         public AbstractPluginPathMiddleware(OwinMiddleware next) : base(next)
         {
-            pluginAliasDict = new Dictionary<String, String>();
         }
 
         public virtual Task InvokeNotMatch(IOwinContext context)
@@ -70,16 +68,7 @@ namespace Quick.OwinMVC.Middleware
         }
 
         public abstract Task Invoke(IOwinContext context, String plugin, String path);
-
-        public virtual void Hunt(Assembly assembly)
-        {
-            String pluginName = assembly.GetName().Name;
-            foreach (RouteAttribute attr in assembly.GetCustomAttributes<RouteAttribute>())
-            {
-                pluginAliasDict[attr.Path] = pluginName;
-            }
-        }
-
+        
         void IOwinContextCleaner.Clean(IOwinContext context)
         {
             if (context.Environment.ContainsKey(QOMVC_PLUGIN_KEY))

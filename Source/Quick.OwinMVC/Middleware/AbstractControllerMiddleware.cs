@@ -48,10 +48,7 @@ namespace Quick.OwinMVC.Middleware
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
             //构造key
-            var key = plugin;
-            if (key != null && pluginAliasDict.ContainsKey(key))
-                key = pluginAliasDict[plugin];
-            key = $"{key}:{path}";
+            var key = $"{plugin}:{path}";
             //然后查找控制器
             if (!controllerDict.ContainsKey(key))
                 return Next.Invoke(context);

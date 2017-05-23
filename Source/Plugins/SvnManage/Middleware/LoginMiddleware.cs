@@ -14,8 +14,8 @@ namespace SvnManage.Middleware
         private readonly String[] allowPaths =
         {
             loginPath,
-            "/base/api/language",
-            "/base/api/login",
+            "/SvnManage/api/language",
+            "/SvnManage/api/login",
         };
         internal const String LOGINED_USER_KEY = "SVN_USER";
         internal const String RETURN_URL_KEY = "returnUrl";
