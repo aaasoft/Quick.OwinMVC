@@ -57,15 +57,15 @@ namespace Quick.OwinMVC.Middleware
             var stream = getUrlStream($"resource://0{context.Request.Path}", out resourceResponse);
             if (stream == null)
                 return base.InvokeNotMatch(context);
-            return handleResource(context, stream, resourceResponse, Expires);
+            return handleResource(context, stream, resourceResponse, Expires, AddonHttpHeaders);
         }
 
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
-            return InvokeFinal(context, Route, null, plugin, path, t => InvokeNotMatch(context), Expires);
+            return InvokeFinal(context, Route, null, plugin, path, t => InvokeNotMatch(context), Expires, AddonHttpHeaders);
         }
 
-        public Task InvokeFinal(IOwinContext context, string prefix, string suffix, string plugin, string path, Func<IOwinContext, Task> noMatchHandler, double expires)
+        public Task InvokeFinal(IOwinContext context, string prefix, string suffix, string plugin, string path, Func<IOwinContext, Task> noMatchHandler, double expires, IDictionary<string, string> addonHttpHeaders)
         {
             //加前缀
             if (!String.IsNullOrEmpty(prefix))
@@ -84,12 +84,12 @@ namespace Quick.OwinMVC.Middleware
             {
                 stream = getUrlStream($"resource://{plugin}/{currentPath}", out resourceResponse);
                 if (stream != null)
-                    return handleResource(context, stream, resourceResponse, expires);
+                    return handleResource(context, stream, resourceResponse, expires, addonHttpHeaders);
             }
             return noMatchHandler(context);
         }
 
-        private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse, double expires)
+        private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse, double expires, IDictionary<string, string> addonHttpHeaders)
         {
             var req = context.Request;
             var rep = context.Response;
@@ -131,7 +131,7 @@ namespace Quick.OwinMVC.Middleware
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
             rep.Headers["Cache-Control"] = $"max-age={expires}";
             rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-            return context.Output(stream, true, EnableCompress, resourceResponse.Uri.LocalPath);
+            return context.Output(stream, true, EnableCompress, resourceResponse.Uri.LocalPath, addonHttpHeaders);
         }
 
         public override void Hunt(string key, string value)

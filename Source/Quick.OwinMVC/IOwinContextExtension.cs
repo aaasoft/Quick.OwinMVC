@@ -334,7 +334,7 @@ namespace Quick.OwinMVC
             return acceptEncoding.Contains("gzip");
         }
 
-        public static Task Output(this IOwinContext context, Stream stream, bool closeStreamWhenFinish, bool enableCompress = true, string resourceName = null)
+        public static Task Output(this IOwinContext context, Stream stream, bool closeStreamWhenFinish, bool enableCompress = true, string resourceName = null, IDictionary<string, string> addonHttpHeaders = null)
         {
             IOwinResponse rep = context.Response;
             Task rtnTask = null;
@@ -347,6 +347,11 @@ namespace Quick.OwinMVC
                 if (mime != null)
                     rep.ContentType = mime;
             }
+
+            //添加额外的HTTP头
+            if (addonHttpHeaders != null && addonHttpHeaders.Count > 0)
+                foreach (var header in addonHttpHeaders)
+                    context.Response.Headers[header.Key] = header.Value;
 
             //如果启用压缩
             if (enableCompress && IsAllowCompress(context.Request))

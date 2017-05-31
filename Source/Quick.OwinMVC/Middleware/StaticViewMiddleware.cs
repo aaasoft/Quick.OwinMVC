@@ -33,7 +33,7 @@ namespace Quick.OwinMVC.Middleware
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
             var resourceMiddleware = Server.Instance.GetMiddleware<ResourceMiddleware>();
-            return resourceMiddleware.InvokeFinal(context, Route, ViewFileSuffix, plugin, path, t => Next.Invoke(t), Expires);
+            return resourceMiddleware.InvokeFinal(context, Route, ViewFileSuffix, plugin, path, t => Next.Invoke(t), Expires, AddonHttpHeaders);
         }
     }
 }
