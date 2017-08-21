@@ -105,6 +105,7 @@
     <Compile Include="Node\ValueFormat\FileUploadFormat.cs" />
     <Compile Include="Node\ValueFormat\FileValueFormat.cs" />
     <Compile Include="Node\ValueFormat\IValueFormat.cs" />
+    <Compile Include="Node\ValueFormat\IValueTransfer.cs" />
     <Compile Include="Node\ValueFormat\SelectValueFormat.cs" />
     <Compile Include="Node\ValueFormat\TextboxValueFormat.cs" />
     <Compile Include="Plugin\IPluginActivator.cs" />

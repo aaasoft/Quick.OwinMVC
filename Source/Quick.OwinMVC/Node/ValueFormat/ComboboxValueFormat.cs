@@ -18,6 +18,23 @@ namespace Quick.OwinMVC.Node.ValueFormat
         }
 
         public IEnumerable<KeyValuePair<String, String>> Values { get; set; }
+        public object Values_IValueTransfer
+        {
+            get { return null; }
+            set
+            {
+                var type = value as Type;
+                if (type == null)
+                    return;
+                if (!typeof(IValueTransfer).IsAssignableFrom(type))
+                    return;
+                var valueTransfer = System.Activator.CreateInstance(type) as IValueTransfer;
+                if (valueTransfer == null)
+                    return;
+                Values = (valueTransfer.GetValue() as IEnumerable<KeyValuePair<String, String>>)?
+                    .ToList();
+            }
+        }
 
         [JsonIgnore]
         public Object ValuesEnum { get; set; }
