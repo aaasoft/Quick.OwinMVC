@@ -334,6 +334,11 @@ namespace Quick.OwinMVC
             return acceptEncoding.Contains("gzip");
         }
 
+        public static Task Output(this IOwinContext context, Stream stream, bool closeStreamWhenFinish, bool enableCompress = true, string resourceName = null)
+        {
+            return Output(context, stream, closeStreamWhenFinish, enableCompress, resourceName, null);
+        }
+
         public static Task Output(this IOwinContext context, Stream stream, bool closeStreamWhenFinish, bool enableCompress = true, string resourceName = null, IDictionary<string, string> addonHttpHeaders = null)
         {
             IOwinResponse rep = context.Response;
