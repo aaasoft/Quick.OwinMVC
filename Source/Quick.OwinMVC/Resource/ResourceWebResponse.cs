@@ -26,7 +26,8 @@ namespace Quick.OwinMVC.Resource
             this.uri = uri;
             //得到插件名
             var pluginName = uri.Host;
-            if (pluginName == "0")
+            if (pluginName == "0"
+                || pluginName == "0.0.0.0")
                 pluginName = ".";
             //得到资源名
             resourceName = uri.LocalPath;
