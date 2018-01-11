@@ -10,11 +10,17 @@ using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Node
 {
-    public class NodeApiMiddleware : OwinMiddleware, IHungryPropertyHunter
+    public class NodeApiMiddleware : OwinMiddleware, IHungryPropertyHunter, IPropertyHunter
     {
         public const string JSONP_CALLBACK = "callback";
         public static NodeApiMiddleware Instance { get; private set; }
         public static string Prefix = "/api/";
+
+        /// <summary>
+        /// 额外的HTTP头
+        /// </summary>
+        public IDictionary<string, string> AddonHttpHeaders { get; private set; }
+
         private Encoding encoding = new UTF8Encoding(false);
 
         public NodeApiMiddleware(OwinMiddleware next = null) : base(next)
@@ -100,6 +106,12 @@ namespace Quick.OwinMVC.Node
                     result = $"{jsonpCallback}({json})";
                 }
                 rep.Expires = new DateTimeOffset(DateTime.Now);
+
+                //添加额外的HTTP头
+                if (AddonHttpHeaders != null && AddonHttpHeaders.Count > 0)
+                    foreach (var header in AddonHttpHeaders)
+                        context.Response.Headers[header.Key] = header.Value;
+
                 return context.Output(encoding.GetBytes(result), true);
             }
             return Next.Invoke(context);
@@ -108,6 +120,25 @@ namespace Quick.OwinMVC.Node
         public void Hunt(IDictionary<string, string> properties)
         {
             NodeManager.Instance.Init(properties);
+        }
+
+        public void Hunt(string key, string value)
+        {
+            switch (key)
+            {
+                case nameof(AddonHttpHeaders):
+                    AddonHttpHeaders = new Dictionary<string, string>();
+                    foreach (var headerKeyValue in value.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        var tmpStrs = headerKeyValue.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (tmpStrs.Length < 2)
+                            continue;
+                        var headerKey = tmpStrs[0].Trim();
+                        var headerValue = tmpStrs[1].Trim();
+                        AddonHttpHeaders[headerKey] = headerValue;
+                    }
+                    break;
+            }
         }
     }
 }
