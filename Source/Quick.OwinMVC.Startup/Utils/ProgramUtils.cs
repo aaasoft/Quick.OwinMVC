@@ -79,7 +79,7 @@ namespace Quick.OwinMVC.Startup.Utils
         {
             StringBuilder titleSb = new StringBuilder();
             //添加服务名称
-            titleSb.Append($"{new WinServiceInstaller().ServiceName}");
+            titleSb.Append($"{new WinServiceInstaller().DisplayName}");
             var assembly = System.Reflection.Assembly.GetEntryAssembly();
             //添加信息版本
             foreach (var attr in assembly.CustomAttributes)
