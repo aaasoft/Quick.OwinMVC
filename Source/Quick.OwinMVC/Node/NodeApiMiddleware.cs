@@ -134,7 +134,7 @@ namespace Quick.OwinMVC.Node
                         if (tmpStrs.Length < 2)
                             continue;
                         var headerKey = tmpStrs[0].Trim();
-                        var headerValue = tmpStrs[1].Trim();
+                        var headerValue = string.Join(":", tmpStrs.Skip(1));
                         AddonHttpHeaders[headerKey] = headerValue;
                     }
                     break;
