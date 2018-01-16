@@ -11,6 +11,9 @@ namespace Quick.OwinMVC
     /// </summary>
     public class ApiResult
     {
+        [JsonProperty("success")]
+        public bool SuccessResult { get => Code == 0; }
+
         [JsonProperty("code")]
         public Int32 Code { get; set; }
         [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
