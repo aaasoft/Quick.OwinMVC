@@ -120,12 +120,13 @@ namespace Quick.OwinMVC
             return formCollection;
         }
 
-        private static JObject getJObject(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, params String[] ignoreProperties)
+        private static JObject getJObject(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, string[] arrayProperties = null, String[] ignoreProperties = null)
         {
             JObject jObj = new JObject();
             foreach (var pair in data)
             {
-                if (pair.Value.Length > 1)
+                if (pair.Value.Length > 1
+                    || (arrayProperties != null && arrayProperties.Contains(pair.Key)))
                 {
                     jObj.Add(pair.Key, JToken.FromObject(pair.Value));
                 }
@@ -176,6 +177,14 @@ namespace Quick.OwinMVC
             return jObj;
         }
 
+        private static string[] getArrayProperties(Type type)
+        {
+            return type.GetProperties()
+                .Where(t => typeof(Array).IsAssignableFrom(t.PropertyType))
+                .Select(t => t.Name)
+                .ToArray();
+        }
+
         /// <summary>
         /// 获取POST提交的表单数据到对象
         /// </summary>
@@ -184,7 +193,7 @@ namespace Quick.OwinMVC
         /// <returns></returns>
         public static Object GetFormData(this IOwinContext context, Type type)
         {
-            return getJObject(context.GetFormData(), false).ToObject(type);
+            return getJObject(context.GetFormData(), false, getArrayProperties(type)).ToObject(type);
         }
 
         /// <summary>
@@ -206,10 +215,10 @@ namespace Quick.OwinMVC
         /// <param name="context"></param>
         /// <param name="valueToObject">是否将值转换为对象</param>
         /// <returns></returns>
-        public static T GetFormData<T>(this IOwinContext context, bool valueToObject, params String[] ignoreProperties)
+        public static T GetFormData<T>(this IOwinContext context, bool valueToObject, String[] ignoreProperties = null)
             where T : class
         {
-            return getJObject(context.GetFormData(), valueToObject, ignoreProperties).ToObject<T>();
+            return getJObject(context.GetFormData(), valueToObject, getArrayProperties(typeof(T)), ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
@@ -220,9 +229,9 @@ namespace Quick.OwinMVC
         /// <param name="valueToObject"></param>
         /// <param name="ignoreProperties"></param>
         /// <returns></returns>
-        public static T GetDictData<T>(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, params String[] ignoreProperties)
+        public static T GetDictData<T>(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, String[] arrayProperties = null, String[] ignoreProperties = null)
         {
-            return getJObject(data, valueToObject, ignoreProperties).ToObject<T>();
+            return getJObject(data, valueToObject, arrayProperties, ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
@@ -234,9 +243,9 @@ namespace Quick.OwinMVC
         /// <param name="valueToObject"></param>
         /// <param name="ignoreProperties"></param>
         /// <returns></returns>
-        public static T GetDictData<T>(this IOwinContext context, IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, params String[] ignoreProperties)
+        public static T GetDictData<T>(this IOwinContext context, IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, String[] arrayProperties = null, String[] ignoreProperties = null)
         {
-            return getJObject(data, valueToObject, ignoreProperties).ToObject<T>();
+            return getJObject(data, valueToObject, arrayProperties, ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
@@ -259,9 +268,9 @@ namespace Quick.OwinMVC
         /// <param name="obj"></param>
         /// <param name="valueToObject">是否将值转换为对象</param>
         /// <returns></returns>
-        public static T GetFormData<T>(this IOwinContext context, T obj, bool valueToObject, params String[] ignoreProperties)
+        public static T GetFormData<T>(this IOwinContext context, T obj, bool valueToObject, String[] ignoreProperties = null)
         {
-            var jsonString = getJObject(context.GetFormData(), valueToObject, ignoreProperties).ToString();
+            var jsonString = getJObject(context.GetFormData(), valueToObject, getArrayProperties(typeof(T)), ignoreProperties).ToString();
             Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
             if (hasCompilerGeneratedAttribute)
                 return JsonConvert.DeserializeAnonymousType(jsonString, obj);
@@ -288,10 +297,10 @@ namespace Quick.OwinMVC
         /// <param name="context"></param>
         /// <param name="valueToObject">是否将值转换为对象</param>
         /// <returns></returns>
-        public static T GetQueryData<T>(this IOwinContext context, bool valueToObject, params String[] ignoreProperties)
+        public static T GetQueryData<T>(this IOwinContext context, bool valueToObject, String[] ignoreProperties = null)
             where T : class
         {
-            return getJObject(context.Request.Query, valueToObject, ignoreProperties).ToObject<T>();
+            return getJObject(context.Request.Query, valueToObject, getArrayProperties(typeof(T)), ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
@@ -318,7 +327,7 @@ namespace Quick.OwinMVC
         public static T GetQueryData<T>(this IOwinContext context, T obj, bool valueToObject)
             where T : class
         {
-            var jsonString = getJObject(context.Request.Query, valueToObject).ToString();
+            var jsonString = getJObject(context.Request.Query, valueToObject, getArrayProperties(typeof(T))).ToString();
             Boolean hasCompilerGeneratedAttribute = typeof(T).GetCustomAttributes(typeof(CompilerGeneratedAttribute), false).Length > 0;
             if (hasCompilerGeneratedAttribute)
                 return JsonConvert.DeserializeAnonymousType(jsonString, obj);
