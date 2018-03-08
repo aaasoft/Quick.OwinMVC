@@ -32,6 +32,13 @@ namespace Quick.OwinMVC.Resource
             //得到资源名
             resourceName = uri.LocalPath;
 
+            pluginName = pluginName.ToLower();
+            //获取到程序集
+            if (assemblyMap.ContainsKey(pluginName))
+            {
+                Assembly = assemblyMap[pluginName];
+                pluginName = Assembly.GetName().Name;
+            }
             //设置资源搜索目录
             List<String> searchFolderList = new List<string>();
             searchFolderList.Add(Path.Combine(staticFileFolder, pluginName));
@@ -40,11 +47,6 @@ namespace Quick.OwinMVC.Resource
                 pluginName = pluginAliasMap[pluginName];
                 searchFolderList.Add(Path.Combine(staticFileFolder, pluginName));
             }
-            pluginName = pluginName.ToLower();
-            //获取到程序集
-            if (assemblyMap.ContainsKey(pluginName))
-                Assembly = assemblyMap[pluginName];
-
             //开始在文件系统上搜索资源
             String fullFilePath = null;
             foreach (var searchFolder in searchFolderList)
