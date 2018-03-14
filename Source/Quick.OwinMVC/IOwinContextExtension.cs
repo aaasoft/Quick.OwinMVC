@@ -229,9 +229,9 @@ namespace Quick.OwinMVC
         /// <param name="valueToObject"></param>
         /// <param name="ignoreProperties"></param>
         /// <returns></returns>
-        public static T GetDictData<T>(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, String[] arrayProperties = null, String[] ignoreProperties = null)
+        public static T GetDictData<T>(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, String[] ignoreProperties = null)
         {
-            return getJObject(data, valueToObject, arrayProperties, ignoreProperties).ToObject<T>();
+            return getJObject(data, valueToObject, getArrayProperties(typeof(T)), ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
@@ -243,9 +243,9 @@ namespace Quick.OwinMVC
         /// <param name="valueToObject"></param>
         /// <param name="ignoreProperties"></param>
         /// <returns></returns>
-        public static T GetDictData<T>(this IOwinContext context, IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, String[] arrayProperties = null, String[] ignoreProperties = null)
+        public static T GetDictData<T>(this IOwinContext context, IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, String[] ignoreProperties = null)
         {
-            return getJObject(data, valueToObject, arrayProperties, ignoreProperties).ToObject<T>();
+            return getJObject(data, valueToObject, getArrayProperties(typeof(T)), ignoreProperties).ToObject<T>();
         }
 
         /// <summary>
