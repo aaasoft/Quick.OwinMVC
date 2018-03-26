@@ -116,7 +116,10 @@ namespace Quick.OwinMVC.Node
                         IDictionary<string, string[]> paramDict = new Dictionary<string, string[]>();
                         MultipartFormDataUtils.HandleMultipartData(context.Request, part =>
                          {
-                             paramDict[part.Name] = new[] { part.Data };
+                             if (paramDict.ContainsKey(part.Name))
+                                 paramDict[part.Name] = paramDict[part.Name].Union(new[] { part.Data }).ToArray();
+                             else
+                                 paramDict[part.Name] = new[] { part.Data };
                          }, (string name, string fileName, string contentType, string contentDisposition, byte[] buffer, int bytes) =>
                          {
                              HandleFileUpload(context, name, fileName, contentType, contentDisposition, buffer, bytes);
