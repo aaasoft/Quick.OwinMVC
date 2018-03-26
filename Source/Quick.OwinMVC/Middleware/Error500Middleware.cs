@@ -58,7 +58,7 @@ namespace Quick.OwinMVC.Middleware
                     {
                         var result = ApiResult.Error("500 内部错误", new ExceptionInfo(ex)).ToString();
 
-                        rep.ContentType = "text/json; charset=UTF-8";
+                        rep.ContentType = "application/json; charset=UTF-8";
                         byte[] content = encoding.GetBytes(result);
                         rep.ContentLength = content.Length;
                         await context.Response.WriteAsync(content);

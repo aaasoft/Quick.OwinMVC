@@ -97,7 +97,7 @@ namespace Quick.OwinMVC.Node
 
                 if (string.IsNullOrEmpty(jsonpCallback))
                 {
-                    rep.ContentType = "text/json; charset=UTF-8";
+                    rep.ContentType = "application/json; charset=UTF-8";
                     result = json;
                 }
                 else
@@ -106,7 +106,8 @@ namespace Quick.OwinMVC.Node
                     result = $"{jsonpCallback}({json})";
                 }
                 rep.Expires = new DateTimeOffset(DateTime.Now);
-
+                rep.Headers["Cache-Control"] = "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+                rep.Headers["Pragma"] = "no-cache";
                 //添加额外的HTTP头
                 if (AddonHttpHeaders != null && AddonHttpHeaders.Count > 0)
                     foreach (var header in AddonHttpHeaders)

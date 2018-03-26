@@ -48,7 +48,7 @@ namespace SvnManage.Middleware
                 {
                     var rep = context.Response;
                     var result = ApiResult.Error(-1, "当前未登录！").ToString();
-                    rep.ContentType = "text/json; charset=UTF-8";
+                    rep.ContentType = "application/json; charset=UTF-8";
                     byte[] content = encoding.GetBytes(result);
                     rep.ContentLength = content.Length;
                     return context.Response.WriteAsync(content);

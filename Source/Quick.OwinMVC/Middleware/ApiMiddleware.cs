@@ -33,7 +33,7 @@ namespace Quick.OwinMVC.Middleware
 
             if (string.IsNullOrEmpty(jsonpCallback))
             {
-                rep.ContentType = "text/json; charset=UTF-8";
+                rep.ContentType = "application/json; charset=UTF-8";
                 result = json;
             }
             else
