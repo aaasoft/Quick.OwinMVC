@@ -90,6 +90,35 @@ namespace Quick.OwinMVC
         }
 
         /// <summary>
+        /// 获取POST提交的JSON数据
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static JToken GetJsonData(this IOwinContext context)
+        {
+            JToken token = context.Get<JToken>(FORMDATA_KEY);
+            if (token != null)
+                return token;
+
+            StreamReader reader = new StreamReader(context.Request.Body);
+            var formData = reader.ReadToEnd();
+            token = JToken.Parse(formData);
+            context.Set(FORMDATA_KEY, token);
+            return token;
+        }
+
+        /// <summary>
+        /// 获取POST提交的JSON数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static T GetJsonData<T>(this IOwinContext context)
+        {
+            return GetJsonData(context).ToObject<T>();
+        }
+
+        /// <summary>
         /// 获取POST提交的表单数据
         /// </summary>
         /// <param name="context"></param>
