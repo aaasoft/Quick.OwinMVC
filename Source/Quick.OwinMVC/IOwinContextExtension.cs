@@ -132,18 +132,42 @@ namespace Quick.OwinMVC
             StreamReader reader = new StreamReader(context.Request.Body);
             var formData = reader.ReadToEnd();
             IDictionary<String, IList<String>> dict = new Dictionary<String, IList<String>>();
-            foreach (var line in formData.Split('&'))
+            formData = formData.Trim();
+            string strisJson = "";
+            if (formData.Length > 0)
             {
-                var strs = line.Split('=');
-                if (line.Length < 2)
-                    continue;
-                var key = strs[0].Trim();
-                var value = strs[1].Trim();
-                value = HttpUtility.UrlDecode(value);
-                if (!dict.ContainsKey(key))
-                    dict.Add(key, new List<String>());
-                dict[key].Add(value);
+                strisJson = formData.Substring(0, 1);
             }
+            
+            if ("{"==strisJson)//aa=1&bb=2    或{'a':'1','b':'2'}
+            {
+                JObject dyJObject = JObject.Parse(formData);
+                foreach (var item in dyJObject)
+                {
+                    var key = item.Key;
+                    string value = item.Value.ToString();
+                    value = HttpUtility.UrlDecode(value);
+                    if (!dict.ContainsKey(key))
+                        dict.Add(key, new List<String>());
+                    dict[key].Add(value);
+                }
+            } 
+            else
+            {
+                foreach (var line in formData.Split('&'))
+                {
+                    var strs = line.Split('=');
+                    if (line.Length < 2)
+                        continue;
+                    var key = strs[0].Trim();
+                    var value = strs[1].Trim();
+                    value = HttpUtility.UrlDecode(value);
+                    if (!dict.ContainsKey(key))
+                        dict.Add(key, new List<String>());
+                    dict[key].Add(value);
+                }
+            }
+
             formCollection = new FormCollection(dict.ToDictionary(t => t.Key, t => t.Value.ToArray()));
             context.Set(FORMDATA_KEY, formCollection);
             return formCollection;
