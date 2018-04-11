@@ -154,11 +154,13 @@ namespace Quick.OwinMVC
             JObject jObj = new JObject();
             foreach (var pair in data)
             {
+                //数组处理
                 if (pair.Value.Length > 1
                     || (arrayProperties != null && arrayProperties.Contains(pair.Key)))
                 {
                     jObj.Add(pair.Key, JToken.FromObject(pair.Value));
                 }
+                //其他处理
                 else
                 {
                     var text = pair.Value[0];
@@ -190,7 +192,22 @@ namespace Quick.OwinMVC
                             catch { }
                         }
                     }
-                    jObj.Add(pair.Key, JToken.FromObject(text));
+                    if (pair.Key.Contains("."))
+                    {
+                        var segments = pair.Key.Split('.');
+                        var currentJObj = jObj;
+                        foreach (var segment in segments.Take(segments.Length - 1))
+                        {
+                            if (currentJObj.Property(segment) == null)
+                                currentJObj.Add(segment, new JObject());
+                            currentJObj = (JObject)currentJObj.Property(segment).Value;
+                        }
+                        currentJObj.Add(segments.Last(), JToken.FromObject(text));
+                    }
+                    else
+                    {
+                        jObj.Add(pair.Key, JToken.FromObject(text));
+                    }
                 }
             }
             if (ignoreProperties != null && ignoreProperties.Length > 0)
