@@ -149,6 +149,30 @@ namespace Quick.OwinMVC
             return formCollection;
         }
 
+        private static JToken stringToJToken(string text)
+        {
+            //如果文本是一个JSON对象
+            if (text.StartsWith("{") && text.EndsWith("}"))
+            {
+                try
+                {
+                    JObject subObj = JObject.Parse(text);
+                    return subObj;
+                }
+                catch { }
+            }
+            //如果文本是一个JSON数组
+            if (text.StartsWith("[") && text.EndsWith("]"))
+            {
+                try
+                {
+                    JArray subObj = JArray.Parse(text);
+                    return subObj;
+                }
+                catch { }
+            }
+            return null;
+        }
         private static JObject getJObject(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, string[] arrayProperties = null, String[] ignoreProperties = null)
         {
             JObject jObj = new JObject();
@@ -158,6 +182,21 @@ namespace Quick.OwinMVC
                 if (pair.Value.Length > 1
                     || (arrayProperties != null && arrayProperties.Contains(pair.Key)))
                 {
+                    JToken obj = null;
+                    //如果要将字符串转换为JSON对象或数组
+                    if (valueToObject)
+                    {
+                        JArray array = new JArray();
+                        foreach (var text in pair.Value)
+                        {
+                            var tmpObj = stringToJToken(text);
+                            if (tmpObj == null)
+                                continue;
+                            array.Add(tmpObj);
+                        }
+                        jObj.Add(pair.Key, array);
+                        continue;
+                    }
                     jObj.Add(pair.Key, JToken.FromObject(pair.Value));
                 }
                 //其他处理
@@ -169,27 +208,11 @@ namespace Quick.OwinMVC
                     //如果要将字符串转换为JSON对象或数组
                     if (valueToObject)
                     {
-                        //如果文本是一个JSON对象
-                        if (text.StartsWith("{") && text.EndsWith("}"))
+                        var subObj = stringToJToken(text);
+                        if (subObj != null)
                         {
-                            try
-                            {
-                                JObject subObj = JObject.Parse(text);
-                                jObj.Add(pair.Key, subObj);
-                                continue;
-                            }
-                            catch { }
-                        }
-                        //如果文本是一个JSON数组
-                        if (text.StartsWith("[") && text.EndsWith("]"))
-                        {
-                            try
-                            {
-                                JArray subObj = JArray.Parse(text);
-                                jObj.Add(pair.Key, subObj);
-                                continue;
-                            }
-                            catch { }
+                            jObj.Add(pair.Key, subObj);
+                            continue;
                         }
                     }
                     if (pair.Key.Contains("."))
