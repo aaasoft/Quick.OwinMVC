@@ -171,8 +171,9 @@ namespace Quick.OwinMVC
                 }
                 catch { }
             }
-            return null;
+            return new JValue(text);
         }
+
         private static JObject getJObject(IEnumerable<KeyValuePair<string, string[]>> data, bool valueToObject, string[] arrayProperties = null, String[] ignoreProperties = null)
         {
             JObject jObj = new JObject();
