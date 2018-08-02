@@ -74,27 +74,30 @@ namespace Quick.OwinMVC.Startup
                 Environment.Exit(0);
             }, token);
 
-            if (Entrance.Parameter.OnServiceStoping != null)
-                Entrance.Parameter.OnServiceStoping.Invoke();
-
-            if (Entrance.Parameter.LoadAllPlugins)
+            try
             {
-                //停止所有插件
-                foreach (var activator in pluginActivators)
-                    activator.Stop();
+                if (Entrance.Parameter.OnServiceStoping != null)
+                    Entrance.Parameter.OnServiceStoping.Invoke();
+
+                if (Entrance.Parameter.LoadAllPlugins)
+                {
+                    //停止所有插件
+                    foreach (var activator in pluginActivators)
+                        activator.Stop();
+                }
+
+                //停止所有服务
+                foreach (var service in ServiceManager.Instance.GetItems())
+                {
+                    service.Stop();
+                }
+
+                if (Entrance.Parameter.OnServiceStoped != null)
+                    Entrance.Parameter.OnServiceStoped.Invoke();
+
             }
-
-            //停止所有服务
-            foreach (var service in ServiceManager.Instance.GetItems())
-            {
-                service.Stop();
-            }
-
-            if (Entrance.Parameter.OnServiceStoped != null)
-                Entrance.Parameter.OnServiceStoped.Invoke();
-
-            cts.Cancel();
-            Environment.Exit(0);
+            catch { }
+            finally { cts.Cancel(); }
         }
     }
 }
