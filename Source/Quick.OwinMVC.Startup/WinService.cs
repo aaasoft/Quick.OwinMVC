@@ -67,6 +67,13 @@ namespace Quick.OwinMVC.Startup
 
         protected override void OnStop()
         {
+            System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
+            var token = cts.Token;
+            Task.Delay(TimeSpan.FromSeconds(60.0D), token).ContinueWith((t) =>
+            {
+                Environment.Exit(0);
+            }, token);
+
             if (Entrance.Parameter.OnServiceStoping != null)
                 Entrance.Parameter.OnServiceStoping.Invoke();
 
@@ -86,6 +93,7 @@ namespace Quick.OwinMVC.Startup
             if (Entrance.Parameter.OnServiceStoped != null)
                 Entrance.Parameter.OnServiceStoped.Invoke();
 
+            cts.Cancel();
             Environment.Exit(0);
         }
     }
