@@ -183,7 +183,7 @@ namespace Quick.OwinMVC
                 if (pair.Value.Length > 1
                     || (arrayProperties != null && arrayProperties.Contains(pair.Key)))
                 {
-                    JToken obj = null;
+                    //JToken obj = null;
                     //如果要将字符串转换为JSON对象或数组
                     if (valueToObject)
                     {

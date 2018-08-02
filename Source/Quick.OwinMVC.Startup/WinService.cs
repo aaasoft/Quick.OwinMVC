@@ -67,26 +67,37 @@ namespace Quick.OwinMVC.Startup
 
         protected override void OnStop()
         {
-            if (Entrance.Parameter.OnServiceStoping != null)
-                Entrance.Parameter.OnServiceStoping.Invoke();
-
-            if (Entrance.Parameter.LoadAllPlugins)
+            System.Threading.CancellationTokenSource cts = new System.Threading.CancellationTokenSource();
+            var token = cts.Token;
+            Task.Delay(TimeSpan.FromSeconds(60.0D), token).ContinueWith((t) =>
             {
-                //停止所有插件
-                foreach (var activator in pluginActivators)
-                    activator.Stop();
-            }
+                Environment.Exit(0);
+            }, token);
 
-            //停止所有服务
-            foreach (var service in ServiceManager.Instance.GetItems())
+            try
             {
-                service.Stop();
+                if (Entrance.Parameter.OnServiceStoping != null)
+                    Entrance.Parameter.OnServiceStoping.Invoke();
+
+                if (Entrance.Parameter.LoadAllPlugins)
+                {
+                    //停止所有插件
+                    foreach (var activator in pluginActivators)
+                        activator.Stop();
+                }
+
+                //停止所有服务
+                foreach (var service in ServiceManager.Instance.GetItems())
+                {
+                    service.Stop();
+                }
+
+                if (Entrance.Parameter.OnServiceStoped != null)
+                    Entrance.Parameter.OnServiceStoped.Invoke();
+
             }
-
-            if (Entrance.Parameter.OnServiceStoped != null)
-                Entrance.Parameter.OnServiceStoped.Invoke();
-
-            Environment.Exit(0);
+            catch { }
+            finally { cts.Cancel(); }
         }
     }
 }
