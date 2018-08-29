@@ -24,7 +24,7 @@ namespace Quick.OwinMVC.Middleware
         private static ConcurrentDictionary<String, SessionInfo> allSessionDict;
         private static Timer checkSessionExpiresTimer;
 
-        private class SessionInfo : Dictionary<String, Object>, IDictionary<String, Object>
+        internal class SessionInfo : Dictionary<String, Object>, IDictionary<String, Object>
         {
             public String SessionId { get; private set; }
 
@@ -53,6 +53,11 @@ namespace Quick.OwinMVC.Middleware
                     CheckExpirePeriods = Int32.Parse(value);
                     break;
             }
+        }
+
+        public static string GetSessionId(IOwinContext context)
+        {
+            return context.Get<SessionInfo>(SESSION_KEY)?.SessionId;
         }
 
         public static IDictionary<String, Object> GetSession(IOwinContext context)

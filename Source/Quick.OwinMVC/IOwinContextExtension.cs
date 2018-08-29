@@ -29,6 +29,16 @@ namespace Quick.OwinMVC
         public static readonly String ACCEPT_LANGUAGE_KEY = "Accept-Language";
 
         /// <summary>
+        /// 得到Session Id信息
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static string GetSessionId(this IOwinContext context)
+        {
+            return SessionMiddleware.GetSessionId(context);
+        }
+
+        /// <summary>
         /// 得到Session信息
         /// </summary>
         /// <param name="context"></param>
