@@ -9,6 +9,20 @@ namespace Quick.OwinMVC
     /// <summary>
     /// WEB API的返回结果
     /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class ApiResult<T>
+    {
+        [JsonProperty("code")]
+        public Int32 Code { get; set; }
+        [JsonProperty("message", NullValueHandling = NullValueHandling.Ignore)]
+        public String Message { get; set; }
+        [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
+        public T Data { get; set; }
+    }
+
+    /// <summary>
+    /// WEB API的返回结果
+    /// </summary>
     public class ApiResult
     {
         [JsonProperty("success")]
