@@ -15,10 +15,10 @@ namespace Quick.OwinMVC.Startup.Static
         public static void Launch()
         {
             WinService service = new WinService();
-            
+
             //如果是运行的Windows操作系统，则设置控制台标题
             if (ProgramUtils.IsRuningOnWindows())
-                Console.Title = ProgramUtils.GetProgramVersion();
+                Console.Title = ProgramUtils.GetProgramTitleAndVersionAndBuildTime();
 
             service.Start(null);
             while (true)

@@ -13,7 +13,7 @@ namespace Quick.OwinMVC.Startup.Utils
     public class WinServiceInstaller : IPropertyHunter
     {
         public String ServiceName = null;
-        public String DisplayName = null;
+        public String DisplayName = ProgramUtils.GetProgramTitle();
         public String Description = null;
 
         public WinServiceInstaller()
@@ -28,9 +28,6 @@ namespace Quick.OwinMVC.Startup.Utils
             {
                 case nameof(ServiceName):
                     ServiceName = value;
-                    break;
-                case nameof(DisplayName):
-                    DisplayName = value;
                     break;
                 case nameof(Description):
                     Description = value;

@@ -19,12 +19,12 @@ namespace Quick.OwinMVC.Startup.Forms
         {
             InitializeComponent();
             winServiceInstaller = new WinServiceInstaller();
-            this.Text = winServiceInstaller.DisplayName;
+            this.Text = $"{ProgramUtils.GetProgramTitle()} v{ProgramUtils.GetProgramVersion()}";
             this.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().Location);
             //托盘图标
             niMain.Text = this.Text;
             niMain.Icon = this.Icon;
-            
+
             ensureOnlyOne();
         }
 
@@ -99,7 +99,7 @@ namespace Quick.OwinMVC.Startup.Forms
                             form.Activate();
                     }
                 }
-            }));            
+            }));
         }
 
         private void MainForm_Load(object sender, EventArgs e)

@@ -74,22 +74,36 @@ namespace Quick.OwinMVC.Startup.Utils
             }
             return Process.Start(processStartInfo);
         }
-
-        public static string GetProgramVersion()
+        public static string GetProgramTitle()
         {
             StringBuilder titleSb = new StringBuilder();
             //添加服务名称
-            titleSb.Append($"{new WinServiceInstaller().DisplayName}");
-            var assembly = System.Reflection.Assembly.GetEntryAssembly();
+            var assembly = Assembly.GetEntryAssembly();
+            var productAttr = assembly.GetCustomAttribute<AssemblyProductAttribute>();
+            if (productAttr != null)
+                titleSb.Append(productAttr.Product);
             //添加信息版本
-            foreach (var attr in assembly.CustomAttributes)
-                if (attr.AttributeType == typeof(AssemblyInformationalVersionAttribute))
-                    titleSb.Append($"-{attr.ConstructorArguments[0].Value}");
-            //添加版本号
-            titleSb.Append($" Ver:{assembly.GetName().Version}");
-            //添加编译时间
-            titleSb.Append($" Build:{AssemblyUtils.GetLinkerTime(assembly).ToString("F")}");
+            var informationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+            if (informationalVersion != null)
+                titleSb.Append(informationalVersion.InformationalVersion);
             return titleSb.ToString();
+        }
+
+        public static string GetProgramBuildTime()
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            return AssemblyUtils.GetLinkerTime(assembly).ToString("F");
+        }
+
+        public static string GetProgramVersion()
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            return assembly.GetName().Version.ToString();
+        }
+
+        public static string GetProgramTitleAndVersionAndBuildTime()
+        {
+            return $"{GetProgramTitle()} Ver:{GetProgramVersion()} BuildTime:{GetProgramBuildTime()}";
         }
     }
 }
