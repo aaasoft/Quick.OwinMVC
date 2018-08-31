@@ -19,7 +19,7 @@ namespace Quick.OwinMVC.Startup.Forms
         {
             InitializeComponent();
             winServiceInstaller = new WinServiceInstaller();
-            this.Text = $"{ProgramUtils.GetProgramTitle()} v{ProgramUtils.GetProgramVersion()}";
+            this.Text = ProgramUtils.GetProgramTitle();
             this.Icon = System.Drawing.Icon.ExtractAssociatedIcon(System.Reflection.Assembly.GetEntryAssembly().Location);
             //托盘图标
             niMain.Text = this.Text;

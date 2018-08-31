@@ -22,6 +22,7 @@ namespace Quick.OwinMVC.Program
                 LoadAllPlugins = true,
                 GetControlConfigFunc = () => new KeyValuePair<string, object>[]
                  {
+                    new KeyValuePair<string, object>("版本号",CommonButtons.Instance.VersionLabel),
                     new KeyValuePair<string, object>("服务状态",ServiceButtons.Instance.StatusLabel),
                     new KeyValuePair<string, object>("启动",ServiceButtons.Instance.StartButton),
                     new KeyValuePair<string, object>("停止",ServiceButtons.Instance.StopButton),

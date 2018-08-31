@@ -85,7 +85,7 @@ namespace Quick.OwinMVC.Startup.Utils
             //添加信息版本
             var informationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
             if (informationalVersion != null)
-                titleSb.Append(informationalVersion.InformationalVersion);
+                titleSb.Append("-" + informationalVersion.InformationalVersion);
             return titleSb.ToString();
         }
 

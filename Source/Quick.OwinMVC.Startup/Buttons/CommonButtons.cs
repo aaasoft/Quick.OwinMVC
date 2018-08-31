@@ -12,12 +12,17 @@ namespace Quick.OwinMVC.Startup.Buttons
     {
         public static CommonButtons Instance = new CommonButtons();
 
+        private Label _VersionLabel;
+        public object VersionLabel { get { return _VersionLabel; } }
+
         public Action Action_Exit { get; set; }
         public Action Action_Setting { get; set; }
         public Action Action_Debug { get; set; }
 
         public CommonButtons()
         {
+            _VersionLabel = new Label() { Text = ProgramUtils.GetProgramVersion() };
+
             Action_Exit = () =>
             {
                 foreach (var form in Application.OpenForms
