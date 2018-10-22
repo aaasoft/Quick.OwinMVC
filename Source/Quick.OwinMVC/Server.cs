@@ -31,6 +31,18 @@ namespace Quick.OwinMVC
 
         //WEB服务器转接器
         private String Wrapper;
+        /// <summary>
+        /// 上下文路径
+        /// </summary>
+        public string ContextPath { get; private set; }
+        /// <summary>
+        /// 上下文路径是否是根路径
+        /// </summary>
+        public bool IsRootContextPath
+        {
+            get { return string.IsNullOrEmpty(ContextPath) || ContextPath == "/"; }
+        }
+
         //中间件队列
         private List<Action<IAppBuilder>> middlewareRegisterActionList = new List<Action<IAppBuilder>>();
 
@@ -43,6 +55,8 @@ namespace Quick.OwinMVC
                 url = $"{protocol}://{endpoint.Address.ToString()}";
             if (endpoint.Port != defaultPort)
                 url += $":{endpoint.Port}";
+            if (!IsRootContextPath)
+                url += "/" + ContextPath;
             return url;
         }
 
@@ -91,6 +105,9 @@ namespace Quick.OwinMVC
         {
             switch (key)
             {
+                case nameof(ContextPath):
+                    ContextPath = value;
+                    break;
                 case nameof(Middlewares):
                     value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                         .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));

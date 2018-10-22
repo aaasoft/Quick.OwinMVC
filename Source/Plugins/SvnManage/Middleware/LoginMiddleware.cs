@@ -36,8 +36,12 @@ namespace SvnManage.Middleware
             var sourceRequestPath = req.Get<String>("Quick.OwinMVC.SourceRequestPath");
             if (sourceRequestPath == null)
                 sourceRequestPath = req.Get<String>("owin.RequestPath");
+            var contextPath = req.Get<String>("ContextPath");
+            var requestPath = sourceRequestPath;
+            if (contextPath.Length < sourceRequestPath.Length)
+                requestPath = sourceRequestPath.Substring(contextPath.Length);
             //如果是登录页面，则允许访问
-            if (allowPaths.Contains(sourceRequestPath))
+            if (allowPaths.Contains(requestPath))
                 return Next.Invoke(context);
             else
             //否则

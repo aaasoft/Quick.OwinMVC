@@ -3,15 +3,15 @@
     <!--标题-->
     <meta name="title" content="登录" />
     <!--母版页-->
-    <meta name="masterPage" content="/SvnManage/resource/shared._Single.html" />
-    <script src="/SvnManage/resource/js/base64.js"></script>
-    <script src="/SvnManage/resource/js/cookie.js"></script>
+    <meta name="masterPage" content="./SvnManage/resource/shared._Single.html" />
+    <script src="./SvnManage/resource/js/base64.js"></script>
+    <script src="./SvnManage/resource/js/cookie.js"></script>
     <script type="text/javascript">
         window.jQuery &&
         $(document).ready(function () {
-            $.get("/SvnManage/api/login");
+            $.get("./SvnManage/api/login");
             //多语言下拉框
-            $.get("/SvnManage/api/language", function (json) {
+            $.get("./SvnManage/api/language", function (json) {
                 var selectElement = $("#selectLanguage");
                 for (i in json) {
                     var data = json[i];
@@ -63,7 +63,7 @@
                 var hash = Base64.encode(account + ':' + password);
 
                 onBeforeLogin();
-                $.post("/SvnManage/api/login", { password: hash }, function (result) {
+                $.post("./SvnManage/api/login", { password: hash }, function (result) {
                     
                     if (result.code == 0 ) {
                         var queryParams = getQueryParams();
@@ -145,7 +145,7 @@
         </div><!-- /.col -->
     </div><!-- /.row -->
     <footer>
-        <script src='/SvnManage/resource/js/includeMasterPage.js'></script>
+        <script src='./SvnManage/resource/js/includeMasterPage.js'></script>
     </footer>
 </body>
 </html>

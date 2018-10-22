@@ -23,6 +23,11 @@ namespace Quick.OwinMVC.Middleware
         /// <param name="desPath"></param>
         public void RegisterRedirect(String srcPath, String desPath)
         {
+            if (!Server.Instance.IsRootContextPath)
+            {
+                srcPath = $"/{Server.Instance.ContextPath}{srcPath}";
+                desPath = $"/{Server.Instance.ContextPath}{desPath}";
+            }
             redirectDict[srcPath] = desPath;
         }
 

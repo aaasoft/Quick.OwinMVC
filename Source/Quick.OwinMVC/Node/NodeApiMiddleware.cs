@@ -26,6 +26,10 @@ namespace Quick.OwinMVC.Node
         public NodeApiMiddleware(OwinMiddleware next = null) : base(next)
         {
             Instance = this;
+            if (string.IsNullOrEmpty(Server.Instance.ContextPath)
+                    || Server.Instance.ContextPath == "/")
+                return;
+            Prefix = $"/{Server.Instance.ContextPath}/{Prefix}";
         }
 
         /// <summary>

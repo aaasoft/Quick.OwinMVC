@@ -74,16 +74,11 @@ namespace Quick.OwinMVC.Middleware
             context.Set("Quick.OwinMVC.SourceRequestPath", path);
             context.Set("Quick.OwinMVC.SourceRequestUri", context.Request.Uri);
 
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < path.Split('/').Length - 2; i++)
-            {
-                if (i > 0)
-                    sb.Append("/");
-                sb.Append("..");
-            }
-            var contextPath = sb.ToString();
-            if (String.IsNullOrEmpty(contextPath))
-                contextPath = ".";
+            var contextPath = string.Empty;
+            if (Server.Instance.IsRootContextPath)
+                contextPath = "";
+            else
+                contextPath = $"/{Server.Instance.ContextPath}";
 
             context.Set("ContextPath", contextPath);
             return Next.Invoke(context);

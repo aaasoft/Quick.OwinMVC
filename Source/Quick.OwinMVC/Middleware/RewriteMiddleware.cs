@@ -23,6 +23,11 @@ namespace Quick.OwinMVC.Middleware
         /// <param name="desPath"></param>
         public void RegisterRewrite(String srcPath, String desPath)
         {
+            if (!Server.Instance.IsRootContextPath)
+            {
+                srcPath = $"/{Server.Instance.ContextPath}{srcPath}";
+                desPath = $"/{Server.Instance.ContextPath}{desPath}";
+            }
             rewriteDict[srcPath] = desPath;
         }
 
