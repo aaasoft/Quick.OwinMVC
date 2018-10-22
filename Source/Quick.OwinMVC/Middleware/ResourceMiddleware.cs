@@ -53,8 +53,13 @@ namespace Quick.OwinMVC.Middleware
 
         public override Task InvokeNotMatch(IOwinContext context)
         {
+            var requestPath = context.Request.Path.ToString();
+            if (!Server.Instance.IsRootContextPath
+                && requestPath.StartsWith($"/{Server.Instance.ContextPath}/")
+                && requestPath.Length > Server.Instance.ContextPath.Length + 1)
+                requestPath = requestPath.Substring(Server.Instance.ContextPath.Length + 1);
             ResourceWebResponse resourceResponse;
-            var stream = getUrlStream($"resource://0{context.Request.Path}", out resourceResponse);
+            var stream = getUrlStream($"resource://0{requestPath}", out resourceResponse);
             if (stream == null)
                 return base.InvokeNotMatch(context);
             return handleResource(context, stream, resourceResponse, Expires, AddonHttpHeaders);

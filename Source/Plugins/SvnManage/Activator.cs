@@ -20,12 +20,12 @@ namespace SvnManage
 
         public void Start()
         {
-            PreMiddlewareManager.Instance.Register(middleware);
+            //PreMiddlewareManager.Instance.Register(middleware);
         }
 
         public void Stop()
         {
-            PreMiddlewareManager.Instance.Unregister(middleware);
+            //PreMiddlewareManager.Instance.Unregister(middleware);
         }
     }
 }

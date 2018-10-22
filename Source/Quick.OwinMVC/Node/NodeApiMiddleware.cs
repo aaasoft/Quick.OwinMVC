@@ -29,7 +29,7 @@ namespace Quick.OwinMVC.Node
             if (string.IsNullOrEmpty(Server.Instance.ContextPath)
                     || Server.Instance.ContextPath == "/")
                 return;
-            Prefix = $"/{Server.Instance.ContextPath}/{Prefix}";
+            Prefix = $"/{Server.Instance.ContextPath}{Prefix}";
         }
 
         /// <summary>
