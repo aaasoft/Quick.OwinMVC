@@ -4,7 +4,7 @@
     <title>API调试</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/Plugin.ApiDoc/resource/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../resource/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
     <div class="display-main">
@@ -17,17 +17,17 @@
 
     <div id="formDiv"></div>
 
-    <script src="/Plugin.ApiDoc/resource/jquery-1.12.4/jquery.min.js"></script>
-    <script src="/Plugin.ApiDoc/resource/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    <script src="/Plugin.ApiDoc/resource/api/bootstrapvalidator.min.js"></script>
-    <script src="/Plugin.ApiDoc/resource/api/debug.html.js"></script>
-    <script src="/Plugin.ApiDoc/resource/layer-3.0.3/layer.js"></script>
+    <script src="../../resource/jquery-1.12.4/jquery.min.js"></script>
+    <script src="../../resource/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+    <script src="../../resource/api/bootstrapvalidator.min.js"></script>
+    <script src="../../resource/api/debug.html.js"></script>
+    <script src="../../resource/layer-3.0.3/layer.js"></script>
     <script type="text/javascript">
         window.jQuery &&
         $(document).ready(function () {
             var queryParams = getQueryParams();
             var id = queryParams['id'];
-            $.get("/api/Api/Detail?Id=" + id, function (json) {
+            $.get("../../../api/Api/Detail?Id=" + id, function (json) {
                 if (json.code != 0) {
                     layer.alert("获取API详情失败，" + json.message);
                     return;
@@ -41,7 +41,7 @@
                     submitHandler: function (form) {
                         //参数
                         var ajaxParameter = {
-                            url: apiInfo.Path,
+                            url: '../../..' + apiInfo.Path,
                             type: apiInfo.HttpMethod,
                             success: function (ret) {
                                 $('#formDiv').bootstrapValidator('disableSubmitButtons', false);

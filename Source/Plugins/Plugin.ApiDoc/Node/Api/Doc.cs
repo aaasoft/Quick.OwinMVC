@@ -22,7 +22,10 @@ namespace Plugin.ApiDoc.Node.Api
 
             public override object Invoke(IOwinContext context, DocParameter input)
             {
-                Utils.OutputXml(context, input, $"/{this.GetType().Assembly.GetName().Name}/resource/api/doc.xslt", input.Output == DocOutput.XML);
+                var req = context.Request;
+                var contextPath = req.Get<String>("ContextPath");
+
+                Utils.OutputXml(context, input, $"{contextPath}/{this.GetType().Assembly.GetName().Name}/resource/api/doc.xslt", input.Output == DocOutput.XML);
                 throw NodeMethodHandledException.Instance;
             }
         }

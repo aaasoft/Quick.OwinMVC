@@ -10,7 +10,7 @@
             [标签:<xsl:value-of select="@Tag"/>]
           </xsl:if>
         </title>
-        <link href="/Plugin.ApiDoc/resource/api/style.css" rel="stylesheet" />
+        <link href="../../Plugin.ApiDoc/resource/api/style.css" rel="stylesheet" />
         <style>
           body {
             padding: 0px;
@@ -55,8 +55,8 @@
             color: green;
           }
         </style>
-        <script src="/Plugin.ApiDoc/resource/jquery-1.12.4/jquery.min.js" type="text/javascript">_</script>
-        <script src="/Plugin.ApiDoc/resource/layer-3.0.3/layer.js" type="text/javascript">_</script>
+        <script src="../../Plugin.ApiDoc/resource/jquery-1.12.4/jquery.min.js" type="text/javascript">_</script>
+        <script src="../../Plugin.ApiDoc/resource/layer-3.0.3/layer.js" type="text/javascript">_</script>
         <script type="text/javascript">
           function invokeApi(id, name) {
             layer.open({
@@ -67,7 +67,7 @@
                 //moveType: 1,
                 maxmin: true, //开启最大化最小化按钮
                 area: ['640px', '480px'],
-                content: '/Plugin.ApiDoc/resource/api/debug.html?id=' + id,
+                content: '../../Plugin.ApiDoc/resource/api/debug.html?id=' + id,
                 zIndex: layer.zIndex,
                 success: function(layero){
                 layer.setTop(layero); //重点2
@@ -83,16 +83,16 @@
               <div id="primary">
                 <div style="float: right;">
                   <code>
-                    <a href="/api/Api/Doc">全部接口文档</a>
+                    <a href="../../api/Api/Doc">全部接口文档</a>
                   </code>
                   <code>
-                    <a href="/api/Api/Doc?Tag=external">对外接口文档</a>
+                    <a href="../../api/Api/Doc?Tag=external">对外接口文档</a>
                   </code>
                   <code>
-                    <a href="/api/Api/Table">全部接口表格</a>
+                    <a href="../../api/Api/Table">全部接口表格</a>
                   </code>
                   <code>
-                    <a href="/api/Api/Table?Tag=external">对外接口表格</a>
+                    <a href="../../api/Api/Table?Tag=external">对外接口表格</a>
                   </code>
                 </div>
                 <article class="post-530 page type-page status-publish hentry">
@@ -207,7 +207,7 @@
                               </h4>
                               <p style="padding-left: 0px;">
                                 <xsl:if test="Tags">
-                                  <img style="display: inline;box-shadow: none;border-style: none; margin: 0px 10px 0px 0px;padding:0px" src="/Plugin.ApiDoc/resource/api/tags.png"></img>
+                                  <img style="display: inline;box-shadow: none;border-style: none; margin: 0px 10px 0px 0px;padding:0px" src="../../Plugin.ApiDoc/resource/api/tags.png"></img>
                                   <xsl:for-each select="Tags/Tag">
                                     <code>
                                       <xsl:element name="a">
@@ -246,6 +246,7 @@
                                 <tr>
                                   <th style="width: 200px;">地址</th>
                                   <td>
+                                    <xsl:text>[虚拟目录]</xsl:text>
                                     <xsl:value-of select="@Path"/>
                                   </td>
                                 </tr>

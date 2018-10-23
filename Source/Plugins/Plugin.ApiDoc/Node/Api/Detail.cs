@@ -69,7 +69,10 @@ namespace Plugin.ApiDoc.Node.Api
                 if (idArray.Length < 2)
                     throw new NodeMethodException($"[{input.Id}]不是有效的API编号！");
 
-                var path = idArray[0];
+                var req = context.Request;
+                var contextPath = req.Get<String>("ContextPath");
+
+                var path = contextPath + idArray[0];
                 var httpMethod = idArray[1];
 
                 var nodePath = path.Substring(NodeApiMiddleware.Prefix.Length);
