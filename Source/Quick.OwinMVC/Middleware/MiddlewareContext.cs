@@ -81,7 +81,16 @@ namespace Quick.OwinMVC.Middleware
                 contextPath = $"/{Server.Instance.ContextPath}";
 
             context.Set("ContextPath", contextPath);
-            return Next.Invoke(context);
+
+            if (path.StartsWith(contextPath))
+                return Next.Invoke(context);
+            else
+            {
+                var rep = context.Response;
+                rep.StatusCode = 404;
+                rep.ReasonPhrase = "NOT FOUND";
+                return rep.WriteAsync($"404 NOT FOUND,ContextPath:{contextPath},Request URL:{path}");
+            }
         }
     }
 }
