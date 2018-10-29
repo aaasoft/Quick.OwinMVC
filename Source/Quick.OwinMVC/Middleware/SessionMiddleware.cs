@@ -88,7 +88,11 @@ namespace Quick.OwinMVC.Middleware
 
         public override Task Invoke(IOwinContext context)
         {
-            String sessionId = context.Request.Cookies.Where(t => t.Key == IdKey).SingleOrDefault().Value;
+            //先从URL参数中获取
+            var sessionId  = context.Request.Query.Get("SessionId");
+            //然后从Cookie中获取
+            if (string.IsNullOrEmpty(sessionId))
+                sessionId = context.Request.Cookies.Where(t => t.Key == IdKey).SingleOrDefault().Value;
             SessionInfo session = null;
             if (sessionId != null)
                 allSessionDict.TryGetValue(sessionId, out session);
@@ -100,11 +104,12 @@ namespace Quick.OwinMVC.Middleware
                 sessionId = Guid.NewGuid().ToString().Replace("-", "");
                 session = new SessionInfo(sessionId);
                 allSessionDict.TryAdd(sessionId, session);
-                //设置Cookie
-                context.Response.Cookies.Append(IdKey, session.SessionId);
             }
             //重新设置Session的过期时间
             session.Expires = DateTime.Now.AddSeconds(Expires);
+            //设置Cookie
+            context.Response.Cookies.Append(IdKey, session.SessionId);
+
             context.Set<SessionInfo>(SESSION_KEY, session);
             return Next.Invoke(context);
         }
