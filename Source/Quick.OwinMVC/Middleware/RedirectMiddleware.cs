@@ -25,7 +25,7 @@ namespace Quick.OwinMVC.Middleware
         {
             if (!Server.Instance.IsRootContextPath)
             {
-                var tmpContextPath = Server.Instance.ContextPath.Substring(Server.Instance.ContextPath.Length - 1);
+                var tmpContextPath = Server.Instance.ContextPath.Substring(0, Server.Instance.ContextPath.Length - 1);
                 srcPath = $"{tmpContextPath}{srcPath}";
                 desPath = $"{tmpContextPath}{desPath}";
             }
