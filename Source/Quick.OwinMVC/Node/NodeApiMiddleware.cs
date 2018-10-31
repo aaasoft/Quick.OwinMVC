@@ -14,7 +14,7 @@ namespace Quick.OwinMVC.Node
     {
         public const string JSONP_CALLBACK = "callback";
         public static NodeApiMiddleware Instance { get; private set; }
-        public static string Prefix = "/api/";
+        public static string Prefix = "api/";
 
         /// <summary>
         /// 额外的HTTP头
@@ -26,10 +26,7 @@ namespace Quick.OwinMVC.Node
         public NodeApiMiddleware(OwinMiddleware next = null) : base(next)
         {
             Instance = this;
-            if (string.IsNullOrEmpty(Server.Instance.ContextPath)
-                    || Server.Instance.ContextPath == "/")
-                return;
-            Prefix = $"/{Server.Instance.ContextPath}{Prefix}";
+            Prefix = $"{Server.Instance.ContextPath}{Prefix}";
         }
 
         /// <summary>

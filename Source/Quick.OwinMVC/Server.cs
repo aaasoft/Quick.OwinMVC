@@ -35,6 +35,7 @@ namespace Quick.OwinMVC
         /// 上下文路径
         /// </summary>
         public string ContextPath { get; private set; }
+
         /// <summary>
         /// 上下文路径是否是根路径
         /// </summary>
@@ -56,7 +57,7 @@ namespace Quick.OwinMVC
             if (endpoint.Port != defaultPort)
                 url += $":{endpoint.Port}";
             if (!IsRootContextPath)
-                url += "/" + ContextPath;
+                url += ContextPath;
             return url;
         }
 
@@ -106,7 +107,13 @@ namespace Quick.OwinMVC
             switch (key)
             {
                 case nameof(ContextPath):
-                    ContextPath = value;
+                    var contextPath = string.Empty;
+                    if (string.IsNullOrEmpty(value)
+                        || value == "/")
+                        contextPath = "/";
+                    else
+                        contextPath = $"/{value}/";
+                    ContextPath = contextPath;
                     break;
                 case nameof(Middlewares):
                     value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)

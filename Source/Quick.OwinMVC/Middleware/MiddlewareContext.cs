@@ -73,23 +73,16 @@ namespace Quick.OwinMVC.Middleware
             //设置原始请求路径
             context.Set("Quick.OwinMVC.SourceRequestPath", path);
             context.Set("Quick.OwinMVC.SourceRequestUri", context.Request.Uri);
+            context.Set("ContextPath", Server.Instance.ContextPath);
 
-            var contextPath = string.Empty;
-            if (Server.Instance.IsRootContextPath)
-                contextPath = "";
-            else
-                contextPath = $"/{Server.Instance.ContextPath}";
-
-            context.Set("ContextPath", contextPath);
-
-            if (path.StartsWith(contextPath))
+            if (path.StartsWith(Server.Instance.ContextPath))
                 return Next.Invoke(context);
             else
             {
                 var rep = context.Response;
                 rep.StatusCode = 404;
                 rep.ReasonPhrase = "NOT FOUND";
-                return rep.WriteAsync($"404 NOT FOUND,ContextPath:{contextPath},Request URL:{path}");
+                return rep.WriteAsync($"404 NOT FOUND,ContextPath:{Server.Instance.ContextPath},Request URL:{path}");
             }
         }
     }

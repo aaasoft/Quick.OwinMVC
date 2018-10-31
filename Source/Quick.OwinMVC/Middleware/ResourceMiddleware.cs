@@ -57,9 +57,9 @@ namespace Quick.OwinMVC.Middleware
             var isRootContextPath = Server.Instance.IsRootContextPath;
             var contextPath = Server.Instance.ContextPath;
             if (!isRootContextPath
-                && requestPath.StartsWith($"/{contextPath}/")
-                && requestPath.Length > contextPath.Length + 1)
-                requestPath = requestPath.Substring(Server.Instance.ContextPath.Length + 1);
+                && requestPath.StartsWith(contextPath)
+                && requestPath.Length > contextPath.Length)
+                requestPath = requestPath.Substring(Server.Instance.ContextPath.Length - 1);
             ResourceWebResponse resourceResponse;
             var stream = getUrlStream($"resource://0{requestPath}", out resourceResponse);
             if (stream == null)

@@ -86,11 +86,7 @@ namespace Quick.OwinMVC.Middleware
                     break;
                 case nameof(Route):
                     Route = value;
-                    String fullRoute;
-                    if (Server.Instance.IsRootContextPath)
-                        fullRoute = $"/:{QOMVC_PLUGIN_KEY}/{Route}/:{QOMVC_PATH_KEY}";
-                    else
-                        fullRoute = $"/{Server.Instance.ContextPath}/:{QOMVC_PLUGIN_KEY}/{Route}/:{QOMVC_PATH_KEY}";
+                    String fullRoute = $"{Server.Instance.ContextPath}:{QOMVC_PLUGIN_KEY}/{Route}/:{QOMVC_PATH_KEY}";
                     route = RouteBuilder.RouteToRegex(fullRoute);
                     break;
                 case nameof(AddonHttpHeaders):
