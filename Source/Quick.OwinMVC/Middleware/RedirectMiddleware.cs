@@ -37,9 +37,12 @@ namespace Quick.OwinMVC.Middleware
             String path = context.Get<String>("owin.RequestPath");
             if (redirectDict.ContainsKey(path))
             {
-                context.Response.Redirect(redirectDict[path]);
-                context.Response.ContentLength = 0;
-                return context.Response.WriteAsync(String.Empty);
+                var req = context.Request;
+                var rep = context.Response;                
+                var desPath = redirectDict[path] + req.QueryString.ToString();
+                rep.Redirect(desPath);
+                rep.ContentLength = 0;
+                return rep.WriteAsync(String.Empty);
             }
             return Next.Invoke(context);
         }
