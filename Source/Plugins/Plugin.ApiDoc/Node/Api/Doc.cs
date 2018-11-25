@@ -25,7 +25,7 @@ namespace Plugin.ApiDoc.Node.Api
                 var req = context.Request;
                 var contextPath = req.Get<String>("ContextPath");
 
-                Utils.OutputXml(context, input, $"{contextPath}/{this.GetType().Assembly.GetName().Name}/resource/api/doc.xslt", input.Output == DocOutput.XML);
+                Utils.OutputXml(context, input, $"{contextPath}{this.GetType().Assembly.GetName().Name}/resource/api/doc.xslt", input.Output == DocOutput.XML);
                 throw NodeMethodHandledException.Instance;
             }
         }
