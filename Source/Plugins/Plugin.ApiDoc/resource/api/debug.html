@@ -41,7 +41,7 @@
                     submitHandler: function (form) {
                         //参数
                         var ajaxParameter = {
-                            url: '../../..' + apiInfo.Path,
+                            url: '../../../' + apiInfo.Path,
                             type: apiInfo.HttpMethod,
                             success: function (ret) {
                                 $('#formDiv').bootstrapValidator('disableSubmitButtons', false);
