@@ -64,10 +64,27 @@ namespace Quick.OwinMVC.Middleware
                 && requestPath.StartsWith(contextPath)
                 && requestPath.Length > contextPath.Length)
                 requestPath = requestPath.Substring(Server.Instance.ContextPath.Length - 1);
+            var url = $"resource://0{requestPath}";
+            if (UseMemoryCache)
+            {
+                if (memoryCacheDict.ContainsKey(url))
+                    return handleResource(context, new MemoryStream(memoryCacheDict[url]), null, url, Expires, AddonHttpHeaders);
+            }
             ResourceWebResponse resourceResponse;
-            var stream = getUrlStream($"resource://0{requestPath}", out resourceResponse);
+            var stream = getUrlStream(url, out resourceResponse);
             if (stream == null)
                 return base.InvokeNotMatch(context);
+            if (UseMemoryCache)
+            {
+                var ms = new MemoryStream();
+                stream.CopyTo(ms);
+                lock (memoryCacheDict)
+                    memoryCacheDict[url] = ms.ToArray();
+                ms.Position = 0;
+                stream.Close();
+                stream.Dispose();
+                stream = ms;
+            }
             return handleResource(context, stream, resourceResponse.LastModified, resourceResponse.Uri.LocalPath, Expires, AddonHttpHeaders);
         }
 
