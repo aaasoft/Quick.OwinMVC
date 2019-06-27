@@ -18,11 +18,11 @@ namespace Quick.OwinMVC.Middleware
     public class ResourceMiddleware : AbstractPluginPathMiddleware, IPropertyHunter, IAssemblyHunter
     {
         //(资源的缓存过期时间，单位：秒)默认一天
-        private double Expires = 86400;
+        public double Expires { get; private set; } = 86400;
         //资源的ETag是否使用MD5值
-        private Boolean UseMd5ETag = false;
+        public Boolean UseMd5ETag { get; private set; } = false;
         //使用内存缓存
-        private bool UseMemoryCache = false;
+        public bool UseMemoryCache { get; private set; } = false;
 
         private Dictionary<string, byte[]> memoryCacheDict = new Dictionary<string, byte[]>();
 
