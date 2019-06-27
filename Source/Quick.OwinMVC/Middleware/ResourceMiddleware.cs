@@ -21,6 +21,10 @@ namespace Quick.OwinMVC.Middleware
         private double Expires = 86400;
         //资源的ETag是否使用MD5值
         private Boolean UseMd5ETag = false;
+        //使用内存缓存
+        private bool UseMemoryCache = false;
+
+        private Dictionary<string, byte[]> memoryCacheDict = new Dictionary<string, byte[]>();
 
         private ResourceWebRequestFactory resourceWebRequestFactory;
 
@@ -64,7 +68,7 @@ namespace Quick.OwinMVC.Middleware
             var stream = getUrlStream($"resource://0{requestPath}", out resourceResponse);
             if (stream == null)
                 return base.InvokeNotMatch(context);
-            return handleResource(context, stream, resourceResponse, Expires, AddonHttpHeaders);
+            return handleResource(context, stream, resourceResponse.LastModified, resourceResponse.Uri.LocalPath, Expires, AddonHttpHeaders);
         }
 
         public override Task Invoke(IOwinContext context, string plugin, string path)
@@ -78,34 +82,58 @@ namespace Quick.OwinMVC.Middleware
             if (!String.IsNullOrEmpty(prefix))
                 path = $"{prefix}/{path}";
 
-            List<String> pathList = new List<string>();
-            pathList.Add(path);
+            List<String> resourceUrlList = new List<string>();
+            resourceUrlList.Add($"resource://{plugin}/{path}");
             //加后缀
             if (!String.IsNullOrEmpty(suffix))
                 path = $"{path}{suffix}";
-            pathList.Add(path);
+            resourceUrlList.Add($"resource://{plugin}/{path}");
+
+            //先尝试从缓存中获取
+            if (UseMemoryCache)
+            {
+                foreach (var url in resourceUrlList)
+                {
+                    if (memoryCacheDict.ContainsKey(url))
+                    {
+                        return handleResource(context, new MemoryStream(memoryCacheDict[url]), null, url, expires, addonHttpHeaders);
+                    }
+                }
+            }
 
             Stream stream;
             ResourceWebResponse resourceResponse;
-            foreach (var currentPath in pathList)
+            foreach (var url in resourceUrlList)
             {
-                stream = getUrlStream($"resource://{plugin}/{currentPath}", out resourceResponse);
+                stream = getUrlStream(url, out resourceResponse);
                 if (stream != null)
-                    return handleResource(context, stream, resourceResponse, expires, addonHttpHeaders);
+                {
+                    if (UseMemoryCache)
+                    {
+                        var ms = new MemoryStream();
+                        stream.CopyTo(ms);
+                        lock (memoryCacheDict)
+                            memoryCacheDict[url] = ms.ToArray();
+                        ms.Position = 0;
+                        stream = ms;
+                    }
+                    return handleResource(context, stream, resourceResponse.LastModified, resourceResponse.Uri.LocalPath, expires, addonHttpHeaders);
+                }
             }
             return noMatchHandler(context);
         }
 
-        private Task handleResource(IOwinContext context, Stream stream, ResourceWebResponse resourceResponse, double expires, IDictionary<string, string> addonHttpHeaders)
+        private Task handleResource(IOwinContext context, Stream stream, DateTime? lastModified, string path, double expires, IDictionary<string, string> addonHttpHeaders)
         {
             var req = context.Request;
             var rep = context.Response;
             //验证缓存有效
+            if (lastModified.HasValue)
             {
                 //===================
                 //先验证最后修改时间
                 //===================
-                var resourceLastModified = resourceResponse.LastModified;
+                var resourceLastModified = lastModified.Value;
                 //最后修改时间判断部分
                 var clientLastModified = req.Headers.Get("If-Modified-Since");
                 if (clientLastModified != null)
@@ -124,7 +152,7 @@ namespace Quick.OwinMVC.Middleware
                 if (UseMd5ETag)
                     serverETag = HashUtils.ComputeETagByMd5(stream);
                 else
-                    serverETag = resourceResponse.LastModified.Ticks.ToString();
+                    serverETag = lastModified.Value.Ticks.ToString();
                 var clientETag = req.Headers.Get("If-None-Match");
                 //如果客户端的ETag值与服务端相同，则返回304，表示资源未修改
                 if (serverETag == clientETag)
@@ -137,8 +165,9 @@ namespace Quick.OwinMVC.Middleware
             }
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
             rep.Headers["Cache-Control"] = $"max-age={expires}";
-            rep.Headers["Last-Modified"] = resourceResponse.LastModified.ToUniversalTime().ToString("R");
-            return context.Output(stream, true, EnableCompress, resourceResponse.Uri.LocalPath, addonHttpHeaders);
+            if (lastModified.HasValue)
+                rep.Headers["Last-Modified"] = lastModified.Value.ToUniversalTime().ToString("R");
+            return context.Output(stream, true, EnableCompress, path, addonHttpHeaders);
         }
 
         public override void Hunt(string key, string value)
@@ -153,6 +182,9 @@ namespace Quick.OwinMVC.Middleware
                     break;
                 case nameof(UseMd5ETag):
                     UseMd5ETag = Boolean.Parse(value);
+                    break;
+                case nameof(UseMemoryCache):
+                    UseMemoryCache = Boolean.Parse(value);
                     break;
             }
             base.Hunt(key, value);
