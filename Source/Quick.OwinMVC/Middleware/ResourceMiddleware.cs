@@ -115,6 +115,8 @@ namespace Quick.OwinMVC.Middleware
                         lock (memoryCacheDict)
                             memoryCacheDict[url] = ms.ToArray();
                         ms.Position = 0;
+                        stream.Close();
+                        stream.Dispose();
                         stream = ms;
                     }
                     return handleResource(context, stream, resourceResponse.LastModified, resourceResponse.Uri.LocalPath, expires, addonHttpHeaders);
