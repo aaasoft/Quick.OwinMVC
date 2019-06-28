@@ -22,7 +22,7 @@ namespace Quick.OwinMVC.Middleware
         //使用内存缓存
         public bool UseMemoryCache { get; private set; } = false;
 
-        public static Dictionary<string, StreamCache> StreamCacheDict { get; set; } = new Dictionary<string, StreamCache>();
+        public static StreamCacheManager StreamCacheManager = new StreamCacheManager();
 
         private ResourceWebRequestFactory resourceWebRequestFactory;
 
@@ -65,8 +65,11 @@ namespace Quick.OwinMVC.Middleware
             var url = $"resource://0{requestPath}";
             if (UseMemoryCache)
             {
-                if (StreamCacheDict.ContainsKey(url))
-                    return handleResource(context, StreamCacheDict[url].GetStream(), null, url, Expires, AddonHttpHeaders);
+                var streamCache = StreamCacheManager.GetCache(url);
+                if (streamCache != null)
+                {
+                    return handleResource(context, streamCache.GetStream(), null, url, Expires, AddonHttpHeaders);
+                }
             }
             ResourceWebResponse resourceResponse;
             var stream = getUrlStream(url, out resourceResponse);
@@ -74,14 +77,11 @@ namespace Quick.OwinMVC.Middleware
                 return base.InvokeNotMatch(context);
             if (UseMemoryCache)
             {
-                lock (StreamCacheDict)
-                {
-                    var streamCache = new StreamCache(stream);
-                    StreamCacheDict[url] = streamCache;
-                    stream.Close();
-                    stream.Dispose();
-                    stream = streamCache.GetStream();
-                }
+                var streamCache = new StreamCache(stream);
+                StreamCacheManager.AddCache(url, streamCache);
+                stream.Close();
+                stream.Dispose();
+                stream = streamCache.GetStream();
             }
             return handleResource(context, stream, resourceResponse.LastModified, resourceResponse.Uri.LocalPath, Expires, AddonHttpHeaders);
         }
@@ -109,8 +109,11 @@ namespace Quick.OwinMVC.Middleware
             {
                 foreach (var url in resourceUrlList)
                 {
-                    if (StreamCacheDict.ContainsKey(url))
-                        return handleResource(context, StreamCacheDict[url].GetStream(), null, url, expires, addonHttpHeaders);
+                    var streamCache = StreamCacheManager.GetCache(url);
+                    if (streamCache != null)
+                    {
+                        return handleResource(context, streamCache.GetStream(), null, url, expires, addonHttpHeaders);
+                    }
                 }
             }
 
@@ -123,14 +126,11 @@ namespace Quick.OwinMVC.Middleware
                 {
                     if (UseMemoryCache)
                     {
-                        lock (StreamCacheDict)
-                        {
-                            var streamCache = new StreamCache(stream);
-                            StreamCacheDict[url] = streamCache;
-                            stream.Close();
-                            stream.Dispose();
-                            stream = streamCache.GetStream();
-                        }
+                        var streamCache = new StreamCache(stream);
+                        StreamCacheManager.AddCache(url, streamCache);
+                        stream.Close();
+                        stream.Dispose();
+                        stream = streamCache.GetStream();
                     }
                     return handleResource(context, stream, resourceResponse.LastModified, resourceResponse.Uri.LocalPath, expires, addonHttpHeaders);
                 }
