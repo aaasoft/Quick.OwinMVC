@@ -109,6 +109,7 @@
     <Compile Include="Node\ValueFormat\SelectValueFormat.cs" />
     <Compile Include="Node\ValueFormat\TextboxValueFormat.cs" />
     <Compile Include="Plugin\IPluginActivator.cs" />
+    <Compile Include="Resource\StreamCache.cs" />
     <Compile Include="Service\IService.cs" />
     <Compile Include="Service\ServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

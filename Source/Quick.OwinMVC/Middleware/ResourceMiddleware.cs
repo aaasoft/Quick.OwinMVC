@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Owin;
-using Quick.OwinMVC.Controller;
 using Quick.OwinMVC.Resource;
 using System.Net;
 using Quick.OwinMVC.Utils;
 using System.IO;
 using System.Reflection;
-using System.IO.Compression;
 using Quick.OwinMVC.Hunter;
 
 namespace Quick.OwinMVC.Middleware
@@ -24,7 +22,7 @@ namespace Quick.OwinMVC.Middleware
         //使用内存缓存
         public bool UseMemoryCache { get; private set; } = false;
 
-        private Dictionary<string, byte[]> memoryCacheDict = new Dictionary<string, byte[]>();
+        public static Dictionary<string, StreamCache> StreamCacheDict { get; set; } = new Dictionary<string, StreamCache>();
 
         private ResourceWebRequestFactory resourceWebRequestFactory;
 
@@ -67,8 +65,8 @@ namespace Quick.OwinMVC.Middleware
             var url = $"resource://0{requestPath}";
             if (UseMemoryCache)
             {
-                if (memoryCacheDict.ContainsKey(url))
-                    return handleResource(context, new MemoryStream(memoryCacheDict[url]), null, url, Expires, AddonHttpHeaders);
+                if (StreamCacheDict.ContainsKey(url))
+                    return handleResource(context, StreamCacheDict[url].GetStream(), null, url, Expires, AddonHttpHeaders);
             }
             ResourceWebResponse resourceResponse;
             var stream = getUrlStream(url, out resourceResponse);
@@ -76,14 +74,14 @@ namespace Quick.OwinMVC.Middleware
                 return base.InvokeNotMatch(context);
             if (UseMemoryCache)
             {
-                var ms = new MemoryStream();
-                stream.CopyTo(ms);
-                lock (memoryCacheDict)
-                    memoryCacheDict[url] = ms.ToArray();
-                ms.Position = 0;
-                stream.Close();
-                stream.Dispose();
-                stream = ms;
+                lock (StreamCacheDict)
+                {
+                    var streamCache = new StreamCache(stream);
+                    StreamCacheDict[url] = streamCache;
+                    stream.Close();
+                    stream.Dispose();
+                    stream = streamCache.GetStream();
+                }
             }
             return handleResource(context, stream, resourceResponse.LastModified, resourceResponse.Uri.LocalPath, Expires, AddonHttpHeaders);
         }
@@ -111,10 +109,8 @@ namespace Quick.OwinMVC.Middleware
             {
                 foreach (var url in resourceUrlList)
                 {
-                    if (memoryCacheDict.ContainsKey(url))
-                    {
-                        return handleResource(context, new MemoryStream(memoryCacheDict[url]), null, url, expires, addonHttpHeaders);
-                    }
+                    if (StreamCacheDict.ContainsKey(url))
+                        return handleResource(context, StreamCacheDict[url].GetStream(), null, url, expires, addonHttpHeaders);
                 }
             }
 
@@ -127,14 +123,14 @@ namespace Quick.OwinMVC.Middleware
                 {
                     if (UseMemoryCache)
                     {
-                        var ms = new MemoryStream();
-                        stream.CopyTo(ms);
-                        lock (memoryCacheDict)
-                            memoryCacheDict[url] = ms.ToArray();
-                        ms.Position = 0;
-                        stream.Close();
-                        stream.Dispose();
-                        stream = ms;
+                        lock (StreamCacheDict)
+                        {
+                            var streamCache = new StreamCache(stream);
+                            StreamCacheDict[url] = streamCache;
+                            stream.Close();
+                            stream.Dispose();
+                            stream = streamCache.GetStream();
+                        }
                     }
                     return handleResource(context, stream, resourceResponse.LastModified, resourceResponse.Uri.LocalPath, expires, addonHttpHeaders);
                 }
@@ -169,7 +165,11 @@ namespace Quick.OwinMVC.Middleware
                 //ETag设置判断部分
                 String serverETag = null;
                 if (UseMd5ETag)
+                {
                     serverETag = HashUtils.ComputeETagByMd5(stream);
+                    if (stream.CanSeek)
+                        stream.Position = 0;
+                }
                 else
                     serverETag = lastModified.Value.Ticks.ToString();
                 var clientETag = req.Headers.Get("If-None-Match");
@@ -180,7 +180,6 @@ namespace Quick.OwinMVC.Middleware
                     return Task.Run(() => stream.Dispose());
                 }
                 rep.ETag = serverETag;
-                stream.Position = 0;
             }
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
             rep.Headers["Cache-Control"] = $"max-age={expires}";
