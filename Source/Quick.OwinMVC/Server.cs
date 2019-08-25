@@ -20,6 +20,7 @@ namespace Quick.OwinMVC
     public class Server : IPropertyHunter
     {
         internal static Server Instance { get; private set; }
+        public Action<IAppBuilder> AppBuilderAction { get; set; }
 
         internal IDictionary<String, String> properties;
         //所有的中间件
@@ -173,12 +174,12 @@ namespace Quick.OwinMVC
         }
 
         public void Start()
-        {
-            //APP构造器
-            //var appBuilder = new AppBuilder();          
+        {    
             //启动服务器
             server.Start(app =>
             {
+                //AppBuilder处理
+                AppBuilderAction?.Invoke(app);
                 //中间件上下文
                 app.Use<MiddlewareContext>();
                 //注册所有的中间件
