@@ -21,11 +21,13 @@ namespace SvnManage
         public void Start()
         {
             //PreMiddlewareManager.Instance.Register(middleware);
+            Quick.OwinMVC.WebSocket.WebSocketManager.Instance.Register<WebSockets.NowTime>();
         }
 
         public void Stop()
         {
             //PreMiddlewareManager.Instance.Unregister(middleware);
+            Quick.OwinMVC.WebSocket.WebSocketManager.Instance.Unregister<WebSockets.NowTime>();
         }
     }
 }

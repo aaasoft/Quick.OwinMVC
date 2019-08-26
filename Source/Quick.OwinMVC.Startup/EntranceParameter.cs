@@ -25,7 +25,6 @@ namespace Quick.OwinMVC.Startup
                     Properties = PropertyUtils.LoadFile(_ConfigFilePath);
             }
         }
-        public Action<IAppBuilder> AppBuilderAction { get; set; }
         /// <summary>
         /// 配置
         /// </summary>

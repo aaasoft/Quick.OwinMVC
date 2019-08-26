@@ -25,7 +25,6 @@ namespace Quick.OwinMVC.Startup.Service.Impl
         public void Start()
         {
             server = new Server(properties, WebServerUri);
-            server.AppBuilderAction = Entrance.Parameter.AppBuilderAction;
             server.Start();
             Console.Write("->地址：" + this.server.GetUrl());
         }

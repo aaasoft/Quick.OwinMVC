@@ -14,13 +14,13 @@ using Quick.OwinMVC.Resource;
 using Quick.OwinMVC.Localization;
 using Quick.OwinMVC.Plugin;
 using Quick.OwinMVC.Service;
+using Owin.WebSocket.Extensions;
 
 namespace Quick.OwinMVC
 {
     public class Server : IPropertyHunter
     {
         internal static Server Instance { get; private set; }
-        public Action<IAppBuilder> AppBuilderAction { get; set; }
 
         internal IDictionary<String, String> properties;
         //所有的中间件
@@ -178,8 +178,22 @@ namespace Quick.OwinMVC
             //启动服务器
             server.Start(app =>
             {
-                //AppBuilder处理
-                AppBuilderAction?.Invoke(app);
+                //注册WebSocket连接
+                IDictionary<string, Type> webSocketConnectionDict = WebSocket.WebSocketManager.Instance.GetConnectionTypeDict();
+                if (webSocketConnectionDict.Count > 0)
+                {
+                    var OwinExtensionType = typeof(OwinExtension);
+                    var MapWebSocketRouteMethod = OwinExtensionType.GetMethod(nameof(OwinExtension.MapWebSocketRoute), new Type[] { typeof(IAppBuilder), typeof(string), typeof(Microsoft.Practices.ServiceLocation.IServiceLocator) });
+
+                    foreach (var item in webSocketConnectionDict)
+                    {
+                        var route = item.Key;
+                        var connectionType = item.Value;
+
+                        var method = MapWebSocketRouteMethod.MakeGenericMethod(connectionType);
+                        method.Invoke(null, new object[] { app, route, null });
+                    }
+                }
                 //中间件上下文
                 app.Use<MiddlewareContext>();
                 //注册所有的中间件
