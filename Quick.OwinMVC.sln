@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26430.4
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC", "Source\Quick.OwinMVC\Quick.OwinMVC.csproj", "{17F47358-C8E5-49B2-BCAC-0B315F93E114}"
 EndProject
@@ -149,5 +149,8 @@ Global
 		{E30DACE1-AD25-49D6-8D0F-531345BCD436} = {B19DDEE8-6724-4592-B0F7-25D18A107624}
 		{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0} = {B19DDEE8-6724-4592-B0F7-25D18A107624}
 		{62FF4DBB-C721-472C-90CD-8C94735DA94C} = {7AB2CB70-AB73-49B7-8800-6479AFA60E6B}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {31B5EC58-A686-4866-B0E1-86E88975E60D}
 	EndGlobalSection
 EndGlobal
