@@ -9,7 +9,6 @@ namespace Quick.OwinMVC.WebSocket
 {
     public class WebSocketManager
     {
-        public const string PREFIX = "/ws";
         public static WebSocketManager Instance { get; } = new WebSocketManager();
         private List<Type> connectionList = new List<Type>();
 
@@ -21,7 +20,12 @@ namespace Quick.OwinMVC.WebSocket
                var typeName = type.FullName;
                if (typeName.StartsWith(assemblyName))
                    typeName = typeName.Substring(assemblyName.Length + 1);
-               return $"{PREFIX}/{assemblyName}/{typeName}";
+               var contextPath = Server.Instance.ContextPath;
+               if (string.IsNullOrEmpty(contextPath))
+                   contextPath = "/";
+               if (!contextPath.EndsWith("/"))
+                   contextPath = contextPath + "/";
+               return $"{contextPath}ws/{assemblyName}/{typeName}";
            };
 
         public void Register<T>()
