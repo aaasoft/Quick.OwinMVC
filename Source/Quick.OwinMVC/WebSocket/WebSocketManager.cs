@@ -23,6 +23,9 @@ namespace Quick.OwinMVC.WebSocket
                var contextPath = Server.Instance.ContextPath;
                if (string.IsNullOrEmpty(contextPath))
                    contextPath = "/";
+
+               if (!contextPath.StartsWith("/"))
+                   contextPath = "/" + contextPath;
                if (!contextPath.EndsWith("/"))
                    contextPath = contextPath + "/";
                return $"{contextPath}ws/{assemblyName}/{typeName}";
