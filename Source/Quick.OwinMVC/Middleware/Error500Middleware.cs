@@ -44,6 +44,7 @@ namespace Quick.OwinMVC.Middleware
 
         public override async Task Invoke(IOwinContext context)
         {
+            context.Response.Headers.Add("Server", new[] { "" });
             try
             {
                 await Next.Invoke(context);
