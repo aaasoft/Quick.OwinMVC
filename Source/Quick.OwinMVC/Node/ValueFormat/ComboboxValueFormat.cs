@@ -31,8 +31,11 @@ namespace Quick.OwinMVC.Node.ValueFormat
                 var valueTransfer = System.Activator.CreateInstance(type) as IValueTransfer;
                 if (valueTransfer == null)
                     return;
-                Values = (valueTransfer.GetValue() as IEnumerable<KeyValuePair<String, String>>)?
-                    .ToList();
+                var values = valueTransfer.GetValue() as IEnumerable<KeyValuePair<String, String>>;
+                if (values == null)
+                    Values = null;
+                else
+                    Values = values.ToList();
             }
         }
 
@@ -75,7 +78,7 @@ namespace Quick.OwinMVC.Node.ValueFormat
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public String SubLabel { get; set; }
 
-        public Boolean OnChage { get; set; } = false;
+        public Boolean OnChage { get; set; }
 
         public Enum GetValueEnum(Object value)
         {
@@ -88,6 +91,11 @@ namespace Quick.OwinMVC.Node.ValueFormat
             {
                 return Enum.ToObject(enumType, value) as Enum;
             }
+        }
+
+        public ComboboxValueFormat()
+        {
+            OnChage = false;
         }
 
         public void Handle(TextManager textManager, FormFieldInfo field)

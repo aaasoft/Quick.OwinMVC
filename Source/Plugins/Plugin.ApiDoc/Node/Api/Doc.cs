@@ -17,15 +17,15 @@ namespace Plugin.ApiDoc.Node.Api
 
         public class Get : AbstractMethod<DocParameter>
         {
-            public override string Name { get; } = "获取API文档";
-            public override string[] Tags { get; } = { "doc", "api", "internal", "hidden" };
+            public override string Name { get { return "获取API文档"; } }
+            public override string[] Tags { get { return new[] { "doc", "api", "internal", "hidden" }; } }
 
             public override object Invoke(IOwinContext context, DocParameter input)
             {
                 var req = context.Request;
                 var contextPath = req.Get<String>("ContextPath");
 
-                Utils.OutputXml(context, input, $"{contextPath}{this.GetType().Assembly.GetName().Name}/resource/api/doc.xslt", input.Output == DocOutput.XML);
+                Utils.OutputXml(context, input, string.Format("{0}{1}/resource/api/doc.xslt", contextPath, this.GetType().Assembly.GetName().Name), input.Output == DocOutput.XML);
                 throw NodeMethodHandledException.Instance;
             }
         }

@@ -18,7 +18,12 @@ namespace Quick.OwinMVC.Node.ValueFormat
 
         public string FileType { set; get; }
 
-        public string FolderName { set; get; } = "default";
+        public string FolderName { set; get; }
+
+        public FileValueFormat()
+        {
+            FolderName = "default";
+        }
 
         public void Handle(TextManager textManager, FormFieldInfo field)
         {

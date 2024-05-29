@@ -60,25 +60,25 @@ namespace Quick.OwinMVC.Startup.Buttons
 
         private void InstallButton_Click(object sender, EventArgs e)
         {
-            try { ProgramUtils.StartSelfProcess("-install", true)?.WaitForExit(); }
+            try { ProgramUtils.StartSelfProcess("-install", true).WaitForExit(); }
             catch { MessageBox.Show("安装服务失败!"); }
         }
 
         private void UninstallButton_Click(object sender, EventArgs e)
         {
-            try { ProgramUtils.StartSelfProcess("-uninstall", true)?.WaitForExit(); }
+            try { ProgramUtils.StartSelfProcess("-uninstall", true).WaitForExit(); }
             catch { MessageBox.Show("卸载服务失败!"); }
         }
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            try { ProgramUtils.StartSelfProcess("-start", true)?.WaitForExit(); }
+            try { ProgramUtils.StartSelfProcess("-start", true).WaitForExit(); }
             catch { MessageBox.Show("启动服务失败!"); }
         }
 
         private void StopButton_Click(object sender, EventArgs e)
         {
-            try { ProgramUtils.StartSelfProcess("-stop", true)?.WaitForExit(); }
+            try { ProgramUtils.StartSelfProcess("-stop", true).WaitForExit(); }
             catch { MessageBox.Show("停止服务失败!"); }
         }
 

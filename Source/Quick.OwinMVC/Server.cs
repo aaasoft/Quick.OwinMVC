@@ -54,9 +54,9 @@ namespace Quick.OwinMVC
             var defaultPort = 80;
 
             if (url == null)
-                url = $"{protocol}://{endpoint.Address.ToString()}";
+                url = string.Format("{0}://{1}",protocol,endpoint.Address);
             if (endpoint.Port != defaultPort)
-                url += $":{endpoint.Port}";
+                url += ":"+endpoint.Port;
             if (!IsRootContextPath)
                 url += ContextPath;
             return url;
@@ -107,23 +107,23 @@ namespace Quick.OwinMVC
         {
             switch (key)
             {
-                case nameof(ContextPath):
+                case "ContextPath":
                     var contextPath = string.Empty;
                     if (string.IsNullOrEmpty(value)
                         || value == "/")
                         contextPath = "/";
                     else
-                        contextPath = $"/{value}/";
+                        contextPath = string.Format("/{0}/", value);
                     ContextPath = contextPath;
                     break;
-                case nameof(Middlewares):
+                case "Middlewares":
                     value.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                         .ToList().ForEach(t => RegisterMiddleware(AssemblyUtils.GetType(t)));
                     break;
-                case nameof(Wrapper):
+                case "Wrapper":
                     Wrapper = value;
                     break;
-                case nameof(TextManager.DefaultLanguage):
+                case "DefaultLanguage":
                     TextManager.DefaultLanguage = value;
                     break;
             }
@@ -183,7 +183,7 @@ namespace Quick.OwinMVC
                 if (webSocketConnectionDict.Count > 0)
                 {
                     var OwinExtensionType = typeof(OwinExtension);
-                    var MapWebSocketRouteMethod = OwinExtensionType.GetMethod(nameof(OwinExtension.MapWebSocketRoute), new Type[] { typeof(IAppBuilder), typeof(string), typeof(Microsoft.Practices.ServiceLocation.IServiceLocator) });
+                    var MapWebSocketRouteMethod = OwinExtensionType.GetMethod("MapWebSocketRoute", new Type[] { typeof(IAppBuilder), typeof(string), typeof(Microsoft.Practices.ServiceLocation.IServiceLocator) });
 
                     foreach (var item in webSocketConnectionDict)
                     {

@@ -20,7 +20,7 @@ namespace Quick.OwinMVC.Startup.Service.Impl
 
         private Server server = null;
 
-        public String Name { get; } = "WEB服务";
+        public String Name { get { return "WEB服务"; } }
 
         public void Start()
         {
@@ -39,7 +39,7 @@ namespace Quick.OwinMVC.Startup.Service.Impl
         {
             switch (key)
             {
-                case nameof(WebServerUri):
+                case "WebServerUri":
                     WebServerUri = new Uri(value);
                     break;
             }

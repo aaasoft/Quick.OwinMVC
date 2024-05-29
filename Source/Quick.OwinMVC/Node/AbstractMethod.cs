@@ -16,27 +16,27 @@ namespace Quick.OwinMVC.Node
         public String Path { get; set; }
         public String HttpMethod { get; set; }
         public abstract string Name { get; }
-        public string ContextPath => Server.Instance.ContextPath;
-        public virtual Type InputType { get; } = null;
-        public virtual string Description { get; } = String.Empty;
-        public virtual string InvokeExample { get; } = String.Empty;
+        public string ContextPath {get{return Server.Instance.ContextPath;}}
+        public virtual Type InputType { get;private set; }
+        public virtual string Description { get; private set; }
+        public virtual string InvokeExample { get; private set; }
         public virtual string ReturnValueExample
         {
             get
             {
                 if (HttpMethod == AbstractNode.HTTP_METHOD_POST)
                 {
-                    return $@"成功时示例：
-{JsonConvert.SerializeObject(ApiResult.Success($"{Name}成功"), Formatting.Indented)}
-
+                    return string.Format(@"成功时示例：
+{0}
 失败时示例：
-{JsonConvert.SerializeObject(ApiResult.Error($"{Name}失败"), Formatting.Indented)}
-";
+{1}
+",JsonConvert.SerializeObject(ApiResult.Success(Name+"成功"), Formatting.Indented),
+JsonConvert.SerializeObject(ApiResult.Error(Name+"失败"), Formatting.Indented));
                 }
                 return String.Empty;
             }
         }
-        public virtual string[] Tags { get; }
+        public virtual string[] Tags { get; private set; }
 
         /// <summary>
         /// 处理文件上传
@@ -69,7 +69,8 @@ namespace Quick.OwinMVC.Node
     public abstract class AbstractMethod<TInput> : AbstractMethod
                 where TInput : class
     {
-        public override Type InputType { get; } = typeof(TInput);
+        private Type _InputType;
+        public override Type InputType { get { return _InputType; } }
 
         [TextResource]
         private enum Texts
@@ -77,13 +78,22 @@ namespace Quick.OwinMVC.Node
             [Text("传入参数错误，请检查参数是否正确。{0}")]
             ARGUMENT_ERROR = 410
         }
+
+        public AbstractMethod()
+        {
+            _InputType = typeof(TInput);
+        }
+
         /// <summary>
         /// 处理参数
         /// </summary>
         /// <param name="context"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        public virtual TInput HandleParameter(IOwinContext context, TInput input) => input;
+        public virtual TInput HandleParameter(IOwinContext context, TInput input)
+        {
+            return input;
+        }
 
         public override object Invoke(IOwinContext context)
         {

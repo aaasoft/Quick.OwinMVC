@@ -29,7 +29,8 @@ namespace Quick.OwinMVC.Manager
                 OwinMiddleware preMiddleware = null;
                 foreach (var middleware in GetItems())
                 {
-                    if (Server.Instance?.properties != null)
+
+                    if (Server.Instance!=null && Server.Instance.properties != null)
                         HunterUtils.TryHunt(middleware, Server.Instance.properties);
 
                     if (preMiddleware != null)
@@ -45,7 +46,7 @@ namespace Quick.OwinMVC.Manager
 
         public override void Register(OwinMiddleware item)
         {
-            if (Server.Instance?.properties != null)
+            if (Server.Instance!=null && Server.Instance.properties != null)
                 HunterUtils.TryHunt(item, Server.Instance.properties);
 
             var preLastMiddleware = GetItems().LastOrDefault();

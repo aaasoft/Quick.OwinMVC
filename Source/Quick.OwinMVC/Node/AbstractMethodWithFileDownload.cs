@@ -30,7 +30,7 @@ namespace Quick.OwinMVC.Node
             if (!string.IsNullOrEmpty(result.FileName))
             {
                 var encodedFileName = System.Net.WebUtility.UrlEncode(result.FileName);
-                rep.Headers["Content-Disposition"] = $"attachment; filename=\"{encodedFileName}\"";
+                rep.Headers["Content-Disposition"] = string.Format("attachment; filename=\"{0}\"", encodedFileName);
             }
             //内容大小
             rep.ContentLength = result.ContentLength;

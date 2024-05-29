@@ -82,7 +82,7 @@ namespace Quick.OwinMVC.Resource
                     dirName = dirHandler(dirName);
                     dirName = dirName.Replace(".", "._");
 
-                    resourceNameList.Add(fileNameHandler.Invoke($"{dirName}/{fileName}"));
+                    resourceNameList.Add(fileNameHandler.Invoke(string.Format("{0}/{1}",dirName,fileName)));
                 }
                 resourceNameList.Add(resourceName);
 
@@ -92,7 +92,7 @@ namespace Quick.OwinMVC.Resource
 
                 foreach (var currentResourceName in resourceNameList)
                 {
-                    var fullResourceName = $"{assemblyName}.{currentResourceName}";
+                    var fullResourceName = string.Format("{0}.{1}", assemblyName, currentResourceName);
                     resourceInfo = Assembly.GetManifestResourceInfo(fullResourceName);
                     if (resourceInfo != null)
                     {

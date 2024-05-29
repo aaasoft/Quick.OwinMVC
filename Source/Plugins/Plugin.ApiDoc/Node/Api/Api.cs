@@ -9,7 +9,7 @@ namespace Plugin.ApiDoc.Node.Api
 {
     public class Api : AbstractNode
     {
-        public override string Name { get; } = "API";
+        public override string Name { get { return "API"; } }
 
         public Api(params INode[] nodes) : base(nodes) { }
     }

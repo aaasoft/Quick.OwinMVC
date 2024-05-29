@@ -12,7 +12,8 @@ namespace Quick.OwinMVC.Node
 {
     public class NodeManager : INode
     {
-        public static NodeManager Instance { get; } = new NodeManager();
+        private static NodeManager _Instance = new NodeManager();
+        public static NodeManager Instance { get{return _Instance;} }
 
         private Dictionary<String, INode> dict = new Dictionary<string, INode>();
         private Dictionary<string, IMethod> methodDict = new Dictionary<string, IMethod>();
@@ -69,9 +70,9 @@ namespace Quick.OwinMVC.Node
                 dict.Remove(t.Id);
         }
 
-        string INode.Id { get; } = null;
+        string INode.Id { get { return null; } }
 
-        string INode.Name { get; } = null;
+        string INode.Name { get { return null; } }
 
         INode[] INode.GetChildren()
         {

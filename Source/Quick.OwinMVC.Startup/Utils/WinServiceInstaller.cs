@@ -26,10 +26,10 @@ namespace Quick.OwinMVC.Startup.Utils
         {
             switch (key)
             {
-                case nameof(ServiceName):
+                case "ServiceName":
                     ServiceName = value;
                     break;
-                case nameof(Description):
+                case "Description":
                     Description = value;
                     break;
             }
@@ -40,7 +40,7 @@ namespace Quick.OwinMVC.Startup.Utils
             DotNetServiceInstaller installer = new DotNetServiceInstaller();
             ServiceInstallInfo installInfo = new ServiceInstallInfo();
             // -service
-            installInfo.ServiceFilePath = $"\"{Assembly.GetEntryAssembly().Location}\" -service";
+            installInfo.ServiceFilePath = string.Format("\"{0}\" -service",Assembly.GetEntryAssembly().Location);
             installInfo.ServiceName = ServiceName;
             installInfo.DisplayName = DisplayName;
             installInfo.Description = Description;
@@ -90,7 +90,7 @@ namespace Quick.OwinMVC.Startup.Utils
             catch
             {
                 if (showMsg)
-                    MessageBox.Show($"服务[{ServiceName}]不存在！");
+                    MessageBox.Show(string.Format("服务[{0}]不存在！", ServiceName));
                 return null;
             }
         }

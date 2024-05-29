@@ -35,7 +35,7 @@ namespace Quick.OwinMVC.Startup.Static
         /// <param name="e"></param>
         private static void ThreadExceptionCallbackFun(object sender, ThreadExceptionEventArgs e)
         {
-            Console.WriteLine($"发生严重未处理线程异常.异常:{Environment.NewLine}{e.Exception.ToString()}");
+            Console.WriteLine(string.Format("发生严重未处理线程异常.异常:{0}{1}", Environment.NewLine, e.Exception));
         }
     }
 }

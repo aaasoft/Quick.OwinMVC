@@ -62,15 +62,15 @@ namespace Quick.OwinMVC.Server.Microsoft
             if (endpoint.Address == IPAddress.Any)
             {
                 if (IsUserAdministrator())
-                    options.Urls.Add($"http://*:{endpoint.Port}");
+                    options.Urls.Add(string.Format("http://*:{0}", endpoint.Port));
                 else
                 {
                     endpoint.Address = IPAddress.Loopback;
-                    options.Urls.Add($"http://{endpoint.Address}:{endpoint.Port}");
+                    options.Urls.Add(string.Format("http://{0}:{1}", endpoint.Address, endpoint.Port));
                 }
             }
             else
-                options.Urls.Add($"http://{endpoint.Address}:{endpoint.Port}");
+                options.Urls.Add(string.Format("http://{0}:{1}", endpoint.Address, endpoint.Port));
             webApp = WebApp.Start(options, startup =>
             {
                 app(startup);

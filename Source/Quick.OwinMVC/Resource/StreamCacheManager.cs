@@ -24,13 +24,22 @@ namespace Quick.OwinMVC.Resource
         /// <summary>
         /// 缓存数量
         /// </summary>
-        public int CacheCount => dict.Count;
+        public int CacheCount 
+        {
+            get
+            {
+                return dict.Count;
+            }
+        }
 
         /// <summary>
         /// 获取全部的缓存大小 
         /// </summary>
         /// <returns></returns>
-        public long GetTotalCacheSize() => dict.Sum(t => t.Value.ActualSize);
+        public long GetTotalCacheSize() 
+        {
+            return  dict.Sum(t => t.Value.ActualSize);
+        }
 
         public void AddCache(string id, StreamCache cache)
         {

@@ -16,11 +16,11 @@ namespace Quick.OwinMVC.Middleware
     public class ResourceMiddleware : AbstractPluginPathMiddleware, IPropertyHunter, IAssemblyHunter
     {
         //(资源的缓存过期时间，单位：秒)默认一天
-        public double Expires { get; private set; } = 86400;
+        public double Expires { get; private set; }
         //资源的ETag是否使用MD5值
-        public Boolean UseMd5ETag { get; private set; } = false;
+        public Boolean UseMd5ETag { get; private set; }
         //使用内存缓存
-        public bool UseMemoryCache { get; private set; } = false;
+        public bool UseMemoryCache { get; private set; }
 
         public static StreamCacheManager StreamCacheManager = new StreamCacheManager();
 
@@ -37,6 +37,10 @@ namespace Quick.OwinMVC.Middleware
 
         public ResourceMiddleware(OwinMiddleware next) : base(next)
         {
+            Expires = 86400;
+            UseMd5ETag = false;
+            UseMemoryCache = false;
+
             resourceWebRequestFactory = new ResourceWebRequestFactory();
             resourceWebRequestFactory.AssemblyMap = new Dictionary<String, Assembly>();
             //注册resource:前缀URI处理程序
@@ -49,7 +53,9 @@ namespace Quick.OwinMVC.Middleware
             response = null;
             try { response = WebRequest.Create(uri).GetResponse() as ResourceWebResponse; }
             catch { }
-            var stream = response?.GetResponseStream();
+            if(response==null)
+                return null;
+            var stream = response.GetResponseStream();
             return stream;
         }
 
@@ -62,7 +68,7 @@ namespace Quick.OwinMVC.Middleware
                 && requestPath.StartsWith(contextPath)
                 && requestPath.Length > contextPath.Length)
                 requestPath = requestPath.Substring(Server.Instance.ContextPath.Length - 1);
-            var url = $"resource://0{requestPath}";
+            var url = string.Format("resource://0{0}",requestPath);
             if (UseMemoryCache)
             {
                 var streamCache = StreamCacheManager.GetCache(url);
@@ -95,14 +101,14 @@ namespace Quick.OwinMVC.Middleware
         {
             //加前缀
             if (!String.IsNullOrEmpty(prefix))
-                path = $"{prefix}/{path}";
+                path = string.Format("{0}/{1}",prefix,path);
 
             List<String> resourceUrlList = new List<string>();
-            resourceUrlList.Add($"resource://{plugin}/{path}");
+            resourceUrlList.Add(string.Format("resource://{0}/{1}",plugin,path));
             //加后缀
             if (!String.IsNullOrEmpty(suffix))
-                path = $"{path}{suffix}";
-            resourceUrlList.Add($"resource://{plugin}/{path}");
+                path = string.Format("{0}{1}",path,suffix);
+            resourceUrlList.Add(string.Format("resource://{0}/{1}",plugin,path));
 
             //先尝试从缓存中获取
             if (UseMemoryCache)
@@ -182,7 +188,7 @@ namespace Quick.OwinMVC.Middleware
                 rep.ETag = serverETag;
             }
             rep.Expires = new DateTimeOffset(DateTime.Now.AddSeconds(expires));
-            rep.Headers["Cache-Control"] = $"max-age={expires}";
+            rep.Headers["Cache-Control"] = "max-age="+expires;
             if (lastModified.HasValue)
                 rep.Headers["Last-Modified"] = lastModified.Value.ToUniversalTime().ToString("R");
             return context.Output(stream, true, EnableCompress, path, addonHttpHeaders);
@@ -192,16 +198,16 @@ namespace Quick.OwinMVC.Middleware
         {
             switch (key)
             {
-                case nameof(StaticFileFolder):
+                case "StaticFileFolder":
                     resourceWebRequestFactory.StaticFileFolder = value;
                     break;
-                case nameof(Expires):
+                case "Expires":
                     Expires = double.Parse(value);
                     break;
-                case nameof(UseMd5ETag):
+                case "UseMd5ETag":
                     UseMd5ETag = Boolean.Parse(value);
                     break;
-                case nameof(UseMemoryCache):
+                case "UseMemoryCache":
                     UseMemoryCache = Boolean.Parse(value);
                     break;
             }

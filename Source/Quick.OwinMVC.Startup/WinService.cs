@@ -54,11 +54,11 @@ namespace Quick.OwinMVC.Startup
             //启动所有服务
             foreach (var service in ServiceManager.Instance.GetItems())
             {
-                Console.Write($"服务[{service.Name}]");
+                Console.Write(string.Format("服务[{0}]",service.Name));
                 HunterUtils.TryHunt(service, Entrance.Parameter.Properties);
-                Console.Write($"->启动中");
+                Console.Write("->启动中");
                 service.Start();
-                Console.WriteLine($"->完成");
+                Console.WriteLine("->完成");
             }
 
             if (Entrance.Parameter.OnServiceStarted != null)

@@ -11,12 +11,13 @@ namespace Quick.OwinMVC.Middleware
     public class StaticViewMiddleware : AbstractPluginPathMiddleware, IPropertyHunter
     {
         //过期时间(默认1秒)
-        public double Expires { get; private set; } = 1;
+        public double Expires { get; private set; }
         //视图文件后缀
         public string ViewFileSuffix { get; private set; }
 
         public StaticViewMiddleware(OwinMiddleware next) : base(next)
         {
+            Expires = 1;
         }
 
         public override void Hunt(string key, string value)
@@ -24,7 +25,7 @@ namespace Quick.OwinMVC.Middleware
             base.Hunt(key, value);
             switch (key)
             {
-                case nameof(ViewFileSuffix):
+                case "ViewFileSuffix":
                     ViewFileSuffix = value;
                     break;
             }

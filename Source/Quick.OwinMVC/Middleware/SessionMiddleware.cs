@@ -12,7 +12,7 @@ namespace Quick.OwinMVC.Middleware
 {
     public class SessionMiddleware : OwinMiddleware, IPropertyHunter
     {
-        private static readonly String SESSION_KEY = $"{typeof(SessionMiddleware).FullName}.{nameof(SESSION_KEY)}";
+        private static readonly String SESSION_KEY = typeof(SessionMiddleware).FullName + ".SESSION_KEY";
 
         //Session的ID键
         private String IdKey = "sid";
@@ -43,13 +43,13 @@ namespace Quick.OwinMVC.Middleware
         {
             switch (key)
             {
-                case nameof(IdKey):
+                case "IdKey":
                     IdKey = value;
                     break;
-                case nameof(Expires):
+                case "Expires":
                     Expires = Int32.Parse(value);
                     break;
-                case nameof(CheckExpirePeriods):
+                case "CheckExpirePeriods":
                     CheckExpirePeriods = Int32.Parse(value);
                     break;
             }
@@ -57,7 +57,10 @@ namespace Quick.OwinMVC.Middleware
 
         public static string GetSessionId(IOwinContext context)
         {
-            return context.Get<SessionInfo>(SESSION_KEY)?.SessionId;
+            var sessionInfo = context.Get<SessionInfo>(SESSION_KEY);
+            if(sessionInfo!=null)
+                return sessionInfo.SessionId;
+            return null;
         }
 
         public static IDictionary<String, Object> GetSession(IOwinContext context)

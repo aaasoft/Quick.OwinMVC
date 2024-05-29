@@ -25,7 +25,7 @@ namespace Quick.OwinMVC
 {
     public static class IOwinContextExtension
     {
-        private static readonly String FORMDATA_KEY = $"{typeof(IOwinContextExtension).FullName}.{nameof(FORMDATA_KEY)}";
+        private static readonly String FORMDATA_KEY = typeof(IOwinContextExtension).FullName+ ".FORMDATA_KEY";
         public static readonly String ACCEPT_LANGUAGE_KEY = "Accept-Language";
 
         /// <summary>

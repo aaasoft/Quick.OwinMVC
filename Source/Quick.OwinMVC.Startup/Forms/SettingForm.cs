@@ -93,14 +93,14 @@ namespace Quick.OwinMVC.Startup.Forms
             var configContent = getConfigContent(Entrance.Parameter.ConfigFilePath);
             if (configContent == null)
             {
-                MessageBox.Show($"配置文件[{Entrance.Parameter.ConfigFilePath}]不存在或者无法打开！");
+                MessageBox.Show(string.Format("配置文件[{0}]不存在或者无法打开！",Entrance.Parameter.ConfigFilePath));
                 this.Close();
                 return;
             }
             var match = webServerRegex.Match(configContent);
             if (match == null)
             {
-                MessageBox.Show($"配置文件[{Entrance.Parameter.ConfigFilePath}]中缺少配置项[{WebServerUrlKey}]！");
+                MessageBox.Show(string.Format("配置文件[{0}]中缺少配置项[{1}]！",Entrance.Parameter.ConfigFilePath,WebServerUrlKey));
                 this.Close();
                 return;
             }
@@ -109,7 +109,7 @@ namespace Quick.OwinMVC.Startup.Forms
             try { uri = new Uri(url); }
             catch
             {
-                MessageBox.Show($"配置文件[{Entrance.Parameter.ConfigFilePath}]中配置项[{WebServerUrlKey}]的值格式不正确！");
+                MessageBox.Show(string.Format("配置文件[{0}]中配置项[{1}]的值格式不正确！",Entrance.Parameter.ConfigFilePath,WebServerUrlKey));
                 this.Close();
                 return;
             }
@@ -130,14 +130,14 @@ namespace Quick.OwinMVC.Startup.Forms
             var configContent = getConfigContent(Entrance.Parameter.ConfigFilePath);
             if (configContent == null)
             {
-                MessageBox.Show($"配置文件[{Entrance.Parameter.ConfigFilePath}]不存在或者无法打开！");
+                MessageBox.Show(string.Format("配置文件[{0}]不存在或者无法打开！",Entrance.Parameter.ConfigFilePath));
                 this.Close();
                 return;
             }
             configContent = webServerRegex.Replace(configContent, match =>
              {
                  var group = match.Groups["value"];
-                 return $"{WebServerUrlKey} = net://{getIPAddress()}:{nudWebServer_Port.Value}";
+                 return string.Format("{0} = net://{1}:{2}", WebServerUrlKey, getIPAddress(), nudWebServer_Port.Value);
              });
             File.WriteAllText(Entrance.Parameter.ConfigFilePath, configContent);
         }

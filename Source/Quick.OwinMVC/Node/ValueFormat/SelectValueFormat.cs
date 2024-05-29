@@ -44,9 +44,15 @@ namespace Quick.OwinMVC.Node.ValueFormat
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public String Parameter { get; set; }
-        public Boolean OnChage { get; set; } = false;
+        public Boolean OnChage { get; set; }
 
         public String TriggerField { get; set; }
+
+        public SelectValueFormat()
+        {
+            OnChage = false;
+        }
+
 
         public void Handle(TextManager textManager, FormFieldInfo field)
         {

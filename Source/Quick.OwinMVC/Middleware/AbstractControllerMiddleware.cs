@@ -20,7 +20,7 @@ namespace Quick.OwinMVC.Middleware
 
         internal void RegisterController(string plugin, string path, T controller)
         {
-            controllerDict[$"{plugin}:{path}"] = controller;
+            controllerDict[string.Format("{0}:{1}",plugin,path)] = controller;
             HunterUtils.TryHunt(controller, properties);
         }
 
@@ -48,7 +48,7 @@ namespace Quick.OwinMVC.Middleware
         public override Task Invoke(IOwinContext context, string plugin, string path)
         {
             //构造key
-            var key = $"{plugin}:{path}";
+            var key = string.Format("{0}:{1}", plugin, path);
             //然后查找控制器
             if (!controllerDict.ContainsKey(key))
                 return Next.Invoke(context);

@@ -26,7 +26,7 @@ namespace Quick.OwinMVC.Middleware
         /// <summary>
         /// 是否启用压缩
         /// </summary>
-        protected bool EnableCompress { get; set; } = false;
+        protected bool EnableCompress { get; set; }
         /// <summary>
         /// 额外的HTTP头
         /// </summary>
@@ -36,6 +36,7 @@ namespace Quick.OwinMVC.Middleware
 
         public AbstractPluginPathMiddleware(OwinMiddleware next) : base(next)
         {
+            EnableCompress = false;
         }
 
         public virtual Task InvokeNotMatch(IOwinContext context)
@@ -81,15 +82,15 @@ namespace Quick.OwinMVC.Middleware
         {
             switch (key)
             {
-                case nameof(EnableCompress):
+                case "EnableCompress":
                     EnableCompress = bool.Parse(value);
                     break;
-                case nameof(Route):
+                case "Route":
                     Route = value;
-                    String fullRoute = $"{Server.Instance.ContextPath}:{QOMVC_PLUGIN_KEY}/{Route}/:{QOMVC_PATH_KEY}";
+                    String fullRoute = string.Format("{0}:{1}/{2}/:{3}", Server.Instance.ContextPath, QOMVC_PLUGIN_KEY, Route, QOMVC_PATH_KEY);
                     route = RouteBuilder.RouteToRegex(fullRoute);
                     break;
-                case nameof(AddonHttpHeaders):
+                case "AddonHttpHeaders":
                     AddonHttpHeaders = new Dictionary<string, string>();
                     foreach (var headerKeyValue in value.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                     {

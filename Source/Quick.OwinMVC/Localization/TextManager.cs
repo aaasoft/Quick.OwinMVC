@@ -12,9 +12,9 @@ namespace Quick.OwinMVC.Localization
 {
     public class TextManager
     {
-        public static String LanguageFileExtension { get; set; } = ".txt";
-        public static String LanguageFolder { get; set; } = "Language";
-        public static String LanguagePathInAssembly { get; set; } = "Language";
+        public static String LanguageFileExtension { get; set; }
+        public static String LanguageFolder { get; set; }
+        public static String LanguagePathInAssembly { get; set; }
 
         private static Dictionary<String, TextManager> textManagerDict = new Dictionary<string, TextManager>();
 
@@ -25,7 +25,7 @@ namespace Quick.OwinMVC.Localization
         /// <summary>
         /// 默认语言
         /// </summary>
-        public static String DefaultLanguage { get; set; } = "zh-CN";
+        public static String DefaultLanguage { get; set; }
 
         /// <summary>
         /// 获取文本管理器实例
@@ -119,6 +119,10 @@ namespace Quick.OwinMVC.Localization
 
         private TextManager(String language)
         {
+            LanguageFileExtension= ".txt";
+            LanguageFolder  = "Language";
+            LanguagePathInAssembly = "Language";
+            DefaultLanguage = "zh-CN";
             this.language = language;
         }
 
@@ -142,7 +146,7 @@ namespace Quick.OwinMVC.Localization
         /// <returns></returns>
         public String GetTextWithTail(Enum key, params Object[] args)
         {
-            return $"{GetText(key, args)}(LanguageKey: {key.GetType().FullName}.{key.ToString()})";
+            return string.Format("{0}(LanguageKey: {1}.{2})", GetText(key, args), key.GetType().FullName, key);
         }
 
         public String GetText(String key, Type type)
@@ -150,7 +154,7 @@ namespace Quick.OwinMVC.Localization
             Dictionary<String, String> languageResourceDict = getLanguageResourceDict(type);
             if (languageResourceDict == null
                 || !languageResourceDict.ContainsKey(key))
-                return $"Language Resource[Type:{type.FullName}, Key:{key}] not found!";
+                return string.Format("Language Resource[Type:{0}, Key:{1}] not found!",type.FullName,key);
             return languageResourceDict[key];
         }
 

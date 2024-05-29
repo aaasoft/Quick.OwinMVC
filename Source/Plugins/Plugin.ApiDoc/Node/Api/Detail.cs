@@ -10,7 +10,7 @@ namespace Plugin.ApiDoc.Node.Api
 {
     public class Detail : AbstractNode
     {
-        public override string Name => "详情";
+        public override string Name { get { return "详情"; } }
 
         public Detail()
         {
@@ -19,16 +19,15 @@ namespace Plugin.ApiDoc.Node.Api
 
         public class GetParameter
         {
-            [FormFieldInfo(Key = nameof(Id), Name = "API编号", Description = "例如：/api/Api/Detail:GET", NotEmpty = true)]
+            [FormFieldInfo(Key = "Id", Name = "API编号", Description = "例如：/api/Api/Detail:GET", NotEmpty = true)]
             public String Id { get; set; }
         }
 
         public class Get : AbstractMethod<GetParameter>
         {
-            public override string Name { get; } = "获取API接口详情";
-            public override string[] Tags { get; } = { "api", "internal" };
-            public override string ReturnValueExample { get; } =
-@"{
+            public override string Name { get{return "获取API接口详情";}}
+            public override string[] Tags { get{return new []{ "api", "internal" };} }
+            public override string ReturnValueExample { get{return @"{
     ""code"": 0,
     ""message"": ""获取API接口详情成功"",
     ""data"": {
@@ -62,12 +61,12 @@ namespace Plugin.ApiDoc.Node.Api
             }
         ]
     }
-}";
+}";} }
             public override object Invoke(IOwinContext context, GetParameter input)
             {
                 var idArray = input.Id.Split(new Char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 if (idArray.Length < 2)
-                    throw new NodeMethodException($"[{input.Id}]不是有效的API编号！");
+                    throw new NodeMethodException(string.Format("[{0}]不是有效的API编号！",input.Id));
 
                 var req = context.Request;
                 var contextPath = req.Get<String>("ContextPath");
@@ -85,12 +84,12 @@ namespace Plugin.ApiDoc.Node.Api
                     var currentSegment = currentSegments.First();
                     currentNode = currentNode.GetChild(currentSegment);
                     if (currentNode == null)
-                        throw new NodeMethodException($"未找到路径为[{path}]的节点！");
+                        throw new NodeMethodException(string.Format("未找到路径为[{0}]的节点！",path));
                     currentSegments = currentSegments.Skip(1);
                 }
                 var nodeMethod = currentNode.GetMethod(httpMethod);
                 if (nodeMethod == null)
-                    throw new NodeMethodException($"路径为[{path}]的节点没有[{httpMethod}]方法！");
+                    throw new NodeMethodException(string.Format("路径为[{0}]的节点没有[{1}]方法！",path,httpMethod));
 
                 return new
                 {

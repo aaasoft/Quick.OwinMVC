@@ -39,7 +39,7 @@ namespace Quick.OwinMVC.Middleware
             else
             {
                 rep.ContentType = "application/x-javascript";
-                result = $"{jsonpCallback}({json})";
+                result = string.Format("{0}({1})", jsonpCallback, json);
             }
             rep.Expires = new DateTimeOffset(DateTime.Now);
             await context.Output(encoding.GetBytes(result), EnableCompress);

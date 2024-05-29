@@ -18,7 +18,8 @@ namespace Quick.OwinMVC.Startup.Utils
     /// </summary>
     public class DotNetServiceInstaller
     {
-        public static DotNetServiceInstaller Instance { get; } = new DotNetServiceInstaller();
+        private static DotNetServiceInstaller _Instance = new DotNetServiceInstaller();
+        public static DotNetServiceInstaller Instance { get { return _Instance; } }
 
         [TextResource]
         public enum Texts

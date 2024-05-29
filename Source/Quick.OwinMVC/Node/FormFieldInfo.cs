@@ -39,7 +39,7 @@ namespace Quick.OwinMVC.Node
                     if (genericType == typeof(Nullable<>))
                         return FieldType.GenericTypeArguments.First().Name;
                     if (typeof(IEnumerable<>).IsAssignableFrom(genericType))
-                        return $"{FieldType.GenericTypeArguments.First().Name}[]";
+                        return FieldType.GenericTypeArguments.First().Name+"[]";
                 }
                 return FieldType.Name;
             }

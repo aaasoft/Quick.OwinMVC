@@ -39,7 +39,7 @@ namespace Quick.OwinMVC.Program
             };
 #if DEBUG
             //修改调试的WEB服务端口为8094
-            var webServerUriKey = $"{typeof(Startup.Service.Impl.WebServerService).FullName}.{nameof(Startup.Service.Impl.WebServerService.WebServerUri)}";
+            var webServerUriKey = string.Format("{0}.{1}", typeof(Startup.Service.Impl.WebServerService).FullName, "WebServerUri");
             if (parameter.Properties.ContainsKey(webServerUriKey))
                 parameter.Properties[webServerUriKey] = "net://0.0.0.0:8094";
 #endif
@@ -54,12 +54,18 @@ namespace Quick.OwinMVC.Program
         /// <param name="e"></param>
         private static void UnhandledExceptionCallbackFun(object sender, UnhandledExceptionEventArgs e)
         {
-            Console.WriteLine($@"发生严重未处理异常.
-操作系统:{Environment.OSVersion.ToString()}
-CLR版本:{Environment.Version.ToString()}
-是否64位系统:{Environment.Is64BitOperatingSystem}
-是否64位进程:{Environment.Is64BitProcess}
-异常:{Environment.NewLine}{e.ExceptionObject.ToString()}");
+            Console.WriteLine(string.Format(@"发生严重未处理异常.
+操作系统:{0}
+CLR版本:{1}
+是否64位系统:{2}
+是否64位进程:{3}
+异常:{4}{5}",
+                Environment.OSVersion,
+                Environment.Version,
+                Environment.Is64BitOperatingSystem,
+                Environment.Is64BitProcess,
+                Environment.NewLine,
+                e.ExceptionObject));
         }
     }
 }

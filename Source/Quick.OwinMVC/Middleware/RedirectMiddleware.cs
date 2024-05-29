@@ -26,8 +26,8 @@ namespace Quick.OwinMVC.Middleware
             if (!Server.Instance.IsRootContextPath)
             {
                 var tmpContextPath = Server.Instance.ContextPath.Substring(0, Server.Instance.ContextPath.Length - 1);
-                srcPath = $"{tmpContextPath}{srcPath}";
-                desPath = $"{tmpContextPath}{desPath}";
+                srcPath = string.Format("{0}{1}",tmpContextPath,srcPath);
+                desPath = string.Format("{0}{1}",tmpContextPath,desPath);
             }
             redirectDict[srcPath] = desPath;
         }

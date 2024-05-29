@@ -10,7 +10,7 @@ namespace Quick.OwinMVC.Middleware
 {
     public class Error404Middleware : OwinMiddleware, IPropertyHunter
     {
-        private static readonly String INVOKE_TIMES = $"{typeof(Error404Middleware).FullName}.{nameof(INVOKE_TIMES)}";
+        private static readonly String INVOKE_TIMES = string.Format("{0}.INVOKE_TIMES",typeof(Error404Middleware).FullName);
         private Server server;
         private String RewritePath;
 
@@ -21,7 +21,7 @@ namespace Quick.OwinMVC.Middleware
 
         void IPropertyHunter.Hunt(string key, string value)
         {
-            if (key == nameof(RewritePath))
+            if (key == "RewritePath")
                 RewritePath = value;
         }
 
@@ -44,7 +44,7 @@ namespace Quick.OwinMVC.Middleware
             context.Set<String>("owin.RequestPath", RewritePath);
             OwinMiddleware first = server.GetFirstMiddlewareInstance();
             if (first == null)
-                throw new ArgumentException($"Middleware '{this.GetType().FullName};{this.GetType().Assembly.GetName().Name}' must not be the first middleware,and recommand to be set to the last one.");
+                throw new ArgumentException(string.Format("Middleware '{0};{1}' must not be the first middleware,and recommand to be set to the last one.",this.GetType().FullName,this.GetType().Assembly.GetName().Name));
 
             //清理OwinContext
             foreach (var cleaner in server.GetMiddlewares<IOwinContextCleaner>())

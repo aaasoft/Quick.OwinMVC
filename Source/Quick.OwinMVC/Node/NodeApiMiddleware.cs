@@ -26,7 +26,7 @@ namespace Quick.OwinMVC.Node
         public NodeApiMiddleware(OwinMiddleware next = null) : base(next)
         {
             Instance = this;
-            Prefix = $"{Server.Instance.ContextPath}{Prefix}";
+            Prefix = string.Format("{0}{1}",Server.Instance.ContextPath,Prefix);
         }
 
         /// <summary>
@@ -50,7 +50,9 @@ namespace Quick.OwinMVC.Node
             if (!string.IsNullOrEmpty(nodePath))
             {
                 var currentNode = NodeManager.Instance.GetNode(nodePath);
-                var nodeMethod = currentNode?.GetMethod(req.Method);
+                IMethod nodeMethod=null;
+                if(currentNode!=null)
+                    nodeMethod = currentNode.GetMethod(req.Method);
                 if (nodeMethod == null)
                     return Next.Invoke(context);
 
@@ -62,14 +64,15 @@ namespace Quick.OwinMVC.Node
                         nodeMethod = NodeManager.Instance.MethodInvokeHandler.Invoke(nodeMethod, context);
                     //调用
                     var invokeTime = DateTime.Now;
-                    data = nodeMethod?.Invoke(context);
+                    if(nodeMethod!=null)
+                    data = nodeMethod.Invoke(context);
                     //返回值处理
                     if (NodeManager.Instance.ReturnValueHandler != null)
                         data = NodeManager.Instance.ReturnValueHandler.Invoke(nodeMethod, data, invokeTime);
                     //如果返回值不是ApiResult
                     if (!(data is ApiResult))
                     {
-                        var message = $"{nodeMethod.Name}成功";
+                        var message = string.Format("{0}成功",nodeMethod.Name);
                         var ret = ApiResult.Success(message, data);
                         ret.SetMetaInfo("usedTime", (DateTime.Now - invokeTime).ToString());
                         data = ret;
@@ -80,9 +83,9 @@ namespace Quick.OwinMVC.Node
                     data = ApiResult.Error(ex.HResult, ex.Message, ex.MethodData);
                 }
                 catch (AppDomainUnloadedException ex)
-                when (ex.InnerException is NodeMethodHandledException)
                 {
-                    return Task.Delay(0);
+                    if(ex.InnerException is NodeMethodHandledException)
+                        return Task.Delay(0);
                 }
                 catch (Exception ex)
                 {
@@ -104,7 +107,7 @@ namespace Quick.OwinMVC.Node
                 else
                 {
                     rep.ContentType = "application/x-javascript";
-                    result = $"{jsonpCallback}({json})";
+                    result = string.Format("{0}({1})",jsonpCallback,json);
                 }
                 rep.Expires = new DateTimeOffset(DateTime.Now);
                 rep.Headers["Cache-Control"] = "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
@@ -128,7 +131,7 @@ namespace Quick.OwinMVC.Node
         {
             switch (key)
             {
-                case nameof(AddonHttpHeaders):
+                case "AddonHttpHeaders":
                     AddonHttpHeaders = new Dictionary<string, string>();
                     foreach (var headerKeyValue in value.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                     {

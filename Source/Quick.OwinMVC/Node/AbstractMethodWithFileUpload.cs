@@ -11,7 +11,7 @@ namespace Quick.OwinMVC.Node
     public abstract class AbstractMethodWithFileUpload<TInput> : AbstractMethod<TInput>
                 where TInput : class
     {
-        public static string STREAM_DICT = $"{typeof(AbstractMethodWithFileUpload<TInput>).FullName}.{nameof(STREAM_DICT)}";
+        public static string STREAM_DICT = string.Format("{0}.STREAM_DICT", typeof(AbstractMethodWithFileUpload<TInput>).FullName);
 
         /// <summary>
         /// 获取上传文件路径

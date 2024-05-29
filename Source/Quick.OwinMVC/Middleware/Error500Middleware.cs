@@ -62,7 +62,7 @@ namespace Quick.OwinMVC.Middleware
                         rep.ContentType = "application/json; charset=UTF-8";
                         byte[] content = encoding.GetBytes(result);
                         rep.ContentLength = content.Length;
-                        await context.Response.WriteAsync(content);
+                        context.Response.Write(content);
                         return;
                     }
 
@@ -73,7 +73,7 @@ namespace Quick.OwinMVC.Middleware
                     foreach (var cleaner in server.GetMiddlewares<IOwinContextCleaner>())
                         cleaner.Clean(context);
 
-                    await Next.Invoke(context);
+                    Next.Invoke(context).Wait();
                     if (rep.StatusCode == 404)
                         throw ex;
                 }
@@ -82,14 +82,14 @@ namespace Quick.OwinMVC.Middleware
                     rep.ContentType = "text/plain; charset=UTF-8";
                     byte[] content = encoding.GetBytes(ex2.ToString());
                     rep.ContentLength = content.Length;
-                    await context.Response.WriteAsync(content);
+                    context.Response.Write(content);
                 }
             }
         }
 
         void IPropertyHunter.Hunt(string key, string value)
         {
-            if (key == nameof(RewritePath))
+            if (key == "RewritePath")
                 RewritePath = value;
         }
     }

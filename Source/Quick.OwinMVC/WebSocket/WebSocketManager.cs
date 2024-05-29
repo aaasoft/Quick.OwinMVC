@@ -9,10 +9,18 @@ namespace Quick.OwinMVC.WebSocket
 {
     public class WebSocketManager
     {
-        public static WebSocketManager Instance { get; } = new WebSocketManager();
-        private List<Type> connectionList = new List<Type>();
+        private static WebSocketManager _Instance = new WebSocketManager();
+        public static WebSocketManager Instance 
+        {
+            get{return _Instance;}
+        }
 
-        public Func<Type, string> GetRouteFunc { get; set; } = type =>
+        private List<Type> connectionList = new List<Type>();
+        
+        public Func<Type, string> GetRouteFunc { get; set; } 
+        public WebSocketManager()
+        {
+            GetRouteFunc= type =>
            {
                var assembly = type.Assembly;
 
@@ -28,8 +36,9 @@ namespace Quick.OwinMVC.WebSocket
                    contextPath = "/" + contextPath;
                if (!contextPath.EndsWith("/"))
                    contextPath = contextPath + "/";
-               return $"{contextPath}ws/{assemblyName}/{typeName}";
+               return string.Format("{0}ws/{1}/{2}", contextPath, assemblyName, typeName);
            };
+        }
 
         public void Register<T>()
             where T : WebSocketConnection

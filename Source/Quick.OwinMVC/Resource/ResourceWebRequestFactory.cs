@@ -9,7 +9,12 @@ namespace Quick.OwinMVC.Resource
     {
         public IDictionary<String, Assembly> AssemblyMap { get; internal set; }
         public IDictionary<string, string> PluginAliasMap { get; internal set; }
-        public String StaticFileFolder { get; set; } = String.Empty;
+        public String StaticFileFolder { get; set; }
+
+        public ResourceWebRequestFactory()
+        {
+            StaticFileFolder = String.Empty;
+        }
 
         public WebRequest Create(Uri uri)
         {

@@ -19,7 +19,7 @@ namespace Quick.OwinMVC.Middleware
         /// <summary>
         /// HTTP服务是否已准备好
         /// </summary>
-        public bool IsReady { get; set; } = false;
+        public bool IsReady { get; set; }
 
         /// <summary>
         /// 获取指定类型的中间件
@@ -43,6 +43,7 @@ namespace Quick.OwinMVC.Middleware
 
         public MiddlewareContext(OwinMiddleware next) : base(next)
         {
+            IsReady = false;
             Instance = this;
             var list = new List<OwinMiddleware>();
 
@@ -82,7 +83,7 @@ namespace Quick.OwinMVC.Middleware
                 var rep = context.Response;
                 rep.StatusCode = 404;
                 rep.ReasonPhrase = "NOT FOUND";
-                return rep.WriteAsync($"404 NOT FOUND,ContextPath:{Server.Instance.ContextPath},Request URL:{path}");
+                return rep.WriteAsync(string.Format("404 NOT FOUND,ContextPath:{0},Request URL:{1}", Server.Instance.ContextPath, path));
             }
         }
     }

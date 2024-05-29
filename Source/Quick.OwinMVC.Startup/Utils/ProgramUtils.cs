@@ -103,7 +103,7 @@ namespace Quick.OwinMVC.Startup.Utils
 
         public static string GetProgramTitleAndVersionAndBuildTime()
         {
-            return $"{GetProgramTitle()} Ver:{GetProgramVersion()} BuildTime:{GetProgramBuildTime()}";
+            return string.Format("{0} Ver:{1} BuildTime:{2}", GetProgramTitle(), GetProgramVersion(),GetProgramBuildTime());
         }
     }
 }

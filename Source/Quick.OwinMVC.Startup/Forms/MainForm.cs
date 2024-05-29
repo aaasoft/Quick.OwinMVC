@@ -40,7 +40,7 @@ namespace Quick.OwinMVC.Startup.Forms
 
         private void ensureOnlyOne()
         {
-            var pipeName = $"{this.GetType().FullName}.{winServiceInstaller.ServiceName}";
+            var pipeName = string.Format("{0}.{1}", this.GetType().FullName, winServiceInstaller.ServiceName);
             try
             {
                 var serverStream = createNewNamedPipedServerStream(pipeName);
@@ -104,7 +104,9 @@ namespace Quick.OwinMVC.Startup.Forms
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            var controlConfig = Entrance.Parameter.GetControlConfigFunc?.Invoke();
+            if(Entrance.Parameter.GetControlConfigFunc==null)
+                return;
+            var controlConfig = Entrance.Parameter.GetControlConfigFunc.Invoke();
             if (controlConfig == null
                 || controlConfig.Length == 0)
                 return;

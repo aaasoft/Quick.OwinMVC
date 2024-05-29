@@ -25,18 +25,23 @@ namespace Plugin.ApiDoc.Node.Api
 
     public class DocParameter
     {
-        [FormFieldInfo(Key = nameof(Tag),
+        [FormFieldInfo(Key = "Tag",
             Name = "标签",
             Description = "可以查询指定标签的接口，如果不传入此参数，则返回全部接口。",
             NotEmpty = false)]
         public String Tag { get; set; }
 
-        [FormFieldInfo(Key = nameof(Output),
+        [FormFieldInfo(Key = "Output",
             Name = "输出格式",
             Description = "设置输出的格式：html或者xml",
             NotEmpty = false)]
         [ComboboxValueFormat(ValuesEnum = typeof(DocOutput), ValuesEnum_KeyByEnumName = true)]
-        public DocOutput Output { get; set; } = DocOutput.HTML;
+        public DocOutput Output { get; set; }
+
+        public DocParameter()
+        {
+            Output = DocOutput.HTML;
+        }
     }
 
     public class Utils
@@ -47,7 +52,7 @@ namespace Plugin.ApiDoc.Node.Api
             if (!String.IsNullOrEmpty(xsltPath))
                 document.AppendChild(document.CreateProcessingInstruction(
                 "xml-stylesheet",
-                $"type='text/xsl' href='{xsltPath}'"));
+                string.Format("type='text/xsl' href='{0}'",xsltPath)));
             var rootElement = document.CreateElement("Api");
             if (!String.IsNullOrEmpty(input.Tag))
                 rootElement.SetAttribute("Tag", input.Tag);
@@ -63,7 +68,7 @@ namespace Plugin.ApiDoc.Node.Api
             var xmlSetting = new XmlWriterSettings() { Encoding = Encoding.UTF8 };
 
             var uri = context.Request.Uri;
-            xsltPath = $"{uri.Scheme}://{uri.Host}:{uri.Port}{xsltPath}";
+            xsltPath = string.Format("{0}://{1}:{2}{3}", uri.Scheme, uri.Host, uri.Port, xsltPath);
             //if (!outputXml)
             //    xsltPath = "Plugins" + xsltPath;
 
@@ -94,8 +99,8 @@ namespace Plugin.ApiDoc.Node.Api
             foreach (var childNode in parentNode.GetChildren())
             {
                 var childElement = document.CreateElement("Plugin");
-                childElement.SetAttribute(nameof(childNode.Id), childNode.Id);
-                childElement.SetAttribute(nameof(childNode.Name), childNode.Name);
+                childElement.SetAttribute("Id", childNode.Id);
+                childElement.SetAttribute("Name", childNode.Name);
 
                 writeLevel2Nodes(context, document, childElement, childNode, input);
                 if (childElement.GetElementsByTagName("Feature").Count > 0)
@@ -109,8 +114,8 @@ namespace Plugin.ApiDoc.Node.Api
             foreach (var childNode in parentNode.GetChildren())
             {
                 var childElement = document.CreateElement("Feature");
-                childElement.SetAttribute(nameof(childNode.Id), childNode.Id);
-                childElement.SetAttribute(nameof(childNode.Name), childNode.Name);
+                childElement.SetAttribute("Id", childNode.Id);
+                childElement.SetAttribute("Name", childNode.Name);
 
                 writeMethods(context, document, childElement, childNode, input);
                 if (childElement.GetElementsByTagName(typeof(IMethod).Name).Count > 0)
@@ -138,12 +143,12 @@ namespace Plugin.ApiDoc.Node.Api
 
                 var methodElement = document.CreateElement(typeof(IMethod).Name);
 
-                methodElement.SetAttribute(nameof(HttpMethod), HttpMethod);
-                methodElement.SetAttribute(nameof(Method.Path), Method.Path);
-                methodElement.SetAttribute(nameof(Method.Name), Method.Name);
-                methodElement.SetAttribute(nameof(Method.Description), Method.Description);
-                methodElement.SetAttribute(nameof(Method.InvokeExample), Method.InvokeExample);
-                methodElement.SetAttribute(nameof(Method.ReturnValueExample), Method.ReturnValueExample);
+                methodElement.SetAttribute("HttpMethod", HttpMethod);
+                methodElement.SetAttribute("Path", Method.Path);
+                methodElement.SetAttribute("Name", Method.Name);
+                methodElement.SetAttribute("Description", Method.Description);
+                methodElement.SetAttribute("InvokeExample", Method.InvokeExample);
+                methodElement.SetAttribute("ReturnValueExample", Method.ReturnValueExample);
                 writePermissions(context, document, methodElement, Method);
                 writeTags(document, methodElement, Method);
                 writeParameters(document, methodElement, Method);
@@ -202,12 +207,12 @@ namespace Plugin.ApiDoc.Node.Api
             {
                 var abc = parameter.TypeId;
                 var parameterElement = document.CreateElement(typeof(FormFieldInfo).Name);
-                parameterElement.SetAttribute(nameof(parameter.Key), parameter.Key);
-                parameterElement.SetAttribute(nameof(parameter.Name), parameter.Name);
-                parameterElement.SetAttribute(nameof(parameter.Type), parameter.Type);
-                parameterElement.SetAttribute(nameof(parameter.Description), parameter.Description);
-                parameterElement.SetAttribute(nameof(parameter.NotEmpty), parameter.NotEmpty.ToString());
-                parameterElement.SetAttribute(nameof(parameter.ValueFormatType), parameter.ValueFormatType);
+                parameterElement.SetAttribute("Key", parameter.Key);
+                parameterElement.SetAttribute("Name", parameter.Name);
+                parameterElement.SetAttribute("Type", parameter.Type);
+                parameterElement.SetAttribute("Description", parameter.Description);
+                parameterElement.SetAttribute("NotEmpty", parameter.NotEmpty.ToString());
+                parameterElement.SetAttribute("ValueFormatType", parameter.ValueFormatType);
                 //parameterElement.SetAttribute(nameof(parameter.ValueFormatValue), DataUtils.Serialize(parameter.ValueFormatValue));
                 parametersElement.AppendChild(parameterElement);
             }
