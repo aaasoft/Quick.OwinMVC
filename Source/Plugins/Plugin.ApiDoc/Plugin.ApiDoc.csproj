@@ -63,8 +63,6 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
     <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.css.map" />
     <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.min.css.map" />
     <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.css.map" />

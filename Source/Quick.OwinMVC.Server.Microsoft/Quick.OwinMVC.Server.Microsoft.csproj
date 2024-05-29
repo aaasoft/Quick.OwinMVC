@@ -67,9 +67,5 @@
       <Name>Quick.OwinMVC</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(SolutionDir)Setting\Library.setting" />
 </Project>
