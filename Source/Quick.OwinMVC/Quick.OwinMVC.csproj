@@ -115,6 +115,7 @@
     <Compile Include="Node\ValueFormat\SelectValueFormat.cs" />
     <Compile Include="Node\ValueFormat\TextboxValueFormat.cs" />
     <Compile Include="Plugin\IPluginActivator.cs" />
+    <Compile Include="Properties\Resources.Designer.cs" />
     <Compile Include="Resource\StreamCache.cs" />
     <Compile Include="Resource\StreamCacheManager.cs" />
     <Compile Include="Service\IService.cs" />
@@ -138,6 +139,8 @@
     <Compile Include="Utils\TimeUtils.cs" />
     <Compile Include="WebSocket\WebSocketManager.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx" />
+  </ItemGroup>
   <Import Project="$(SolutionDir)Setting\Library.setting" />
 </Project>
