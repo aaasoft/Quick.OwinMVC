@@ -8,9 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Quick.OwinMVC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("scbeta")]
 [assembly: AssemblyProduct("Quick.OwinMVC")]
-[assembly: AssemblyCopyright("Copyright © scbeta 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +30,5 @@ using System.Runtime.InteropServices;
 //可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”: :
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2.0.2017.279")]
-[assembly: AssemblyFileVersion("2.0.2017.279")]
+[assembly: AssemblyVersion("2.0.2024.530")]
+[assembly: AssemblyFileVersion("2.0.2024.530")]
