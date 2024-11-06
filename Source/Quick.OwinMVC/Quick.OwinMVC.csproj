@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net45;net48</TargetFrameworks>
-		<Version>2.0.2024.530</Version>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<Version>2.0.2024.1106</Version>
 	</PropertyGroup>
 	<ItemGroup>
 	  <PackageReference Include="HttpMultipartParser" Version="2.2.4" />
