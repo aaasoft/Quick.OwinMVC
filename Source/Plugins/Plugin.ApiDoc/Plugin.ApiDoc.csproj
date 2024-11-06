@@ -1,103 +1,81 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{62FF4DBB-C721-472C-90CD-8C94735DA94C}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Plugin.ApiDoc</RootNamespace>
-    <AssemblyName>Plugin.ApiDoc</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Owin">
-      <HintPath>..\..\..\Libs\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="Owin">
-      <HintPath>..\..\..\Libs\Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Activator.cs" />
-    <Compile Include="Node\Api\Api.cs" />
-    <Compile Include="Node\Api\Detail.cs" />
-    <Compile Include="Node\Api\Doc.cs" />
-    <Compile Include="Node\Api\Table.cs" />
-    <Compile Include="Node\Api\Utils.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Quick.OwinMVC\Quick.OwinMVC.csproj">
-      <Project>{17F47358-C8E5-49B2-BCAC-0B315F93E114}</Project>
-      <Name>Quick.OwinMVC</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.css.map" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.min.css.map" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.css.map" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.min.css.map" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.eot" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.ttf" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.woff" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.woff2" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resource\api\bootstrapvalidator.min.js" />
-    <EmbeddedResource Include="resource\api\debug.html" />
-    <EmbeddedResource Include="resource\api\debug.html.js" />
-    <EmbeddedResource Include="resource\api\doc.xslt" />
-    <EmbeddedResource Include="resource\api\style.css" />
-    <EmbeddedResource Include="resource\api\table.xslt" />
-    <EmbeddedResource Include="resource\api\tags.png" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.css" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.min.css" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.css" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.min.css" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.svg" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\js\bootstrap.js" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\js\bootstrap.min.js" />
-    <EmbeddedResource Include="resource\bootstrap-3.3.7\js\npm.js" />
-    <EmbeddedResource Include="resource\jquery-1.12.4\jquery.min.js" />
-    <EmbeddedResource Include="resource\layer-3.0.3\layer.js" />
-    <EmbeddedResource Include="resource\layer-3.0.3\mobile\layer.js" />
-    <EmbeddedResource Include="resource\layer-3.0.3\mobile\need\layer.css" />
-    <EmbeddedResource Include="resource\layer-3.0.3\skin\default\icon-ext.png" />
-    <EmbeddedResource Include="resource\layer-3.0.3\skin\default\icon.png" />
-    <EmbeddedResource Include="resource\layer-3.0.3\skin\default\layer.css" />
-    <EmbeddedResource Include="resource\layer-3.0.3\skin\default\loading-0.gif" />
-    <EmbeddedResource Include="resource\layer-3.0.3\skin\default\loading-1.gif" />
-    <EmbeddedResource Include="resource\layer-3.0.3\skin\default\loading-2.gif" />
-  </ItemGroup>
-  <Import Project="$(SolutionDir)Setting\Plugin.setting" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net48</TargetFrameworks>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<Version>2.0.2024.530</Version>
+		<OutputPath>..\..\Program\bin\Debug\Plugins\$(MSBuildProjectName)</OutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="resource\api\bootstrapvalidator.min.js" />
+	  <None Remove="resource\api\debug.html" />
+	  <None Remove="resource\api\debug.html.js" />
+	  <None Remove="resource\api\doc.xslt" />
+	  <None Remove="resource\api\style.css" />
+	  <None Remove="resource\api\table.xslt" />
+	  <None Remove="resource\api\tags.png" />
+	  <None Remove="resource\bootstrap-3.3.7\css\bootstrap-theme.css" />
+	  <None Remove="resource\bootstrap-3.3.7\css\bootstrap-theme.css.map" />
+	  <None Remove="resource\bootstrap-3.3.7\css\bootstrap-theme.min.css" />
+	  <None Remove="resource\bootstrap-3.3.7\css\bootstrap-theme.min.css.map" />
+	  <None Remove="resource\bootstrap-3.3.7\css\bootstrap.css" />
+	  <None Remove="resource\bootstrap-3.3.7\css\bootstrap.css.map" />
+	  <None Remove="resource\bootstrap-3.3.7\css\bootstrap.min.css" />
+	  <None Remove="resource\bootstrap-3.3.7\css\bootstrap.min.css.map" />
+	  <None Remove="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.eot" />
+	  <None Remove="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.svg" />
+	  <None Remove="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.ttf" />
+	  <None Remove="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.woff" />
+	  <None Remove="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.woff2" />
+	  <None Remove="resource\bootstrap-3.3.7\js\bootstrap.js" />
+	  <None Remove="resource\bootstrap-3.3.7\js\bootstrap.min.js" />
+	  <None Remove="resource\bootstrap-3.3.7\js\npm.js" />
+	  <None Remove="resource\jquery-1.12.4\jquery.min.js" />
+	  <None Remove="resource\layer-3.0.3\layer.js" />
+	  <None Remove="resource\layer-3.0.3\mobile\layer.js" />
+	  <None Remove="resource\layer-3.0.3\mobile\need\layer.css" />
+	  <None Remove="resource\layer-3.0.3\skin\default\icon-ext.png" />
+	  <None Remove="resource\layer-3.0.3\skin\default\icon.png" />
+	  <None Remove="resource\layer-3.0.3\skin\default\layer.css" />
+	  <None Remove="resource\layer-3.0.3\skin\default\loading-0.gif" />
+	  <None Remove="resource\layer-3.0.3\skin\default\loading-1.gif" />
+	  <None Remove="resource\layer-3.0.3\skin\default\loading-2.gif" />
+	</ItemGroup>
+	<ItemGroup>
+	  <EmbeddedResource Include="resource\api\bootstrapvalidator.min.js" />
+	  <EmbeddedResource Include="resource\api\debug.html" />
+	  <EmbeddedResource Include="resource\api\debug.html.js" />
+	  <EmbeddedResource Include="resource\api\doc.xslt" />
+	  <EmbeddedResource Include="resource\api\style.css" />
+	  <EmbeddedResource Include="resource\api\table.xslt" />
+	  <EmbeddedResource Include="resource\api\tags.png" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.css" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.css.map" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.min.css" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap-theme.min.css.map" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.css" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.css.map" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.min.css" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\css\bootstrap.min.css.map" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.eot" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.svg" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.ttf" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.woff" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\fonts\glyphicons-halflings-regular.woff2" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\js\bootstrap.js" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\js\bootstrap.min.js" />
+	  <EmbeddedResource Include="resource\bootstrap-3.3.7\js\npm.js" />
+	  <EmbeddedResource Include="resource\jquery-1.12.4\jquery.min.js" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\layer.js" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\mobile\layer.js" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\mobile\need\layer.css" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\skin\default\icon-ext.png" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\skin\default\icon.png" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\skin\default\layer.css" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\skin\default\loading-0.gif" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\skin\default\loading-1.gif" />
+	  <EmbeddedResource Include="resource\layer-3.0.3\skin\default\loading-2.gif" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Quick.OwinMVC\Quick.OwinMVC.csproj" />
+	</ItemGroup>
 </Project>

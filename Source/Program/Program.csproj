@@ -1,45 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{291CC54D-2D94-4FC5-8C5C-2389D0C35EC8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Quick.OwinMVC.Program</RootNamespace>
-    <AssemblyName>Program</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Microsoft.Owin">
-      <HintPath>..\..\Libs\Microsoft.Owin.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <None Include="Config\Quick.OwinMVC.properties">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Quick.OwinMVC.Startup\Quick.OwinMVC.Startup.csproj">
-      <Project>{e30dace1-ad25-49d6-8d0f-531345bcd436}</Project>
-      <Name>Quick.OwinMVC.Startup</Name>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Quick.OwinMVC\Quick.OwinMVC.csproj">
-      <Project>{17f47358-c8e5-49b2-bcac-0b315f93e114}</Project>
-      <Name>Quick.OwinMVC</Name>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(SolutionDir)Setting\Main.setting" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net48</TargetFrameworks>
+		<OutputType>Exe</OutputType>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Quick.OwinMVC.Server.Microsoft\Quick.OwinMVC.Server.Microsoft.csproj" />
+		<ProjectReference Include="..\Quick.OwinMVC.Server.Nowin\Quick.OwinMVC.Server.Nowin.csproj" />
+		<ProjectReference Include="..\Quick.OwinMVC.Startup\Quick.OwinMVC.Startup.csproj" />
+		<ProjectReference Include="..\Quick.OwinMVC\Quick.OwinMVC.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="Config\Quick.OwinMVC.properties">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 </Project>
