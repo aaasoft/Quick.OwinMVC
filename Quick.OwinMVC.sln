@@ -1,28 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC", "Source\Quick.OwinMVC\Quick.OwinMVC.csproj", "{17F47358-C8E5-49B2-BCAC-0B315F93E114}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quick.OwinMVC", "Source\Quick.OwinMVC\Quick.OwinMVC.csproj", "{17F47358-C8E5-49B2-BCAC-0B315F93E114}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{B19DDEE8-6724-4592-B0F7-25D18A107624}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{7AB2CB70-AB73-49B7-8800-6479AFA60E6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC.Server.Nowin", "Source\Quick.OwinMVC.Server.Nowin\Quick.OwinMVC.Server.Nowin.csproj", "{9492538C-F2F8-49B8-8B76-255D22B9C8D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quick.OwinMVC.Server.Nowin", "Source\Quick.OwinMVC.Server.Nowin\Quick.OwinMVC.Server.Nowin.csproj", "{9492538C-F2F8-49B8-8B76-255D22B9C8D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Program", "Source\Program\Program.csproj", "{291CC54D-2D94-4FC5-8C5C-2389D0C35EC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Program", "Source\Program\Program.csproj", "{291CC54D-2D94-4FC5-8C5C-2389D0C35EC8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0} = {C4963162-03A3-4F67-AF2B-E3DEDBAE40F0}
 		{9492538C-F2F8-49B8-8B76-255D22B9C8D4} = {9492538C-F2F8-49B8-8B76-255D22B9C8D4}
 		{62FF4DBB-C721-472C-90CD-8C94735DA94C} = {62FF4DBB-C721-472C-90CD-8C94735DA94C}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC.Startup", "Source\Quick.OwinMVC.Startup\Quick.OwinMVC.Startup.csproj", "{E30DACE1-AD25-49D6-8D0F-531345BCD436}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quick.OwinMVC.Startup", "Source\Quick.OwinMVC.Startup\Quick.OwinMVC.Startup.csproj", "{E30DACE1-AD25-49D6-8D0F-531345BCD436}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quick.OwinMVC.Server.Microsoft", "Source\Quick.OwinMVC.Server.Microsoft\Quick.OwinMVC.Server.Microsoft.csproj", "{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quick.OwinMVC.Server.Microsoft", "Source\Quick.OwinMVC.Server.Microsoft\Quick.OwinMVC.Server.Microsoft.csproj", "{C4963162-03A3-4F67-AF2B-E3DEDBAE40F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plugin.ApiDoc", "Source\Plugins\Plugin.ApiDoc\Plugin.ApiDoc.csproj", "{62FF4DBB-C721-472C-90CD-8C94735DA94C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plugin.ApiDoc", "Source\Plugins\Plugin.ApiDoc\Plugin.ApiDoc.csproj", "{62FF4DBB-C721-472C-90CD-8C94735DA94C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

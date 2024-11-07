@@ -8,6 +8,7 @@
 		<ProjectReference Include="..\Quick.OwinMVC\Quick.OwinMVC.csproj" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="Microsoft.Owin.Host.HttpListener" Version="4.2.2" />
 		<PackageReference Include="Microsoft.Owin.Hosting" Version="4.2.2" />
 	</ItemGroup>
 </Project>
