@@ -39,7 +39,7 @@
             this.flpTools.AutoSize = true;
             this.flpTools.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.flpTools.Location = new System.Drawing.Point(10, 6);
-            this.flpTools.MaximumSize = new System.Drawing.Size(200, 0);
+            this.flpTools.MaximumSize = new System.Drawing.Size(300, 0);
             this.flpTools.Name = "flpTools";
             this.flpTools.Size = new System.Drawing.Size(0, 0);
             this.flpTools.TabIndex = 6;

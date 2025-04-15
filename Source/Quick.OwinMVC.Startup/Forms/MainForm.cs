@@ -110,6 +110,8 @@ namespace Quick.OwinMVC.Startup.Forms
                 return;
 
             currentToolStripItemCollection = cmsMain.Items;
+            var totalWidth = flpTools.MaximumSize.Width - 20;
+            var lineHeight = 40;
             foreach (var keyValuePair in controlConfig)
             {
                 var key = keyValuePair.Key;
@@ -123,12 +125,12 @@ namespace Quick.OwinMVC.Startup.Forms
                     Control control = null;
                     if (value is string)
                     {
-                        control = new Label() { Text = (string)value };
+                        control = new Label() { Text = (string)value, Width = totalWidth, Height = lineHeight };
                     }
                     else if (value is Action)
                     {
                         var action = (Action)value;
-                        var btn = new Button() { Text = key };
+                        var btn = new Button() { Text = key, Width = totalWidth, Height = lineHeight };
                         btn.Click += (sender2, e2) =>
                         {
                             disableForm();
@@ -141,7 +143,7 @@ namespace Quick.OwinMVC.Startup.Forms
                     else if (value is Button)
                     {
                         Button sourceButton = (Button)value;
-                        var btn = new Button() { Text = key };
+                        var btn = new Button() { Text = key, Width = totalWidth / 2, Height = lineHeight };
                         btn.Click += (sender2, e2) =>
                         {
                             disableForm();
@@ -159,10 +161,21 @@ namespace Quick.OwinMVC.Startup.Forms
                         control = btn;
                         addNotifyIconButton(btn);
                     }
+                    else if (value is Label)
+                    {
+                        flpTools.Controls.Add(new Label() { Text = key, Width = 56, Height = lineHeight, TextAlign = ContentAlignment.MiddleLeft });
+                        var label = (Label)value;
+                        label.AutoSize = false;
+                        label.Width = totalWidth - 56;
+                        label.Height = lineHeight;
+                        label.TextAlign = ContentAlignment.MiddleLeft;
+                        control = label;
+                    }
                     else if (value is Control)
                     {
                         flpTools.Controls.Add(new Label() { Text = key, Width = 56 });
                         control = (Control)value;
+                        control.Width = totalWidth;
                     }
                     flpTools.Controls.Add(control);
                 }
