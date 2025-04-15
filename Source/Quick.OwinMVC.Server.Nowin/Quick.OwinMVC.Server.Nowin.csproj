@@ -2,7 +2,7 @@
 	<PropertyGroup>
 		<TargetFrameworks>net45;net48</TargetFrameworks>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Version>2.0.2024.1107</Version>
+		<Version>2.0.2025.415</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Quick.OwinMVC\Quick.OwinMVC.csproj" />
