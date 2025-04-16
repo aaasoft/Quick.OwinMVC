@@ -125,12 +125,12 @@ namespace Quick.OwinMVC.Startup.Forms
                     Control control = null;
                     if (value is string)
                     {
-                        control = new Label() { Text = (string)value, Width = totalWidth, Height = lineHeight };
+                        control = new Label() { Text = (string)value, Width = totalWidth};
                     }
                     else if (value is Action)
                     {
                         var action = (Action)value;
-                        var btn = new Button() { Text = key, Width = totalWidth, Height = lineHeight };
+                        var btn = new Button() { Text = key, Width = totalWidth / 2, Height = lineHeight };
                         btn.Click += (sender2, e2) =>
                         {
                             disableForm();
